@@ -1,0 +1,78 @@
+*{
+    font-family: 'Nunito';
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+.admin-parent{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+/* sidebar section */
+.sidebar-section{
+    width: 25%;
+    background: #141b34;
+    position: fixed;
+    height: 100%;
+}
+.logo-divide{
+    padding: 10px 20px;
+}
+.logo-divide img{
+    height: 70px;
+}
+.main-menu{
+    padding: 50px 30px
+}
+.sidebar-header{
+    text-transform: capitalize;
+    font-size: 17px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+.icon-link{
+    color: #fff;
+    display: flex;
+    justify-content: left;
+    transition: all .3s ease;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+}
+.icon-link h6{
+    text-transform: capitalize;
+    font-size: 18px;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+.icon-link .icon-ctrl{
+    font-size: 20px;
+}
+.icon-link.active{
+    background: #fff;
+    color: #141b34;
+}
+.icon-link:hover{
+    background: #fff;
+    color: #141b34;
+}
+/* sidebar section */
+
+.admin-body{
+    width: 100%;
+    background: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.sidebar-placeholder{
+    width: 25%;
+    min-height: 100vh;
+}
+.admin-content{
+    width: 75%;
+    min-height: 100vh;
+}
