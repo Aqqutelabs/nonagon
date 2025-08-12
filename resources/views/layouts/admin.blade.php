@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@6.0.3/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@6.0.3/dist/ionicons/ionicons.js"></script>
     @yield('local_css')
@@ -64,10 +63,18 @@
                         <h6>toksgodwin@gmail.com</h6>
                     </div>
                 </div>
-                
+
                 <div class="setting-dropdown">
-                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    <i class="fa fa-ellipsis-v open-drops" aria-hidden="true"></i>
+                    <div class="side-dropdown">
+                        <ul class="list-unstyled">
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#">Account</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
         </aside>
 
@@ -99,6 +106,7 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script>
@@ -106,17 +114,29 @@
             $('#logout').click();
         });
         var t = 0;
-        $('.iconic-size-ctrl').click(function(){
+        $('.iconic-size-ctrl').click(function() {
             var idBox = $(this).attr('data-resize');
-            $('#'+idBox).toggleClass('active');
-            if(t == 0){
-                $(this).attr('name','chevron-down-outline');
+            $('#' + idBox).toggleClass('active');
+            if (t == 0) {
+                $(this).attr('name', 'chevron-down-outline');
                 t = 1
-            }else{
-                $(this).attr('name','chevron-up-outline');
+            } else {
+                $(this).attr('name', 'chevron-up-outline');
                 t = 0
             }
         });
+        
+
+        $('.open-drops').click(function(e) {
+            const isTrigger = $(e.target).closest('.setting-dropdown');
+
+            if (isTrigger.length) {
+                const menu = isTrigger.find('.side-dropdown');
+                menu.toggleClass('show');
+            }
+        });
+
+        @if(Request::is('/home'))
 
         Chart.register(ChartDataLabels);
 
@@ -193,7 +213,9 @@
                 }
             }
         });
+        @endif
     </script>
+
     @yield('local_js')
 </body>
 

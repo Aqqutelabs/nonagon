@@ -36,7 +36,7 @@
                         class="form-control" aria-label="Amount (to the nearest dollar)">
                     <div class="input-group-append">
                         <span class="input-group-text">
-                            <ion-icon name="filter-outline"></ion-icon>
+                            <ion-icon name="funnel-outline"></ion-icon>
                         </span>
                     </div>
                 </div>
