@@ -7,8 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ env('APP_NAME') }} | Admin Dashboard</title>
 
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -64,7 +66,7 @@
                     </div>
                 </div>
 
-                <div class="setting-dropdown">
+                <div class="setting-dropdown general-pop-opt">
                     <i class="fa fa-ellipsis-v open-drops" aria-hidden="true"></i>
                     <div class="side-dropdown">
                         <ul class="list-unstyled">
@@ -127,8 +129,8 @@
         });
         
 
-        $('.open-drops').click(function(e) {
-            const isTrigger = $(e.target).closest('.setting-dropdown');
+        $('.general-pop-opt').click(function(e) {
+            const isTrigger = $(e.target).closest('.general-pop-opt');
 
             if (isTrigger.length) {
                 const menu = isTrigger.find('.side-dropdown');
@@ -136,7 +138,7 @@
             }
         });
 
-        @if(Request::is('/home'))
+        @if(Request::is('home'))
 
         Chart.register(ChartDataLabels);
 

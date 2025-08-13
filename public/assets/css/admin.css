@@ -1,5 +1,5 @@
 * {
-    font-family: "Nunito";
+    font-family: "DM sans";
 }
 :root {
     --primary-color: #141b34;
@@ -8,6 +8,7 @@
     --tertiary-color: #f6f8fa;
     --radius: 10px;
 }
+
 ::-webkit-scrollbar {
     width: 3px;
 }
@@ -115,6 +116,12 @@ a {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: none;
     z-index: 1000;
+}
+.side-dropdown.options{
+    left: -100%;
+    bottom: -100%;
+    min-width: 120px;
+    font-size: 14px !important;
 }
 
 .side-dropdown.show {
@@ -690,4 +697,24 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+/* listings CSS */
+.listings-section li button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--primary-color);
+    border: none;
+}
+.listings-section li{
+    border-bottom: solid 2px var(--tertiary-color);
+    margin-bottom: -2px;
+}
+.listings-section li .nav-link.active{
+    border-bottom: solid 2px var(--primary-color) !important;
+}
+
+.listings-section li button{
+    border: none !important;
 }
