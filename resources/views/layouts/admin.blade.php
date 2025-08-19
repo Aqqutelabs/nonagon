@@ -38,7 +38,7 @@
                     <ion-icon name="boat-outline" class="icon-ctrl"></ion-icon>
                     <h6>equipment</h6>
                 </a>
-                <a href="#" class="icon-link">
+                <a href="{{ url('maintenance') }}" class="icon-link {{ Request::is('maintenance') ? 'active' : '' }}">
                     <ion-icon name="hammer-outline" class="icon-ctrl"></ion-icon>
                     <h6>maintenance</h6>
                 </a>
@@ -84,10 +84,12 @@
             <div class="sidebar-placeholder"></div>
             <div class="admin-content">
                 <nav class="nav-page-title">
+                    
                     <div class="title-section">
-                        <h1>equipment</h1>
-                        <h6>monitor and manage all equipment across your facilities</h6>
+                        <h1>@yield('nav_title')</h1>
+                        <h6>@yield('nav_desc')</h6>
                     </div>
+
                     <div class="titled-icon">
                         <ion-icon name="notifications-outline" class="title-icon"></ion-icon>
                         <form action="{{ route('logout') }}" method="post" hidden>

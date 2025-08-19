@@ -1,4 +1,8 @@
 @extends('layouts.admin')
+
+@section('nav_title','Equipment')
+@section('nav_desc','Monitor and manage all equipment across your facilities')
+
 @section('local_css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="{{ asset('assets/css/equipment-table.css') }}">
@@ -20,7 +24,7 @@
         <div class="col-lg-8">
             <div class="qd-search-equipment">
                 <div class="other-controls">
-                    <div class="search-box">
+                    <div class="table-search-box">
                         <form action="#" method="post">
                             <div class="input-group mb-3 qd-search">
                                 <div class="input-group-prepend">
@@ -670,7 +674,7 @@
                         </div>
                         
                         <!-- DataTable -->
-                        <table id="equipmentTable" class="display">
+                        <table class="display equipmentTable">
                             <thead>
                                 <tr>
                                     <th>Equipment</th>
@@ -681,6 +685,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                                 <tr>
                                     <td>CAT 320D Excavator</td>
                                     <td>Gibraltar Construction</td>
@@ -733,6 +738,32 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge completed">completed</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
                                 
                             </tbody>
                         </table>
@@ -760,9 +791,447 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="active-bookings" role="tabpanel" aria-labelledby="active-bookings-tab">...</div>
-                <div class="tab-pane fade" id="pending-bookings" role="tabpanel" aria-labelledby="pending-bookings-tab">...</div>
-                <div class="tab-pane fade" id="completed-bookings" role="tabpanel" aria-labelledby="completed-bookings-tab">...</div>
+                <div class="tab-pane fade" id="active-bookings" role="tabpanel" aria-labelledby="active-bookings-tab">
+                    <div class="equipment-container">
+                        <!-- Header Controls -->
+                        <div class="table-controls">
+                            <div class="left-controls">
+                                <div class="search-box">
+                                    <input type="text" id="customSearch" placeholder="Search here...">
+                                    <span class="search-icon">
+                                        <ion-icon name="search-outline"></ion-icon>
+                                    </span>
+                                </div>
+                                
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="funnel-outline"></ion-icon>
+                                    Filter
+                                </button>
+                            </div>
+                            <div class="right-controls">
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="download-outline"></ion-icon>
+                                    Export Data
+                                </button>
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="share-social-outline"></ion-icon>
+                                    Share
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- DataTable -->
+                        <table class="display equipmentTable">
+                            <thead>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <th>Lessee</th>
+                                    <th width="100">Lease Date</th>
+                                    <th>Status</th>
+                                    <th width="100"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge active">active</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge active">active</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        
+                        <!-- Footer Controls -->
+                        <div class="footer-controls">
+                            <div class="left-footer">
+                                <div class="rows-per-page">
+                                    Rows per Page:
+                                    <select id="rowsPerPage">
+                                        <option value="10" selected>10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="right-footer">
+                                <div class="go-to-page">
+                                    Go to Page:
+                                    <input type="number" id="pageInput" min="1" value="1">
+                                    <button class="go-btn" onclick="goToPage()">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pending-bookings" role="tabpanel" aria-labelledby="pending-bookings-tab">
+                    <div class="equipment-container">
+                        <!-- Header Controls -->
+                        <div class="table-controls">
+                            <div class="left-controls">
+                                <div class="search-box">
+                                    <input type="text" id="customSearch" placeholder="Search here...">
+                                    <span class="search-icon">
+                                        <ion-icon name="search-outline"></ion-icon>
+                                    </span>
+                                </div>
+                                
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="funnel-outline"></ion-icon>
+                                    Filter
+                                </button>
+                            </div>
+                            <div class="right-controls">
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="download-outline"></ion-icon>
+                                    Export Data
+                                </button>
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="share-social-outline"></ion-icon>
+                                    Share
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- DataTable -->
+                        <table class="display equipmentTable">
+                            <thead>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <th>Lessee</th>
+                                    <th width="100">Lease Date</th>
+                                    <th>Status</th>
+                                    <th width="100"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge pending">pending</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge pending">Pending</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge pending">pending</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        
+                        <!-- Footer Controls -->
+                        <div class="footer-controls">
+                            <div class="left-footer">
+                                <div class="rows-per-page">
+                                    Rows per Page:
+                                    <select id="rowsPerPage">
+                                        <option value="10" selected>10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="right-footer">
+                                <div class="go-to-page">
+                                    Go to Page:
+                                    <input type="number" id="pageInput" min="1" value="1">
+                                    <button class="go-btn" onclick="goToPage()">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="completed-bookings" role="tabpanel" aria-labelledby="completed-bookings-tab">
+                    <div class="equipment-container">
+                        <!-- Header Controls -->
+                        <div class="table-controls">
+                            <div class="left-controls">
+                                <div class="search-box">
+                                    <input type="text" id="customSearch" placeholder="Search here...">
+                                    <span class="search-icon">
+                                        <ion-icon name="search-outline"></ion-icon>
+                                    </span>
+                                </div>
+                                
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="funnel-outline"></ion-icon>
+                                    Filter
+                                </button>
+                            </div>
+                            <div class="right-controls">
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="download-outline"></ion-icon>
+                                    Export Data
+                                </button>
+                                <button class="table-ctrl-btn">
+                                    <ion-icon name="share-social-outline"></ion-icon>
+                                    Share
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- DataTable -->
+                        <table class="display equipmentTable">
+                            <thead>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <th>Lessee</th>
+                                    <th width="100">Lease Date</th>
+                                    <th>Status</th>
+                                    <th width="100"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge completed">completed</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge completed">completed</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CAT 320D Excavator</td>
+                                    <td>Gibraltar Construction</td>
+                                    <td>Jun 25 - Jul 12 2025</td>
+                                    <td><span class="status-badge completed">completed</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="qp-table-btn edit-btn" title="Edit">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn delete-btn" title="Delete">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                            <button class="qp-table-btn general-pop-opt" title="More">
+                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                <div class="side-dropdown options">
+                                                    <ul class="list-unstyled">
+                                                        <li><a href="#">Menu 1</a></li>
+                                                        <li><a href="#">Menu 2</a></li>
+                                                        <li><a href="#">Menu 3</a></li>
+                                                    </ul>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        
+                        <!-- Footer Controls -->
+                        <div class="footer-controls">
+                            <div class="left-footer">
+                                <div class="rows-per-page">
+                                    Rows per Page:
+                                    <select id="rowsPerPage">
+                                        <option value="10" selected>10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="right-footer">
+                                <div class="go-to-page">
+                                    Go to Page:
+                                    <input type="number" id="pageInput" min="1" value="1">
+                                    <button class="go-btn" onclick="goToPage()">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -774,7 +1243,7 @@
 
 <script>
     $(document).ready(function() {
-        var table = $('#equipmentTable').DataTable({
+        var table = $('.equipmentTable').DataTable({
             pageLength: 10,
             lengthChange: false,
             searching: false,
@@ -844,7 +1313,7 @@
     
     function goToPage() {
         var page = parseInt($('#pageInput').val()) - 1;
-        var table = $('#equipmentTable').DataTable();
+        var table = $('.equipmentTable').DataTable();
         var pageInfo = table.page.info();
         
         if (page >= 0 && page < pageInfo.pages) {

@@ -1,4 +1,8 @@
 @extends('layouts.admin')
+
+@section('nav_title','Overview')
+@section('nav_desc','overview of your equipment management system')
+
 @section('content')
 <div class="quick-stats-section">
     <h4 class="body-title">quick stats</h4>
