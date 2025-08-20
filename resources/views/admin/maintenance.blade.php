@@ -2,6 +2,10 @@
 
 @section('nav_title','Maintenance')
 @section('nav_desc','Schedule, track, and manage all maintenance activities')
+@section('local_css')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('assets/css/maintenance.css') }}">
+@endsection
 
 @section('content')
 <div class="quick-stats-section">
@@ -924,7 +928,462 @@
     </div>
     
     <div class="tab-pane fade" id="tableview" role="tabpanel" aria-labelledby="tableview-tab">
-        asuduyqwe
+        <div class="task-management-container">
+            <div class="task-accordion-wrapper">
+                <div class="accordion" id="taskAccordion">
+                    
+                    <!-- On-going Tasks Section -->
+                    <div class="accordion-item mb-5 mt-5">
+                        <h2 class="accordion-header task-accordion-header" id="ongoingHeader">
+                            <button class="accordion-button task-accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ongoingTasks" aria-expanded="true" aria-controls="ongoingTasks">
+                                <i class="fas fa-circle text-primary" style="font-size: 8px;"></i>
+                                On-going Tasks
+                                <span class="task-count-badge">5</span>
+                            </button>
+                        </h2>
+                        <div id="ongoingTasks" class="accordion-collapse collapse show" aria-labelledby="ongoingHeader" data-bs-parent="#taskAccordion">
+                            <div class="accordion-body task-accordion-body">
+                                <div class="task-table-wrapper">
+                                    <table class="table table-hover task-datatable" id="ongoingTable">
+                                        <thead>
+                                            <tr>
+                                                <th>TASK</th>
+                                                <th>ASSIGNEE</th>
+                                                <th>EQUIPMENT ID</th>
+                                                <th>DUE DATE</th>
+                                                <th>STATUS</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Oil Change</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-ongoing">On going</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tire Maintenance</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-ongoing">On going</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Engine Check</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-ongoing">On going</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oil Change</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-ongoing">On going</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oil Change</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-ongoing">On going</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Upcoming Tasks Section -->
+                    <div class="accordion-item mb-5">
+                        <h2 class="accordion-header task-accordion-header" id="upcomingHeader">
+                            <button class="accordion-button task-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#upcomingTasks" aria-expanded="false" aria-controls="upcomingTasks">
+                                <i class="fas fa-circle text-warning" style="font-size: 8px;"></i>
+                                Upcoming Tasks
+                                <span class="task-count-badge">5</span>
+                            </button>
+                        </h2>
+                        <div id="upcomingTasks" class="accordion-collapse collapse" aria-labelledby="upcomingHeader" data-bs-parent="#taskAccordion">
+                            <div class="accordion-body task-accordion-body">
+                                <div class="task-table-wrapper">
+                                    <table class="table table-hover task-datatable" id="upcomingTable">
+                                        <thead>
+                                            <tr>
+                                                <th>TASK</th>
+                                                <th>ASSIGNEE</th>
+                                                <th>EQUIPMENT ID</th>
+                                                <th>DUE DATE</th>
+                                                <th>STATUS</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Oil Change</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-upcoming">Upcoming</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tire Maintenance</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-upcoming">Upcoming</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Engine Check</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-upcoming">Upcoming</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oil Change</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-upcoming">Upcoming</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oil Change</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>08/08/2025</td>
+                                                <td><span class="task-status-badge status-upcoming">Upcoming</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Completed Tasks Section -->
+                    <div class="accordion-item mb-5">
+                        <h2 class="accordion-header task-accordion-header" id="completedHeader">
+                            <button class="accordion-button task-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#completedTasks" aria-expanded="false" aria-controls="completedTasks">
+                                <i class="fas fa-circle text-success" style="font-size: 8px;"></i>
+                                Completed Tasks
+                                <span class="task-count-badge">3</span>
+                            </button>
+                        </h2>
+                        <div id="completedTasks" class="accordion-collapse collapse" aria-labelledby="completedHeader" data-bs-parent="#taskAccordion">
+                            <div class="accordion-body task-accordion-body">
+                                <div class="task-table-wrapper">
+                                    <table class="table table-hover task-datatable" id="completedTable">
+                                        <thead>
+                                            <tr>
+                                                <th>TASK</th>
+                                                <th>ASSIGNEE</th>
+                                                <th>EQUIPMENT ID</th>
+                                                <th>DUE DATE</th>
+                                                <th>STATUS</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Oil Change</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>N/A</td>
+                                                <td><span class="task-status-badge status-completed">Completed</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tire Maintenance</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>N/A</td>
+                                                <td><span class="task-status-badge status-completed">Completed</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Engine Check</td>
+                                                <td><span class="assignee-avatar">AH</span>Abdul Hannan</td>
+                                                <td>GEN-NK-240</td>
+                                                <td>N/A</td>
+                                                <td><span class="task-status-badge status-completed">Completed</span></td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="qp-table-btn edit-btn" title="Edit">
+                                                            <ion-icon name="pencil-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn delete-btn" title="Delete">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="qp-table-btn general-pop-opt" title="More">
+                                                            <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
+                                                            <div class="side-dropdown options">
+                                                                <ul class="list-unstyled">
+                                                                    <li><a href="#">Menu 1</a></li>
+                                                                    <li><a href="#">Menu 2</a></li>
+                                                                    <li><a href="#">Menu 3</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+@endsection
+
+@section('local_js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net/1.13.6/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.js"></script>
 @endsection
