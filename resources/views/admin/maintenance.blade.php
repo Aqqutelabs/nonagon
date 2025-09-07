@@ -2,6 +2,8 @@
 
 @section('nav_title','Maintenance')
 @section('nav_desc','Schedule, track, and manage all maintenance activities')
+@section('backname','Maintenance')
+
 @section('local_css')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/maintenance.css') }}">
@@ -329,7 +331,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <!-- Ongoing Tasks Column -->
-                    <div class="col-lg-4 col-md-6 p-2">
+                    <div class="col-lg-4 col-sm-12 col-md-12 p-2">
                         <div class="status-column">
                             <div class="status-header">
                                 <div class="d-flex align-items-center justify-content-between">
@@ -527,7 +529,7 @@
                         </div>
                     </div>
                     <!-- upcoming Tasks Column -->
-                    <div class="col-lg-4 col-md-6 p-2">
+                    <div class="col-lg-4 col-sm-12 col-md-12 p-2">
                         <div class="status-column">
                             <div class="status-header">
                                 <div class="d-flex align-items-center justify-content-between">
@@ -725,7 +727,7 @@
                         </div>
                     </div>
                     <!-- completed Tasks Column -->
-                    <div class="col-lg-4 col-md-6 p-2">
+                    <div class="col-lg-4 col-sm-12 col-md-12 p-2">
                         <div class="status-column">
                             <div class="status-header">
                                 <div class="d-flex align-items-center justify-content-between">
@@ -1375,7 +1377,6 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>

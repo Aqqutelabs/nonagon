@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
     <script type="module" src="https://unpkg.com/ionicons@6.0.3/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@6.0.3/dist/ionicons/ionicons.js"></script>
     @yield('local_css')
@@ -26,7 +27,8 @@
         {{-- sidebar section --}}
         <aside class="sidebar-section">
             <div class="logo-divide">
-                <img src="{{ asset('assets/img/light.png') }}" alt="">
+                <img src="{{ asset('assets/img/light.png') }}" class="large-logo" alt="large size">
+                <img src="{{ asset('assets/img/favicon.png') }}" class="small-logo" alt="small size">
             </div>
             <div class="main-menu">
                 <h6 class="sidebar-header">main menu</h6>
@@ -42,11 +44,11 @@
                     <ion-icon name="hammer-outline" class="icon-ctrl"></ion-icon>
                     <h6>maintenance</h6>
                 </a>
-                <a href="#" class="icon-link">
+                <a href="{{ url('users') }}" class="icon-link {{ Request::is('users') ? 'active' : '' }}">
                     <ion-icon name="people-outline" class="icon-ctrl"></ion-icon>
                     <h6>users</h6>
                 </a>
-                <a href="#" class="icon-link">
+                <a href="{{ url('reports') }}" class="icon-link {{ Request::is('reports') ? 'active' : '' }}">
                     <ion-icon name="bar-chart-outline" class="icon-ctrl"></ion-icon>
                     <h6>reports</h6>
                 </a>
@@ -103,6 +105,15 @@
                 </nav>
 
                 <div class="content-section">
+                    @if(!Request::is('home'))
+                    <div class="back-ctrl">
+                        <ion-icon name="chevron-back-outline"></ion-icon>
+                        <a href="#" id="backHistory">back</a>
+                        <div class="lin-back"></div>
+                        <h5>@yield('backname')</h5>
+                    </div>
+                    @endif
+
                     @yield('content')
                 </div>
             </div>
@@ -218,6 +229,11 @@
             }
         });
         @endif
+
+        $('#backHistory').click(function(e){
+            e.preventDefault();
+            window.history.back();
+        })
     </script>
 
     @yield('local_js')

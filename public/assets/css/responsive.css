@@ -1,0 +1,181 @@
+@media only screen and (min-width: 320px) and (max-width: 479px){
+    
+}
+
+@media only screen and (min-width: 479px) and (max-width: 768px){
+    .icon-link h6{
+        display: none;
+    }
+    .main-menu{
+        padding: 50px 10px;
+    }
+    .sidebar-header{
+        display: none;
+    }
+    .sidebar-section,.sidebar-placeholder{
+        width: 8%;
+    }
+    .admin-content,.nav-page-title{
+        width: 92%;
+    }
+    .icon-link{
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        padding: 3px;
+    }
+    .icon-link .icon-ctrl{
+        font-size: 30px !important;
+    }
+    .logo-divide .large-logo{
+        display: none;
+    }
+    .logo-divide .small-logo{
+        display: block;
+        margin-left: -5px;
+        height: 30px;
+    }
+    .logo-divide{
+        padding: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .account-info-card{
+        display: none;
+    }
+    .setting-dropdown{
+        width: 100%;
+    }
+    .btn-view-details i{
+        display: none;
+    }
+    .other-controls{
+        justify-content: left;
+        margin-top: 30px;
+    }
+    .table-controls{
+        display: block !important;
+    }
+    .table-controls .left-controls, .table-controls .right-controls{
+        width: 100%;
+        margin-top: 20px;
+    }
+    .qd-button .hydrated{
+        display: none;
+    }
+    .title-section{
+        width: 50%;
+    }
+    .title-section h6{
+        text-overflow: ellipsis;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px){
+    .icon-link h6{
+        display: none;
+    }
+    .main-menu{
+        padding: 50px 10px;
+    }
+    .sidebar-header{
+        display: none;
+    }
+    .sidebar-section,.sidebar-placeholder{
+        width: 8%;
+    }
+    .admin-content,.nav-page-title{
+        width: 92%;
+    }
+    .icon-link{
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+    .icon-link .icon-ctrl{
+        font-size: 30px;
+    }
+    .logo-divide .large-logo{
+        display: none;
+    }
+    .logo-divide .small-logo{
+        display: block;
+        margin-left: -5px;
+    }
+    .logo-divide{
+        padding: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .account-info-card{
+        display: none;
+    }
+    .setting-dropdown{
+        width: 100%;
+    }
+    .btn-view-details i{
+        display: none;
+    }
+    .other-controls{
+        justify-content: left;
+        margin-top: 30px;
+    }
+    .table-controls{
+        display: block !important;
+    }
+    .table-controls .left-controls, .table-controls .right-controls{
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (min-width: 991px) and (max-width: 1200px){
+    .icon-link h6{
+        display: none;
+    }
+    .main-menu{
+        padding: 50px 10px;
+    }
+    .sidebar-header{
+        display: none;
+    }
+    .sidebar-section,.sidebar-placeholder{
+        width: 8%;
+    }
+    .admin-content,.nav-page-title{
+        width: 92%;
+    }
+    .icon-link{
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+    .icon-link .icon-ctrl{
+        font-size: 30px;
+    }
+    .logo-divide .large-logo{
+        display: none;
+    }
+    .logo-divide .small-logo{
+        display: block;
+        margin-left: -5px;
+    }
+    .avatar-info{
+        display: none;
+    }
+    .account-info-card{
+        width: 50%;
+    }
+    .setting-dropdown{
+        margin-left: -20px;
+        width: 50%;
+    }
+    .btn-view-details i{
+        display: none;
+    }
+}

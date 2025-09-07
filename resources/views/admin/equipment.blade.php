@@ -2,6 +2,7 @@
 
 @section('nav_title','Equipment')
 @section('nav_desc','Monitor and manage all equipment across your facilities')
+@section('backname','Equipment')
 
 @section('local_css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/jquery.dataTables.min.css">
@@ -1125,13 +1126,15 @@
                                     <th width="100"></th>
                                 </tr>
                             </thead>
+                            
                             <tbody>
-
                                 <tr>
                                     <td>CAT 320D Excavator</td>
                                     <td>Gibraltar Construction</td>
                                     <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge completed">completed</span></td>
+                                    <td>
+                                        <span class="status-badge completed">completed</span>
+                                    </td>
                                     <td>
                                         <div class="action-buttons">
                                             <button class="qp-table-btn edit-btn" title="Edit">
