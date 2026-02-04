@@ -179,10 +179,10 @@
                                         <div class="col-lg-8">
                                             <div class="upload-document">
                                                 <div class="file-icon">
-                                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                                    <i class="fa fa-file-text" aria-hidden="true"></i>
                                                 </div>
                                                 <div class="document-box">
-                                                    click to upload an image or document
+                                                    <a href="#">Click to upload</a> an image or document
                                                 </div>
                                             </div>
                                         </div>

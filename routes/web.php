@@ -1,9 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/second', function () {
     return view('welcome');
+});
+
+Route::get('/', function () {
+    return view('second');
 });
 
 Route::get('/equipment', function () {

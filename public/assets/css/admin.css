@@ -741,6 +741,30 @@ a {
     justify-content: center;
     align-items: center;
 }
+.upload-document{
+    display: flex;
+    justify-content: left;
+    gap: 20px;
+}
+.document-box{
+    border-radius: var(--radius);
+    border: solid 1px #dbeafe;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.document-box a {
+    font-weight: bold;
+    color: #13247d;
+    margin-right: 5px;
+}
+.file-icon i{
+    background: #eeeeee;
+    padding: 20px 23px;
+    border-radius: 50%;
+    font-size: 40px;
+}
 /* listings CSS */
 .listings-section li button {
     display: flex;
