@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Quipdeck | Landing Page</title>
+    <title>Nonagon | Landing Page</title>
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
 <body>
     <nav class="quipdeck-nav nav">
         <div class="logo-box">
-            <img src="{{ asset('assets/img/dark.png') }}" alt="quipdeck logo">
+            <img src="{{ asset('assets/img/dark.png') }}" alt="nonagon logo">
         </div>
         <div class="search-box">
             <form action="#" method="post">
