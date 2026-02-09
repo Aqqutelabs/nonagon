@@ -31,9 +31,9 @@
 </head>
 
 <body>
-    <nav class="quipdeck-nav nav">
+    <nav class="nonagon-nav nav">
         <div class="logo-box">
-            <img src="{{ asset('assets/img/dark.png') }}" alt="nonagon logo">
+            <img src="{{ asset('assets/img/logo-dark.svg') }}" alt="nonagon logo">
         </div>
         {{-- <div class="search-box">
             <form action="#" method="post">
@@ -157,7 +157,7 @@
         </div>
     </div>
 
-    <div class="why-quipdeck padded">
+    <div class="why-nonagon padded">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-6">
@@ -395,7 +395,7 @@
                         <a href="#" class="social-link" aria-label="Facebook">
                             <i class="fab fa-facebook"></i>
                         </a>
-                        <a href="https://www.instagram.com/quipdeck?igsh=MWFqejdxcWEwaG01Yw%3D%3D&utm_source=qr"
+                        <a href="https://www.instagram.com/nonagon?igsh=MWFqejdxcWEwaG01Yw%3D%3D&utm_source=qr"
                             class="social-link" aria-label="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
@@ -442,7 +442,7 @@
                         </li>
                         <li>
                             <span class="contact-label">Email:</span>
-                            <a href="mailto:quipdeck@gmail.com">quipdeck@gmail.com</a>
+                            <a href="mailto:nonagon@gmail.com">nonagon@gmail.com</a>
                         </li>
                         <li>
                             <span class="contact-label">Address:</span>

@@ -21,9 +21,9 @@
 </head>
 
 <body>
-    <nav class="quipdeck-nav nav">
+    <nav class="nonagon-nav nav">
         <div class="logo-box">
-            <img src="{{ asset('assets/img/dark.png') }}" alt="nonagon logo">
+            <img src="{{ asset('assets/img/logo-dark.svg') }}" alt="nonagon logo">
         </div>
         <div class="search-box">
             <form action="#" method="post">
@@ -72,10 +72,10 @@
                         </h6>
 
                         <div class="hero-buttons">
-                            <a href="#" class="btn btn-quipdeck active">Explore Marketplace 
+                            <a href="#" class="btn btn-nonagon active">Explore Marketplace 
                                 <ion-icon name="arrow-forward-outline" class="ml-2 icon"></ion-icon>
                             </a>
-                            <a href="#" class="btn btn-quipdeck">List your Equipment</a>
+                            <a href="#" class="btn btn-nonagon">List your Equipment</a>
                         </div>
 
                         <form action="#">
