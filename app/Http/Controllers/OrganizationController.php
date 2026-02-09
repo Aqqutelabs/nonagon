@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrganizationController extends Controller
 {
-    private function createOrg(array $data): Organization
+    public function createOrg(array $data): Organization
     {
         return DB::transaction(function () use ($data){
             $organization = Organization::create($data);

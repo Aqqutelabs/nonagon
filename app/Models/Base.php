@@ -18,4 +18,6 @@ class Base extends Model
     {
         return $this->belongsTo(Organization::class);
     }
+
+    protected $guarded = [];
 }
