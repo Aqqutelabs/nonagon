@@ -1,6 +1,6 @@
 name: Deploy
 on:
-  push:
+  push: main
   pull_request:
 jobs:
   tests:
