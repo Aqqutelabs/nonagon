@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<<<<<<< HEAD
     <title>Nonagon | Landing Page</title>
+=======
+    <title>Quipdeck | Landing Page</title>
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,9 +25,15 @@
 </head>
 
 <body>
+<<<<<<< HEAD
     <nav class="nonagon-nav nav">
         <div class="logo-box">
             <img src="{{ asset('assets/img/logo-dark.svg') }}" alt="nonagon logo">
+=======
+    <nav class="quipdeck-nav nav">
+        <div class="logo-box">
+            <img src="{{ asset('assets/img/dark.png') }}" alt="quipdeck logo">
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
         </div>
         <div class="search-box">
             <form action="#" method="post">
@@ -72,10 +82,17 @@
                         </h6>
 
                         <div class="hero-buttons">
+<<<<<<< HEAD
                             <a href="#" class="btn btn-nonagon active">Explore Marketplace 
                                 <ion-icon name="arrow-forward-outline" class="ml-2 icon"></ion-icon>
                             </a>
                             <a href="#" class="btn btn-nonagon">List your Equipment</a>
+=======
+                            <a href="#" class="btn btn-quipdeck active">Explore Marketplace 
+                                <ion-icon name="arrow-forward-outline" class="ml-2 icon"></ion-icon>
+                            </a>
+                            <a href="#" class="btn btn-quipdeck">List your Equipment</a>
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
                         </div>
 
                         <form action="#">
