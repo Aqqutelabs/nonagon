@@ -27,7 +27,11 @@
         {{-- sidebar section --}}
         <aside class="sidebar-section">
             <div class="logo-divide">
+<<<<<<< HEAD
                 <img src="{{ asset('assets/img/logo-white.svg') }}" class="large-logo" alt="large size">
+=======
+                <img src="{{ asset('assets/img/light.png') }}" class="large-logo" alt="large size">
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
                 <img src="{{ asset('assets/img/favicon.png') }}" class="small-logo" alt="small size">
             </div>
             <div class="main-menu">

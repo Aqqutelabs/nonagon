@@ -4,7 +4,11 @@ body {
 
 :root {
     --primary-color: #000 !important;
+<<<<<<< HEAD
     --secondary-color: #E10600 !important;
+=======
+    --secondary-color: #ec8923 !important;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 }
 
 input,
@@ -13,7 +17,11 @@ select,
     box-shadow: none !important;
 }
 
+<<<<<<< HEAD
 .nonagon-nav {
+=======
+.quipdeck-nav {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     border-bottom: solid 1px #ccc;
     padding: 0px 20px;
     display: flex;
@@ -28,28 +36,48 @@ select,
     background: #fff;
 }
 
+<<<<<<< HEAD
 .nonagon-nav .logo-box {
+=======
+.quipdeck-nav .logo-box {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     width: 30%;
     padding-top: 10px;
 }
 
+<<<<<<< HEAD
 .nonagon-nav .search-box {
+=======
+.quipdeck-nav .search-box {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     width: 40%;
     padding-top: 10px;
 }
 
+<<<<<<< HEAD
 .nonagon-nav .sub-controls {
+=======
+.quipdeck-nav .sub-controls {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     width: 30%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
 }
 
+<<<<<<< HEAD
 .nonagon-nav .logo-box img {
     height: 50px;
 }
 
 .nonagon-nav .search-box .input-group {
+=======
+.quipdeck-nav .logo-box img {
+    height: 50px;
+}
+
+.quipdeck-nav .search-box .input-group {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     width: 100%;
 }
 
@@ -122,7 +150,11 @@ select,
     display: none;
 }
 
+<<<<<<< HEAD
 .user-actions:hover + .action-drop {
+=======
+.user-actions:hover+.action-drop {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     display: block;
 }
 
@@ -171,7 +203,11 @@ select,
     padding-top: 5px;
 }
 
+<<<<<<< HEAD
 .btn-nonagon {
+=======
+.btn-quipdeck {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     border: solid 2px var(--secondary-color);
     margin-right: 10px;
     cursor: pointer;
@@ -179,12 +215,20 @@ select,
     transition: all 0.3s ease;
 }
 
+<<<<<<< HEAD
 .btn-nonagon.active {
+=======
+.btn-quipdeck.active {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     background: var(--secondary-color);
     color: var(--primary-color);
 }
 
+<<<<<<< HEAD
 .btn-nonagon:hover {
+=======
+.btn-quipdeck:hover {
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     background: transparent;
     color: var(--secondary-color);
 }
@@ -283,9 +327,13 @@ select,
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+<<<<<<< HEAD
     transition:
         transform 0.3s ease,
         box-shadow 0.3s ease;
+=======
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     position: relative;
     overflow: hidden;
 }
@@ -302,12 +350,19 @@ select,
     left: -100%;
     width: 100%;
     height: 100%;
+<<<<<<< HEAD
     background: linear-gradient(
         90deg,
         transparent,
         rgba(255, 255, 255, 0.3),
         transparent
     );
+=======
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     transition: left 0.5s;
 }
 
@@ -390,22 +445,36 @@ select,
 
 .sponsor-overlay.left {
     left: 0;
+<<<<<<< HEAD
     background: linear-gradient(
         to right,
         rgb(32, 38, 91),
         rgb(32, 38, 91),
         rgba(32, 38, 91, 0)
     );
+=======
+    background: linear-gradient(to right,
+            rgb(32, 38, 91),
+            rgb(32, 38, 91),
+            rgba(32, 38, 91, 0));
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 }
 
 .sponsor-overlay.right {
     right: 0;
+<<<<<<< HEAD
     background: linear-gradient(
         to left,
         rgb(32, 38, 91),
         rgb(32, 38, 91),
         rgba(32, 38, 91, 0)
     );
+=======
+    background: linear-gradient(to left,
+            rgb(32, 38, 91),
+            rgb(32, 38, 91),
+            rgba(32, 38, 91, 0));
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 }
 
 .sponsors-wrapper {
@@ -485,7 +554,11 @@ select,
 
 .labeled-sect {
     background: #f7ece6;
+<<<<<<< HEAD
     border: solid 2px #E10600;
+=======
+    border: solid 2px #f59846;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     padding: 10px 20px;
     text-transform: capitalize;
     font-size: 14px;
@@ -501,13 +574,21 @@ select,
 }
 
 .journey-start .highlighted {
+<<<<<<< HEAD
     color: var(--secondary-color);
+=======
+    color: #f59846;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     margin-bottom: 40px;
 }
 
 .equipment-body {
+<<<<<<< HEAD
     font-family:
         -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+=======
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     background: #f5f7fa;
     min-height: 100vh;
     padding: 40px 20px;
@@ -524,7 +605,11 @@ select,
 .equipment-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+<<<<<<< HEAD
     gap: 30px;
+=======
+    gap: 30px
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 }
 
 .equipment-card {
@@ -532,9 +617,13 @@ select,
     border-radius: 24px;
     overflow: hidden;
     height: 400px;
+<<<<<<< HEAD
     transition:
         transform 0.3s ease,
         box-shadow 0.3s ease;
+=======
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     cursor: pointer;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
@@ -545,7 +634,11 @@ select,
 }
 
 .equipment-card::before {
+<<<<<<< HEAD
     content: "";
+=======
+    content: '';
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     position: absolute;
     top: 0;
     left: 0;
@@ -568,6 +661,7 @@ select,
 }
 
 .equipment-bg-1 {
+<<<<<<< HEAD
     background-image: url("../img/2.jpg");
 }
 
@@ -577,6 +671,17 @@ select,
 
 .equipment-bg-3 {
     background-image: url("../img/4.jpg");
+=======
+    background-image: url('../img/2.jpg');
+}
+
+.equipment-bg-2 {
+    background-image: url('../img/3.jpg');
+}
+
+.equipment-bg-3 {
+    background-image: url('../img/4.jpg');
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 }
 
 .equipment-content {
@@ -924,7 +1029,11 @@ select,
 }
 
 .newsletter-signup-container::before {
+<<<<<<< HEAD
     content: "";
+=======
+    content: '';
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     position: absolute;
     left: 0px;
     bottom: 0px;
@@ -936,7 +1045,11 @@ select,
 }
 
 .newsletter-signup-container::after {
+<<<<<<< HEAD
     content: "";
+=======
+    content: '';
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     position: absolute;
     right: -15px;
     bottom: -10px;
@@ -956,7 +1069,11 @@ select,
 .newsletter-headline {
     color: white;
     margin-bottom: 40px;
+<<<<<<< HEAD
     font-family: "Braah One";
+=======
+    font-family: 'Braah One';
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     font-size: 35px;
 }
 
@@ -1000,7 +1117,11 @@ select,
 
 .signup-submit-btn {
     padding: 16px 32px;
+<<<<<<< HEAD
     background: #E10600;
+=======
+    background: #ff8c42;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     color: white;
     border: none;
     font-size: 16px;
@@ -1014,7 +1135,11 @@ select,
 }
 
 .signup-submit-btn:hover {
+<<<<<<< HEAD
     background: #fa1a12;
+=======
+    background: #e57a37;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
@@ -1079,6 +1204,10 @@ select,
 
 /* Animation for the chairs */
 @keyframes float-animation {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     0%,
     100% {
         transform: translateY(0px) rotate(-15deg);
@@ -1090,6 +1219,10 @@ select,
 }
 
 @keyframes float-animation-right {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     0%,
     100% {
         transform: translateY(0px) rotate(15deg) scaleX(-1);
@@ -1286,4 +1419,8 @@ select,
     .footer-content {
         gap: 30px;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
