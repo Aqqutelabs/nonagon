@@ -376,7 +376,7 @@
         </div>
 
         <!-- listings tab -->
-        <div class="tab-pane fade" id="listings" role="tabpanel" aria-labelledby="listings-tab">
+        <!-- <div class="tab-pane fade" id="listings" role="tabpanel" aria-labelledby="listings-tab">
 
             <!-- <ul class="nav nav-tabs listings-section mt-5" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -993,7 +993,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 @endsection
 

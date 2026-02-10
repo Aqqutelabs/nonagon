@@ -6,11 +6,7 @@
     <div class="login-card">
         <div class="form-header">
             <h1 class="form-title">
-<<<<<<< HEAD
                 <img src="{{ asset('assets/img/logo-dark.svg') }}" height="70" alt="company logo">
-=======
-                <img src="{{ asset('assets/img/dark.png') }}" height="70" alt="company logo">
->>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
             </h1>
             <p class="form-subtitle">Join us today! Please fill in your details.</p>
         </div>
