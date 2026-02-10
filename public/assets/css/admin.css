@@ -2,9 +2,9 @@
     font-family: "DM sans";
 }
 :root {
-    --primary-color: #141b34;
+    --primary-color: #0A6FB8;
     --secondary-color: #fff;
-    --grey-color: #929292;
+    --grey-color: #4D4D4D;
     --tertiary-color: #f6f8fa;
     --radius: 10px;
 }
@@ -326,10 +326,10 @@ a {
     font-size: 30px;
 }
 .sc-img.primary {
-    color: #7086fd;
+    color: #046D7D;
 }
 .sc-img.warning {
-    color: #ed880d;
+    color: #E10600;
 }
 .sc-img.danger {
     color: #e34664;
@@ -587,7 +587,7 @@ a {
 
 .qd-equipment-price {
     font-size: 16px;
-    color: #f59e0b;
+    color: #E10600;
     font-weight: 600;
     margin-bottom: 16px;
 }

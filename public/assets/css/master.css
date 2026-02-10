@@ -4,7 +4,7 @@ body {
 
 :root {
     --primary-color: #000 !important;
-    --secondary-color: #ec8923 !important;
+    --secondary-color: #E10600 !important;
 }
 
 input,
@@ -485,7 +485,7 @@ select,
 
 .labeled-sect {
     background: #f7ece6;
-    border: solid 2px #f59846;
+    border: solid 2px #E10600;
     padding: 10px 20px;
     text-transform: capitalize;
     font-size: 14px;
@@ -501,7 +501,7 @@ select,
 }
 
 .journey-start .highlighted {
-    color: #f59846;
+    color: var(--secondary-color);
     margin-bottom: 40px;
 }
 
@@ -1000,7 +1000,7 @@ select,
 
 .signup-submit-btn {
     padding: 16px 32px;
-    background: #ff8c42;
+    background: #E10600;
     color: white;
     border: none;
     font-size: 16px;
@@ -1014,7 +1014,7 @@ select,
 }
 
 .signup-submit-btn:hover {
-    background: #e57a37;
+    background: #fa1a12;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }

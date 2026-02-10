@@ -329,7 +329,7 @@
                 <div class="equipment-content">
                     <h2 class="equipment-title">Earn Commissions when Equipment gets hired.</h2>
                     <p class="equipment-description">
-                        As Quipeck Agent, source-verified owners list their machines and earn an income. Simple, transparent, and rewarding—help businesses find equipment fast while you get paid effortlessly.
+                        As Nonagon Agent, source-verified owners list their machines and earn an income. Simple, transparent, and rewarding—help businesses find equipment fast while you get paid effortlessly.
                     </p>
                     <div class="equipment-footer">
                         <button class="equipment-action-btn">
@@ -386,7 +386,7 @@
                 <!-- Brand Section -->
                 <div class="footer-brand">
                     <div class="logo">
-                        <img src="{{ asset('assets/img/light.png') }}" alt="">
+                        <img src="{{ asset('assets/img/logo-white.svg') }}" alt="">
                     </div>
                     <p class="brand-description">
                         Africa's leading platform for industrial equipment rental and management.
