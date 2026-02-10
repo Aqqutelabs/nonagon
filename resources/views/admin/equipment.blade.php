@@ -16,10 +16,10 @@
                     <button class="nav-link active" id="equipment-tab" data-bs-toggle="tab" data-bs-target="#equipment"
                         type="button" role="tab" aria-controls="equipment" aria-selected="true">my equipment</button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <!-- <li class="nav-item" role="presentation">
                     <button class="nav-link" id="listings-tab" data-bs-toggle="tab" data-bs-target="#listings"
                         type="button" role="tab" aria-controls="listings" aria-selected="false">my listings</button>
-                </li>
+                </li> -->
             </ul>
         </div>
         <div class="col-lg-8">
@@ -211,417 +211,174 @@
             </div>
         </div>
     </div>
+    @php
+        // Equipment data array - Edit this to update all equipment cards
+        $equipmentList = [
+            [
+                'category' => 'Vehicle',
+                'brand' => 'Mack',
+                'sub_category' => 'Dump Truck – Granite 64BR',
+                'title' => 'Mac Bulldozer 12DH',
+                'price' => '$120,000/hr',
+                'image' => 'assets/img/logo-dark.svg',
+                'model' => 'GEN-NX 24D',
+                'serial_number' => 'EPE-108X 24D',
+                'assetId' => 'GR64-NX / MCK-88421',
+                'department' => 'Logistics & Haulage',
+                'plant' => 'OML 11 – Central Yard',
+                'status' => 'Operational',
+            ],
+            [
+                'category' => 'Lifting',
+                'brand' => 'Liebherr',
+                'sub_category' => 'Crawler Crane – LR 1300',
+                'title' => 'Mac Bulldozer 12DH',
+                'price' => '$120,000/hr',
+                'image' => 'assets/img/logo-dark.svg',
+                'model' => 'GEN-NX 24D',
+                'serial_number' => 'EPE-108X 24D',
+                'assetId' => 'LR1300-C / LHB-130045',
+                'department' => 'Construction',
+                'plant' => 'OML 11 – Flow Station A',
+                'status' => 'Operational',
+            ],
+            [
+                'category' => 'Storage',
+                'brand' => 'CST',
+                'sub_category' => 'Crude Oil Storage Tank – 10,000 bbl',
+                'title' => 'Mac Bulldozer 12DH',
+                'price' => '$120,000/hr',
+                'image' => 'assets/img/logo-dark.svg',
+                'model' => 'GEN-NX 24D',
+                'serial_number' => 'EPE-108X 24D',
+                'assetId' => 'CST-10K / CST-OM11-009',
+                'department' => 'Production',
+                'plant' => 'OML 11 – Tank Farm 1',
+                'status' => 'Operational',
+            ],
+            [
+                'category' => 'Pressure',
+                'brand' => 'Cameron',
+                'sub_category' => 'Wellhead Christmas Tree – 10k PSI',
+                'title' => 'Mac Bulldozer 12DH',
+                'price' => '$120,000/hr',
+                'image' => 'assets/img/logo-dark.svg',
+                'model' => 'GEN-NX 24D',
+                'serial_number' => 'EPE-108X 24D',
+                'assetId' => 'CM-XT10 / CAM-XT-7712',
+                'department' => 'Wells & Completions',
+                'plant' => 'OML 11 – Wellpad C',
+                'status' => 'Standby',
+            ],
+            [
+                'category' => 'Processing',
+                'brand' => 'Alfa Laval',
+                'sub_category' => 'Separator – 3-Phase Oil/Gas/Water',
+                'title' => 'Mac Bulldozer 12DH',
+                'price' => '$120,000/hr',
+                'image' => 'assets/img/logo-dark.svg',
+                'model' => 'GEN-NX 24D',
+                'serial_number' => 'EPE-108X 24D',
+                'assetId' => 'AL-SEP3 / ALF-CPF-332',
+                'department' => 'Production',
+                'plant' => 'OML 11 – CPF',
+                'status' => 'Operational',
+            ],
+            [
+                'category' => 'Power / Utility',
+                'brand' => 'Caterpillar',
+                'sub_category' => 'Diesel Generator – CAT 3516B (2MW)',
+                'title' => 'Mac Bulldozer 12DH',
+                'price' => '$120,000/hr',
+                'image' => 'assets/img/logo-dark.svg',
+                'model' => 'GEN-NX 24D',
+                'serial_number' => 'EPE-108X 24D',
+                'assetId' => 'CAT-3516B / CAT-PWR-1908',
+                'department' => 'Utilities & Power',
+                'plant' => 'OML 11 – Power House',
+                'status' => 'Under Maintenance',
+            ],
+        ];
+    @endphp
+
     <div class="qd-tabcontent tab-content">
         <div class="tab-pane fade show active" id="equipment" role="tabpanel" aria-labelledby="equipment-tab">
             <div class="col-lg-12">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div class="qd-equipment-card">
-                            <div class="qd-card-header">
-                                <img src="{{ asset('assets/img/1.jpg') }}" alt="Mac Semi Truck" class="qd-equipment-image">
-                            </div>
+                    @foreach($equipmentList as $equipment)
+                        <div class="col-lg-4">
+                            <div class="qd-equipment-card">
+                                <div class="qd-card-header">
+                                    <img src="{{ asset($equipment['image']) }}" alt="{{ $equipment['title'] }}" class="qd-equipment-image">
+                                </div>
+                                <h3 class="qd-equipment-title">{{ $equipment['brand'] }} {{ \Illuminate\Support\Str::limit($equipment['sub_category'], 20) }}</h3>
 
-                            <h3 class="qd-equipment-title">Mac Bulldozer 12DH</h3>
-                            <div class="qd-equipment-price">$120,000/hr</div>
+                                <div class="qd-equipment-price">{{ $equipment['category'] }}</div>
 
-                            <div class="qd-card-body">
+                                <div class="qd-card-body">
+                                    <div class="qd-equipment-details">
+                                        <div class="qd-detail-row">
+                                            <span class="qd-detail-icon">
+                                                <ion-icon name="settings-outline"></ion-icon>
+                                            </span>
+                                            <span class="qd-detail-label">Model:</span>
+                                            <span class="qd-detail-value">{{ $equipment['model'] }}</span>
+                                        </div>
+                                        <div class="qd-detail-row">
+                                            <span class="qd-detail-icon">
+                                                <ion-icon name="settings-outline"></ion-icon>
+                                            </span>
+                                            <span class="qd-detail-label">Serial Number:</span>
+                                            <span class="qd-detail-value">{{ $equipment['serial_number'] }}</span>
+                                        </div>
+                                        <div class="qd-detail-row">
+                                            <span class="qd-detail-icon">
+                                                <ion-icon name="settings-outline"></ion-icon>
+                                            </span>
+                                            <span class="qd-detail-label">Asset ID:</span>
+                                            <span class="qd-detail-value">{{ $equipment['assetId'] }}</span>
+                                        </div>
 
-                                <div class="qd-equipment-details">
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Model:</span>
-                                        <span class="qd-detail-value">GEN-NX 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Serial Number:</span>
-                                        <span class="qd-detail-value">EPE-108X 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Utilization & Usage:</span>
-                                        <span class="qd-detail-value">32%</span>
-                                    </div>
+                                        <div class="qd-detail-row">
+                                            <span class="qd-detail-icon">
+                                                <ion-icon name="build-outline"></ion-icon>
+                                            </span>
+                                            <span class="qd-detail-label">Department:</span>
+                                            <span class="qd-detail-value">{{ $equipment['department'] }}</span>
+                                        </div>
+                                        <div class="qd-detail-row">
+                                            <span class="qd-detail-icon">
+                                                <ion-icon name="build-outline"></ion-icon>
+                                            </span>
+                                            <span class="qd-detail-label">Plant / Facility:</span>
+                                            <span class="qd-detail-value">{{ $equipment['plant'] }}</span>
+                                        </div>
 
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Next Maintenance:</span>
-                                        <span class="qd-detail-value">24/08/2025</span>
+                                        <div class="qd-status-badge">{{ $equipment['status'] }}</div>
                                     </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Last Maintenance:</span>
-                                        <span class="qd-detail-value">08/04/2025</span>
-                                    </div>
-
-                                    <div class="qd-status-badge">Operational</div>
                                 </div>
 
-                            </div>
-
-                            <div class="qd-card-actions">
-                                <button class="qd-action-btn">
-                                    <ion-icon name="settings-outline"></ion-icon>
-                                    View Details
-                                </button>
-                                <button class="qd-action-btn">
-                                    <ion-icon name="build-outline"></ion-icon>
-                                    Schedule Repair
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="qd-equipment-card">
-                            <div class="qd-card-header">
-                                <img src="{{ asset('assets/img/2.jpg') }}" alt="Mac Semi Truck"
-                                    class="qd-equipment-image">
-                            </div>
-
-                            <h3 class="qd-equipment-title">Mac Bulldozer 12DH</h3>
-                            <div class="qd-equipment-price">$120,000/hr</div>
-
-                            <div class="qd-card-body">
-
-                                <div class="qd-equipment-details">
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Model:</span>
-                                        <span class="qd-detail-value">GEN-NX 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Serial Number:</span>
-                                        <span class="qd-detail-value">EPE-108X 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Utilization & Usage:</span>
-                                        <span class="qd-detail-value">32%</span>
-                                    </div>
-
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Next Maintenance:</span>
-                                        <span class="qd-detail-value">24/08/2025</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Last Maintenance:</span>
-                                        <span class="qd-detail-value">08/04/2025</span>
-                                    </div>
-
-                                    <div class="qd-status-badge">Operational</div>
+                                <div class="qd-card-actions">
+                                    <button class="qd-action-btn">
+                                        <ion-icon name="settings-outline"></ion-icon>
+                                        View Details
+                                    </button>
+                                    <button class="qd-action-btn">
+                                        <ion-icon name="build-outline"></ion-icon>
+                                        Change Status
+                                    </button>
                                 </div>
-
-                            </div>
-
-                            <div class="qd-card-actions">
-                                <button class="qd-action-btn">
-                                    <ion-icon name="settings-outline"></ion-icon>
-                                    View Details
-                                </button>
-                                <button class="qd-action-btn">
-                                    <ion-icon name="build-outline"></ion-icon>
-                                    Schedule Repair
-                                </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="qd-equipment-card">
-                            <div class="qd-card-header">
-                                <img src="{{ asset('assets/img/3.jpg') }}" alt="Mac Semi Truck"
-                                    class="qd-equipment-image">
-                            </div>
-
-                            <h3 class="qd-equipment-title">Mac Bulldozer 12DH</h3>
-                            <div class="qd-equipment-price">$120,000/hr</div>
-
-                            <div class="qd-card-body">
-
-                                <div class="qd-equipment-details">
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Model:</span>
-                                        <span class="qd-detail-value">GEN-NX 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Serial Number:</span>
-                                        <span class="qd-detail-value">EPE-108X 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Utilization & Usage:</span>
-                                        <span class="qd-detail-value">32%</span>
-                                    </div>
-
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Next Maintenance:</span>
-                                        <span class="qd-detail-value">24/08/2025</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Last Maintenance:</span>
-                                        <span class="qd-detail-value">08/04/2025</span>
-                                    </div>
-
-                                    <div class="qd-status-badge">Operational</div>
-                                </div>
-
-                            </div>
-
-                            <div class="qd-card-actions">
-                                <button class="qd-action-btn">
-                                    <ion-icon name="settings-outline"></ion-icon>
-                                    View Details
-                                </button>
-                                <button class="qd-action-btn">
-                                    <ion-icon name="build-outline"></ion-icon>
-                                    Schedule Repair
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="qd-equipment-card">
-                            <div class="qd-card-header">
-                                <img src="{{ asset('assets/img/4.jpg') }}" alt="Mac Semi Truck"
-                                    class="qd-equipment-image">
-                            </div>
-
-                            <h3 class="qd-equipment-title">Mac Bulldozer 12DH</h3>
-                            <div class="qd-equipment-price">$120,000/hr</div>
-
-                            <div class="qd-card-body">
-
-                                <div class="qd-equipment-details">
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Model:</span>
-                                        <span class="qd-detail-value">GEN-NX 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Serial Number:</span>
-                                        <span class="qd-detail-value">EPE-108X 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Utilization & Usage:</span>
-                                        <span class="qd-detail-value">32%</span>
-                                    </div>
-
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Next Maintenance:</span>
-                                        <span class="qd-detail-value">24/08/2025</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Last Maintenance:</span>
-                                        <span class="qd-detail-value">08/04/2025</span>
-                                    </div>
-
-                                    <div class="qd-status-badge">Operational</div>
-                                </div>
-
-                            </div>
-
-                            <div class="qd-card-actions">
-                                <button class="qd-action-btn">
-                                    <ion-icon name="settings-outline"></ion-icon>
-                                    View Details
-                                </button>
-                                <button class="qd-action-btn">
-                                    <ion-icon name="build-outline"></ion-icon>
-                                    Schedule Repair
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="qd-equipment-card">
-                            <div class="qd-card-header">
-                                <img src="{{ asset('assets/img/5.jpg') }}" alt="Mac Semi Truck"
-                                    class="qd-equipment-image">
-                            </div>
-
-                            <h3 class="qd-equipment-title">Mac Bulldozer 12DH</h3>
-                            <div class="qd-equipment-price">$120,000/hr</div>
-
-                            <div class="qd-card-body">
-
-                                <div class="qd-equipment-details">
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Model:</span>
-                                        <span class="qd-detail-value">GEN-NX 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Serial Number:</span>
-                                        <span class="qd-detail-value">EPE-108X 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Utilization & Usage:</span>
-                                        <span class="qd-detail-value">32%</span>
-                                    </div>
-
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Next Maintenance:</span>
-                                        <span class="qd-detail-value">24/08/2025</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Last Maintenance:</span>
-                                        <span class="qd-detail-value">08/04/2025</span>
-                                    </div>
-
-                                    <div class="qd-status-badge">Operational</div>
-                                </div>
-
-                            </div>
-
-                            <div class="qd-card-actions">
-                                <button class="qd-action-btn">
-                                    <ion-icon name="settings-outline"></ion-icon>
-                                    View Details
-                                </button>
-                                <button class="qd-action-btn">
-                                    <ion-icon name="build-outline"></ion-icon>
-                                    Schedule Repair
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="qd-equipment-card">
-                            <div class="qd-card-header">
-                                <img src="{{ asset('assets/img/6.jpg') }}" alt="Mac Semi Truck"
-                                    class="qd-equipment-image">
-                            </div>
-
-                            <h3 class="qd-equipment-title">Mac Bulldozer 12DH</h3>
-                            <div class="qd-equipment-price">$120,000/hr</div>
-
-                            <div class="qd-card-body">
-
-                                <div class="qd-equipment-details">
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Model:</span>
-                                        <span class="qd-detail-value">GEN-NX 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Serial Number:</span>
-                                        <span class="qd-detail-value">EPE-108X 24D</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="settings-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Utilization & Usage:</span>
-                                        <span class="qd-detail-value">32%</span>
-                                    </div>
-
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Next Maintenance:</span>
-                                        <span class="qd-detail-value">24/08/2025</span>
-                                    </div>
-                                    <div class="qd-detail-row">
-                                        <span class="qd-detail-icon">
-                                            <ion-icon name="build-outline"></ion-icon>
-                                        </span>
-                                        <span class="qd-detail-label">Last Maintenance:</span>
-                                        <span class="qd-detail-value">08/04/2025</span>
-                                    </div>
-
-                                    <div class="qd-status-badge">Operational</div>
-                                </div>
-
-                            </div>
-
-                            <div class="qd-card-actions">
-                                <button class="qd-action-btn">
-                                    <ion-icon name="settings-outline"></ion-icon>
-                                    View Details
-                                </button>
-                                <button class="qd-action-btn">
-                                    <ion-icon name="build-outline"></ion-icon>
-                                    Schedule Repair
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
+
+        <!-- listings tab -->
         <div class="tab-pane fade" id="listings" role="tabpanel" aria-labelledby="listings-tab">
 
-            <ul class="nav nav-tabs listings-section mt-5" role="tablist">
+            <!-- <ul class="nav nav-tabs listings-section mt-5" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="all-bookings-tab" data-bs-toggle="tab" data-bs-target="#all-bookings" type="button" role="tab" aria-controls="all-bookings" aria-selected="true">
                         <ion-icon name="layers-outline"></ion-icon> All Bookings
@@ -643,12 +400,12 @@
                         <ion-icon name="folder-open-outline"></ion-icon> Completed Bookings
                     </button>
                 </li>
-            </ul>
+            </ul> -->
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="all-bookings" role="tabpanel" aria-labelledby="all-bookings-tab">
                     <div class="equipment-container">
                         <!-- Header Controls -->
-                        <div class="table-controls">
+                        <!-- <div class="table-controls">
                             <div class="left-controls">
                                 <div class="search-box">
                                     <input type="text" id="customSearch" placeholder="Search here...">
@@ -672,10 +429,10 @@
                                     Share
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                         
                         <!-- DataTable -->
-                        <table class="display equipmentTable">
+                        <!-- <table class="display equipmentTable">
                             <thead>
                                 <tr>
                                     <th>Equipment</th>
@@ -767,10 +524,10 @@
                                 </tr>
                                 
                             </tbody>
-                        </table>
+                        </table> -->
                         
                         <!-- Footer Controls -->
-                        <div class="footer-controls">
+                        <!-- <div class="footer-controls">
                             <div class="left-footer">
                                 <div class="rows-per-page">
                                     Rows per Page:
@@ -789,7 +546,7 @@
                                     <button class="go-btn" onclick="goToPage()">Go</button>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="tab-pane fade" id="active-bookings" role="tabpanel" aria-labelledby="active-bookings-tab">
