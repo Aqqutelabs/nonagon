@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<<<<<<< HEAD
     <title>Nonagon | Landing Page</title>
+=======
+    <title>Quipdeck | Landing Page</title>
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,9 +35,15 @@
 </head>
 
 <body>
+<<<<<<< HEAD
     <nav class="nonagon-nav nav">
         <div class="logo-box">
             <img src="{{ asset('assets/img/logo-dark.svg') }}" alt="nonagon logo">
+=======
+    <nav class="quipdeck-nav nav">
+        <div class="logo-box">
+            <img src="{{ asset('assets/img/dark.png') }}" alt="quipdeck logo">
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
         </div>
         {{-- <div class="search-box">
             <form action="#" method="post">
@@ -157,12 +167,20 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class="why-nonagon padded">
+=======
+    <div class="why-quipdeck padded">
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-6">
                     <h5 class="labeled-sect">how it works</h5>
+<<<<<<< HEAD
                     <h6 class="journey-start">why <span class="highlighted">nonagon</span></h6>
+=======
+                    <h6 class="journey-start">why <span class="highlighted">quipdeck</span></h6>
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
                     <p class="sect-describe">We've built the most reliable equipment marketplace in Nigeria. Here's
                         what sets us apart</p>
 
@@ -329,7 +347,11 @@
                 <div class="equipment-content">
                     <h2 class="equipment-title">Earn Commissions when Equipment gets hired.</h2>
                     <p class="equipment-description">
+<<<<<<< HEAD
                         As Nonagon Agent, source-verified owners list their machines and earn an income. Simple, transparent, and rewarding—help businesses find equipment fast while you get paid effortlessly.
+=======
+                        As Quipeck Agent, source-verified owners list their machines and earn an income. Simple, transparent, and rewarding—help businesses find equipment fast while you get paid effortlessly.
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
                     </p>
                     <div class="equipment-footer">
                         <button class="equipment-action-btn">
@@ -386,7 +408,11 @@
                 <!-- Brand Section -->
                 <div class="footer-brand">
                     <div class="logo">
+<<<<<<< HEAD
                         <img src="{{ asset('assets/img/logo-white.svg') }}" alt="">
+=======
+                        <img src="{{ asset('assets/img/light.png') }}" alt="">
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
                     </div>
                     <p class="brand-description">
                         Africa's leading platform for industrial equipment rental and management.
@@ -395,7 +421,11 @@
                         <a href="#" class="social-link" aria-label="Facebook">
                             <i class="fab fa-facebook"></i>
                         </a>
+<<<<<<< HEAD
                         <a href="https://www.instagram.com/nonagon?igsh=MWFqejdxcWEwaG01Yw%3D%3D&utm_source=qr"
+=======
+                        <a href="https://www.instagram.com/quipdeck?igsh=MWFqejdxcWEwaG01Yw%3D%3D&utm_source=qr"
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
                             class="social-link" aria-label="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
@@ -442,7 +472,11 @@
                         </li>
                         <li>
                             <span class="contact-label">Email:</span>
+<<<<<<< HEAD
                             <a href="mailto:nonagon@gmail.com">nonagon@gmail.com</a>
+=======
+                            <a href="mailto:quipdeck@gmail.com">quipdeck@gmail.com</a>
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
                         </li>
                         <li>
                             <span class="contact-label">Address:</span>
