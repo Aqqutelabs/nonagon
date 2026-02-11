@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Quipdeck | Landing Page</title>
+    <title>Nonagon | Landing Page</title>
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,9 +31,9 @@
 </head>
 
 <body>
-    <nav class="quipdeck-nav nav">
+    <nav class="nonagon-nav nav">
         <div class="logo-box">
-            <img src="{{ asset('assets/img/dark.png') }}" alt="quipdeck logo">
+            <img src="{{ asset('assets/img/logo-dark.svg') }}" alt="nonagon logo">
         </div>
         {{-- <div class="search-box">
             <form action="#" method="post">
@@ -157,12 +157,12 @@
         </div>
     </div>
 
-    <div class="why-quipdeck padded">
+    <div class="why-nonagon padded">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-6">
                     <h5 class="labeled-sect">how it works</h5>
-                    <h6 class="journey-start">why <span class="highlighted">quipdeck</span></h6>
+                    <h6 class="journey-start">why <span class="highlighted">nonagon</span></h6>
                     <p class="sect-describe">We've built the most reliable equipment marketplace in Nigeria. Here's
                         what sets us apart</p>
 
@@ -329,7 +329,7 @@
                 <div class="equipment-content">
                     <h2 class="equipment-title">Earn Commissions when Equipment gets hired.</h2>
                     <p class="equipment-description">
-                        As Quipeck Agent, source-verified owners list their machines and earn an income. Simple, transparent, and rewarding—help businesses find equipment fast while you get paid effortlessly.
+                        As Nonagon Agent, source-verified owners list their machines and earn an income. Simple, transparent, and rewarding—help businesses find equipment fast while you get paid effortlessly.
                     </p>
                     <div class="equipment-footer">
                         <button class="equipment-action-btn">
@@ -386,7 +386,7 @@
                 <!-- Brand Section -->
                 <div class="footer-brand">
                     <div class="logo">
-                        <img src="{{ asset('assets/img/light.png') }}" alt="">
+                        <img src="{{ asset('assets/img/logo-white.svg') }}" alt="">
                     </div>
                     <p class="brand-description">
                         Africa's leading platform for industrial equipment rental and management.
@@ -395,7 +395,7 @@
                         <a href="#" class="social-link" aria-label="Facebook">
                             <i class="fab fa-facebook"></i>
                         </a>
-                        <a href="https://www.instagram.com/quipdeck?igsh=MWFqejdxcWEwaG01Yw%3D%3D&utm_source=qr"
+                        <a href="https://www.instagram.com/nonagon?igsh=MWFqejdxcWEwaG01Yw%3D%3D&utm_source=qr"
                             class="social-link" aria-label="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
@@ -442,7 +442,7 @@
                         </li>
                         <li>
                             <span class="contact-label">Email:</span>
-                            <a href="mailto:quipdeck@gmail.com">quipdeck@gmail.com</a>
+                            <a href="mailto:nonagon@gmail.com">nonagon@gmail.com</a>
                         </li>
                         <li>
                             <span class="contact-label">Address:</span>

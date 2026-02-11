@@ -3,8 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+<<<<<<< HEAD
+=======
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +15,11 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
+<<<<<<< HEAD
+    use HasFactory, Notifiable;
+=======
     use HasUuids, HasFactory, Notifiable;
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +30,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+<<<<<<< HEAD
+=======
         'organization_id',
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
         'role'
     ];
 
@@ -49,6 +59,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+<<<<<<< HEAD
+=======
 
     public function organization()
     {
@@ -71,4 +83,5 @@ class User extends Authenticatable
         return $this->bases()->pluck('bases.id');
     }
 
+>>>>>>> 3c15039e2c70c3438132f63d031d6798556f25a4
 }
