@@ -4,26 +4,24 @@ on:
     branches:
       - main
   pull_request:
-    # Sequence of patterns matched against refs/heads
     branches:
       - main
+
 jobs:
-  tests:
+  deploy:
     runs-on: ubuntu-latest
     name: Build & Deploy Assets
     steps:
-      - name: SSH Deploy to Cpanel
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deck.equipment.ng
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/deck.equipment.ng.pub
-          chmod 600 ~/.ssh/deck.equipment.ng
-          chmod 600 ~/.ssh/deck.equipment.ng.pub
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Deploy
+      - name: Deploy to Server
         run: |
-          ssh lyrivers@${{ secrets.SERVER_IP }} 'bash -s' < ${{ github.workspace }}/.github/workflows/deploy.sh
+          ssh -o StrictHostKeyChecking=no lyrivers@${{ secrets.SERVER_IP }} 'bash -s' < ${{ github.workspace }}/.github/workflows/deploy.sh
