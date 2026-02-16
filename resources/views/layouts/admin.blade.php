@@ -34,7 +34,7 @@
                 <h6 class="sidebar-header">main menu</h6>
                 <a href="{{ url('/home') }}" class="icon-link {{ Request::is('home') ? 'active' : '' }}">
                     <ion-icon name="calendar-outline" class="icon-ctrl"></ion-icon>
-                    <h6>Dashboard</h6>
+                    <h6>overview</h6>
                 </a>
                 <a href="{{ url('equipment') }}" class="icon-link  {{ Request::is('equipment') ? 'active' : '' }}">
                     <ion-icon name="boat-outline" class="icon-ctrl"></ion-icon>
