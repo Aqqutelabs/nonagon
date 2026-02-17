@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sites', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('name')->default('Company');
+            $table->string('state')->nullable();
+            $table->string('lga')->nullable();
+            $table->decimal('gps_lat', 10, 7)->nullable();
+            $table->decimal('gps_lng', 10, 7)->nullable();
+            $table->string('address')->nullable();
+            $table->foreignUuid('base_id')->constrained();
+            $table->foreignUuid('organization_id')->constrained();
+            $table->boolean('is_default')->default(true);
             $table->timestamps();
         });
     }
