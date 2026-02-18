@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # Change to the project directory.
-cd ~/public_html/deck.equipment.ng
+# cd ~/public_html/deck.equipment.ng
+cd ~/public_html/nonagon
 
 # Pull the latest changes from the git repository
 git pull origin main
