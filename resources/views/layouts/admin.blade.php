@@ -27,7 +27,7 @@
         {{-- sidebar section --}}
         <aside class="sidebar-section">
             <div class="logo-divide">
-                <img src="{{ asset('assets/img/light.png') }}" class="large-logo" alt="large size">
+                <img src="{{ asset('assets/img/logo-white.svg') }}" class="large-logo" alt="large size">
                 <img src="{{ asset('assets/img/favicon.png') }}" class="small-logo" alt="small size">
             </div>
             <div class="main-menu">
@@ -46,13 +46,13 @@
                 </a>
                 <a href="{{ url('users') }}" class="icon-link {{ Request::is('users') ? 'active' : '' }}">
                     <ion-icon name="people-outline" class="icon-ctrl"></ion-icon>
-                    <h6>users</h6>
+                    <h6>Operators</h6>
                 </a>
                 <a href="{{ url('reports') }}" class="icon-link {{ Request::is('reports') ? 'active' : '' }}">
                     <ion-icon name="bar-chart-outline" class="icon-ctrl"></ion-icon>
                     <h6>reports</h6>
                 </a>
-                <a href="#" class="icon-link">
+                <a href="{{ url('settings') }}" class="icon-link {{ Request::is('settings') ? 'active' : '' }}">
                     <ion-icon name="settings-outline" class="icon-ctrl"></ion-icon>
                     <h6>settings</h6>
                 </a>
@@ -72,9 +72,9 @@
                     <i class="fa fa-ellipsis-v open-drops" aria-hidden="true"></i>
                     <div class="side-dropdown">
                         <ul class="list-unstyled">
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Account</a></li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a href="{{ url('profile') }}">Profile</a></li>
+                            <li><a href="{{ url('account') }}">Account</a></li>
+                            <li><a href="#" id="logout-dropdown">Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script>
-        $('#logout-btn').click(function() {
+        $('#logout-btn, #logout-dropdown').click(function() {
             $('#logout').click();
         });
         var t = 0;

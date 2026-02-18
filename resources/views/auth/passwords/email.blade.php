@@ -5,7 +5,7 @@
     <div class="login-card">
         <div class="form-header">
             <h1 class="form-title">
-                <img src="{{ asset('assets/img/dark.png') }}" height="70" alt="company logo">
+                <img src="{{ asset('assets/img/logo-dark.svg') }}" height="70" alt="company logo">
             </h1>
             <p class="form-subtitle">{{ __('Enter your email to reset your password') }}</p>
             
