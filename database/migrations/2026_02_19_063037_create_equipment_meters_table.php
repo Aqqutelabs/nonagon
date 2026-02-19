@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('equipment_maintenance_logs', function (Blueprint $table) {
+        Schema::create('equipment_meters', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('organization_id')->constrained();
             $table->foreignUuid('equipment_id')->constrained();
-            $table->string('log_type')->nullable(); // enum
-            $table->uuid('ref_id')->nullable();
-            $table->string('message')->nullable();
-            $table->foreignUuid('created_by')->constrained()->on('users');
+            $table->string('name')->nullable();
+            $table->string('meter_type')-> nullable(); //enum
+            $table->string('unit')->nullable();
+            $table->boolean('is_primary')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('equipment_maintenance_logs');
+        Schema::dropIfExists('equipment_meters');
     }
 };
