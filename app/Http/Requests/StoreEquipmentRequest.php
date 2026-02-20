@@ -22,16 +22,30 @@ class StoreEquipmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'base_id' => ['required','uuid','exists:bases,id'],
+            'name' => 'required|string',
+            'aid' => 'nullable|string',
+            'type' => 'nullable|string',
+            'status' => 'nullable|string',
+            'reg_no' => 'nullable|string',
+            'brand' => 'nullable|string',
+            'model' => 'nullable|string',
+            'emd' => 'nullable|string',
+            'manufacture_year' => 'nullable|integer',
+            'description' => 'nullable|string',
+            'industry' => 'nullable|string',
+            'city' => 'nullable|string',
+            'last_maintenance' => 'nullable|string',
 
-            'eid' => ['nullable','string'],
-            'reg_no' => ['nullable','string'],
-            'model' => ['nullable','string'],
-            'year_of_prod' => ['nullable','integer'],
-            'description' => ['nullable','string'],
-            'industry' => ['nullable','string'],
-            'city' => ['nullable','string'],
-            'last_maintenance' => ['nullable','string'],
+            'organization_id' => 'required|uuid',
+            'base_id' => 'required|uuid',
+            'site_id' => 'required|uuid',
+            'plant_id' => 'required|uuid',
+            'unit_id' => 'required|uuid',
+
+            'equipment_category_id' => 'required|uuid|exists:equipment_categories,id',
+            'equipment_subcategory_id' => 'required|uuid|exists:equipment_subcategories,id',
+            'equipment_type_id' => 'required|uuid|exists:equipment_types,id',
+            'equipment_status_id' => 'required|uuid|exists:equipment_statuses,id',
         ];
     }
 }

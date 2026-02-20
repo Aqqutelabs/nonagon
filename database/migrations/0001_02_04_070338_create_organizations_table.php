@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->boolean('has_bases')->default(false);
+            $table->string('email')->unique()->nullable();
+            $table->string('phone_no')->nullable();
+            $table->string('address')->nullable();
+            $table->boolean('is_email_verified')->default(false);
+            //$table->boolean('has_bases')->default(false);
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }
