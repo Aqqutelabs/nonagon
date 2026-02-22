@@ -21,7 +21,7 @@ Route::get('/', function () {
 // Admin routes - require authentication
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
+
     Route::get('/equipment', function () {
         return view('admin.equipment');
     });
@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// Auth::routes();
+Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
