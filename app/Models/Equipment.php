@@ -50,4 +50,19 @@ class Equipment extends Model
         return $this->hasOne(EquipmentValueCurrent::class);
     }
 
+    public function maintenanceWorkOrder()
+    {
+        return $this->hasOne(MaintenanceWorkOrder::class);
+    }
+
+    public function breakdownIncident()
+    {
+        return $this->hasMany(BreakdownIncident::class);
+    }
+
+    public function maintenanceSchedule()
+    {
+        return $this->hasOne(MaintenanceSchedule::class);
+    }
+
 }

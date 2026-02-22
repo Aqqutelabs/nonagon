@@ -23,6 +23,11 @@ class Organization extends Model
             ->where('status', 'active');
     }
 
+    public function equipment()
+    {
+        return $this->hasMany(Equipment::class);
+    }
+
     // public function hasFeature(string $featureKey): bool
     // {
     //     return DB::table('organization_features')

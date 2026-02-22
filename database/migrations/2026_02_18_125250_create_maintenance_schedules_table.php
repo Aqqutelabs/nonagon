@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignUuid('equipment_meters_id')->constrained(); // equipment meters table
             $table->decimal('usage_threshold')->nullable();
             $table->timestamp('last_triggered_at')->nullable();
-            $table->timestamp('next_due_date')->nullable();
+            $table->date('next_due_date')->nullable();
             $table->foreignUuid('completed_by')->constrained()->on('users');
             $table->timestamps();
         });

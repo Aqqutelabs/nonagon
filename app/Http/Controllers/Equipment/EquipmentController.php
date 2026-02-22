@@ -155,6 +155,15 @@ class EquipmentController extends Controller
         //
     }
 
+    public function getEquipmentByOrg()
+    {
+        $user = auth()->user();
+        $org = $user->organization;
+        $equipment = Equipment::where('organization_id', $org->id)->get();
+
+        return $equipment;
+    }
+
     // Equipment value cards
     public function purchaseValue(Equipment $equipment)
     {
@@ -186,4 +195,5 @@ class EquipmentController extends Controller
 
         return $percentChange;
     }
+
 }
