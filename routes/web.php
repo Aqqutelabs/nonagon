@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 
 // Admin routes - require authentication
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::get('/equipment', function () {
@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/account',function () {
         return view('admin.account');
     });
-});
+// });
 
 
 Auth::routes();
