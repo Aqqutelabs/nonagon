@@ -5,1089 +5,532 @@
 @section('backname','Equipment')
 
 @section('local_css')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="{{ asset('assets/css/equipment-table.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/equipment-v2.css') }}">
 @endsection
+
 @section('content')
-    <div class="row">
-        <div class="col-lg-4">
-            <ul class="nav nav-tabs qd-bars" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="equipment-tab" data-bs-toggle="tab" data-bs-target="#equipment"
-                        type="button" role="tab" aria-controls="equipment" aria-selected="true">my equipment</button>
-                </li>
-                <!-- <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="listings-tab" data-bs-toggle="tab" data-bs-target="#listings"
-                        type="button" role="tab" aria-controls="listings" aria-selected="false">my listings</button>
-                </li> -->
-            </ul>
-        </div>
-        <div class="col-lg-8">
-            <div class="qd-search-equipment">
-                <div class="other-controls">
-                    <div class="table-search-box">
-                        <form action="#" method="post">
-                            <div class="input-group mb-3 qd-search">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <ion-icon name="search-outline" aria-label="search outline" role="img"
-                                            class="md hydrated"></ion-icon>
-                                    </span>
-                                </div>
-                                <input type="text" id="search-form" placeholder="Search" class="form-control"
-                                    aria-label="Amount (to the nearest dollar)">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <ion-icon name="funnel-outline" aria-label="funnel outline" role="img"
-                                            class="md hydrated"></ion-icon>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div>
-                        <button class="qd-button btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            <ion-icon name="add-outline"></ion-icon>
-                            add new equipment
-                        </button>
-                    </div>
+<div class="equipment-dashboard">
+    <div class="summary-cards-row">
+        <div class="summary-card">
+            <div class="summary-card-header">
+                <!-- icon -->
+                <div class="summary-card-icon">
+                    <ion-icon name="cube-outline"></ion-icon>
+                </div>
+                <!-- title and value -->
+                <div class="summary-card-text">
+                    <div class="summary-card-title">Total Assets</div>
+                    <div class="summary-card-value">30</div>
+                </div>
+                <!-- analytics -->
+                <div class="summary-card-trend trend-up">
+                    <ion-icon name="trending-up-outline"></ion-icon> +3.2%
                 </div>
             </div>
-
-            <!-- Modal add equipment -->
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header qp-modal-header">
-                            <div class="icon-modal-title">
-                                <div class="modal-desc-icon">
-                                    <ion-icon name="newspaper-outline"></ion-icon>
-                                </div>
-                                <div class="modal-desc">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel"><b>Add New Equipment</b></h1>
-                                    <h6>Add a new equipment to your assets</h6>
-                                </div>
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body p-4">
-                            <form action="#">
-                                @csrf
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            Equipment Model
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="eqp_name" name="eqp_name" placeholder="Enter Equipment Name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            Year of Production
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="year" name="year" placeholder="Enter Year Of Production">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            Registration Number
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="reg_no" name="reg_no" placeholder="Enter Registration Number">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            Equipment ID
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="equipment_id" name="equipment_id" placeholder="Enter ID Number">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            Industry
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <select name="industry" id="industry" required class="form-control">
-                                                    <option value="">Select Industry</option>
-                                                    <option value="Industry 1">Industry 1</option>
-                                                    <option value="Industry 2">Industry 2</option>
-                                                    <option value="Industry 3">Industry 3</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            Equipment Description (optional)
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <textarea name="description" class="form-control" id="description" cols="30" rows="4" placeholder="Write a sentence ..."></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            State/City of Operation
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="city_of_operation" name="city_of_operation" placeholder="State/City Of Operation">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12 mb-4">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            Upload Document
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="upload-document">
-                                                <div class="file-icon">
-                                                    <i class="fa fa-file-text" aria-hidden="true"></i>
-                                                </div>
-                                                <div class="document-box">
-                                                    <a href="#">Click to upload</a> an image or document
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </form>
-                        </div>
-                        <div class="col-lg-12 p-4">
-                            <div class="row">
-                                <div class="col-lg-6 d-grid">
-                                    <a href="javascript:void(0)" class="btn qd-button" data-bs-dismiss="modal">
-                                        Cancel
-                                    </a>
-                                </div>
-                                <div class="col-lg-6 d-grid">
-                                    <a href="javascript:void(0)" class="btn qd-button active">
-                                        <ion-icon name="add-outline"></ion-icon>
-                                        Add New Equipment
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        </div>
+        
+        <div class="summary-card">
+            <div class="summary-card-header">
+                <!-- icon -->
+                <div class="summary-card-icon">
+                    <ion-icon name="cube-outline"></ion-icon>
+                </div>
+                <!-- title and value -->
+                <div class="summary-card-text">
+                    <div class="summary-card-title">Active Assets</div>
+                    <div class="summary-card-value">17</div>
+                </div>
+                <!-- analytics -->
+                <div class="summary-card-trend trend-up">
+                    <ion-icon name="trending-up-outline"></ion-icon> +5.1%
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-card">
+            <div class="summary-card-header">
+                <!-- icon -->
+                <div class="summary-card-icon">
+                    <ion-icon name="cube-outline"></ion-icon>
+                </div>
+                <!-- title and value -->
+                <div class="summary-card-text">
+                    <div class="summary-card-title">Under Maintenance</div>
+                    <div class="summary-card-value">3</div>
+                </div>
+                <!-- analytics -->
+                <div class="summary-card-trend trend-up">
+                    <ion-icon name="trending-up-outline"></ion-icon> -2.4%
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-card">
+            <div class="summary-card-header">
+                <!-- icon -->
+                <div class="summary-card-icon">
+                    <ion-icon name="people-outline"></ion-icon>
+                </div>
+                <!-- title and value -->
+                <div class="summary-card-text">
+                    <div class="summary-card-title">Total Operators</div>
+                    <div class="summary-card-value">20</div>
                 </div>
             </div>
         </div>
     </div>
-    @php
-        // Equipment data array - Edit this to update all equipment cards
-        $equipmentList = [
-            [
-                'category' => 'Vehicle',
-                'brand' => 'Mack',
-                'sub_category' => 'Dump Truck – Granite 64BR',
-                'title' => 'Mac Bulldozer 12DH',
-                'price' => '$120,000/hr',
-                'image' => 'assets/img/logo-dark.svg',
-                'model' => 'GEN-NX 24D',
-                'serial_number' => 'EPE-108X 24D',
-                'assetId' => 'GR64-NX / MCK-88421',
-                'department' => 'Logistics & Haulage',
-                'plant' => 'OML 11 – Central Yard',
-                'status' => 'Operational',
-            ],
-            [
-                'category' => 'Lifting',
-                'brand' => 'Liebherr',
-                'sub_category' => 'Crawler Crane – LR 1300',
-                'title' => 'Mac Bulldozer 12DH',
-                'price' => '$120,000/hr',
-                'image' => 'assets/img/logo-dark.svg',
-                'model' => 'GEN-NX 24D',
-                'serial_number' => 'EPE-108X 24D',
-                'assetId' => 'LR1300-C / LHB-130045',
-                'department' => 'Construction',
-                'plant' => 'OML 11 – Flow Station A',
-                'status' => 'Operational',
-            ],
-            [
-                'category' => 'Storage',
-                'brand' => 'CST',
-                'sub_category' => 'Crude Oil Storage Tank – 10,000 bbl',
-                'title' => 'Mac Bulldozer 12DH',
-                'price' => '$120,000/hr',
-                'image' => 'assets/img/logo-dark.svg',
-                'model' => 'GEN-NX 24D',
-                'serial_number' => 'EPE-108X 24D',
-                'assetId' => 'CST-10K / CST-OM11-009',
-                'department' => 'Production',
-                'plant' => 'OML 11 – Tank Farm 1',
-                'status' => 'Operational',
-            ],
-            [
-                'category' => 'Pressure',
-                'brand' => 'Cameron',
-                'sub_category' => 'Wellhead Christmas Tree – 10k PSI',
-                'title' => 'Mac Bulldozer 12DH',
-                'price' => '$120,000/hr',
-                'image' => 'assets/img/logo-dark.svg',
-                'model' => 'GEN-NX 24D',
-                'serial_number' => 'EPE-108X 24D',
-                'assetId' => 'CM-XT10 / CAM-XT-7712',
-                'department' => 'Wells & Completions',
-                'plant' => 'OML 11 – Wellpad C',
-                'status' => 'Standby',
-            ],
-            [
-                'category' => 'Processing',
-                'brand' => 'Alfa Laval',
-                'sub_category' => 'Separator – 3-Phase Oil/Gas/Water',
-                'title' => 'Mac Bulldozer 12DH',
-                'price' => '$120,000/hr',
-                'image' => 'assets/img/logo-dark.svg',
-                'model' => 'GEN-NX 24D',
-                'serial_number' => 'EPE-108X 24D',
-                'assetId' => 'AL-SEP3 / ALF-CPF-332',
-                'department' => 'Production',
-                'plant' => 'OML 11 – CPF',
-                'status' => 'Operational',
-            ],
-            [
-                'category' => 'Power / Utility',
-                'brand' => 'Caterpillar',
-                'sub_category' => 'Diesel Generator – CAT 3516B (2MW)',
-                'title' => 'Mac Bulldozer 12DH',
-                'price' => '$120,000/hr',
-                'image' => 'assets/img/logo-dark.svg',
-                'model' => 'GEN-NX 24D',
-                'serial_number' => 'EPE-108X 24D',
-                'assetId' => 'CAT-3516B / CAT-PWR-1908',
-                'department' => 'Utilities & Power',
-                'plant' => 'OML 11 – Power House',
-                'status' => 'Under Maintenance',
-            ],
-        ];
-    @endphp
-
-    <div class="qd-tabcontent tab-content">
-        <div class="tab-pane fade show active" id="equipment" role="tabpanel" aria-labelledby="equipment-tab">
-            <div class="col-lg-12">
-                <div class="row">
-                    @foreach($equipmentList as $equipment)
-                        <div class="col-lg-4">
-                            <div class="qd-equipment-card">
-                                <div class="qd-card-header">
-                                    <img src="{{ asset($equipment['image']) }}" alt="{{ $equipment['title'] }}" class="qd-equipment-image">
+    
+    <div class="top-actions-row">
+        <div class="search-wrapper">
+            <input type="text" placeholder="Search equipment name, assest ID, brand, model, category or Operator...">
+            <ion-icon name="search-outline"></ion-icon>
+        </div>
+        <div class="action-buttons">
+            <button class="btn-primary-add" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <ion-icon name="add-outline"></ion-icon>
+                Add New Equipment
+            </button>
+            <button class="btn-export">
+                <ion-icon name="download-outline" style="transform: rotate(-90deg);"></ion-icon>
+            </button>
+        </div>
+    </div>
+    
+    <div class="main-layout">
+        <div class="left-content">
+            <div class="filters-row">
+                <div class="filters-left">
+                    <select class="filter-dropdown">
+                        <option>Status</option>
+                        <option>Operational</option>
+                        <option>Maintenance</option>
+                    </select>
+                    <select class="filter-dropdown">
+                        <option>Category</option>
+                        <option>Machinery</option>
+                    </select>
+                    <button class="btn-filter-toggle">Critical Only</button>
+                </div>
+                
+                <div class="view-toggles">
+                    <button class="view-toggle-btn active" id="btnGrid" onclick="toggleView('grid')"><ion-icon name="grid-outline"></ion-icon></button>
+                    <button class="view-toggle-btn" id="btnList" onclick="toggleView('list')"><ion-icon name="list-outline"></ion-icon></button>
+                </div>
+            </div>
+            
+            <div class="equipment-grid" id="equipmentGrid">
+                @php
+                    $equipmentList = [
+                        [
+                            'category' => 'Machinery',
+                            'title' => 'Hydraulic Press Model A',
+                            'assetId' => 'EQ001',
+                            'location' => 'Plan A - Unit 3',
+                            'status' => 'Operational',
+                            'owner' => 'John Smith',
+                            'time' => '2 hours ago',
+                            'image' => 'assets/img/truck.png'
+                        ],
+                        [
+                            'category' => 'Machinery',
+                            'title' => 'Hydraulic Press Model A',
+                            'assetId' => 'EQ002',
+                            'location' => 'Plan A - Unit 3',
+                            'status' => 'Maintenance',
+                            'owner' => 'John Smith',
+                            'time' => '2 hours ago',
+                            'image' => 'assets/img/truck.png'
+                        ],
+                        [
+                            'category' => 'Machinery',
+                            'title' => 'Air Compressor 300L',
+                            'assetId' => 'EQ003',
+                            'location' => 'Plan A - Unit 3',
+                            'status' => 'Operational',
+                            'owner' => 'John Smith',
+                            'time' => '2 hours ago',
+                            'image' => 'assets/img/truck.png'
+                        ],
+                        [
+                            'category' => 'Machinery',
+                            'title' => 'Hydraulic Press Model A',
+                            'assetId' => 'EQ001',
+                            'location' => 'Plan A - Unit 3',
+                            'status' => 'Operational',
+                            'owner' => 'John Smith',
+                            'time' => '2 hours ago',
+                            'image' => 'assets/img/truck.png'
+                        ],
+                        [
+                            'category' => 'Machinery',
+                            'title' => 'Air Compressor 300L',
+                            'assetId' => 'EQ003',
+                            'location' => 'Plan A - Unit 3',
+                            'status' => 'Operational',
+                            'owner' => 'John Smith',
+                            'time' => '2 hours ago',
+                            'image' => 'assets/img/truck.png'
+                        ]
+                    ];
+                @endphp
+                
+                @foreach($equipmentList as $equipment)
+                <div class="eq-card" onclick="toggleCard(this)">
+                    <div class="eq-card-img-placeholder">
+                        <img src="{{ asset($equipment['image']) }}" alt="{{ $equipment['title'] }}">
+                    </div>
+                    <div class="eq-card-content">
+                        <div class="eq-card-header">
+                            <div>
+                                <h3 class="eq-card-title">{{ $equipment['title'] }}</h3>
+                                <div class="eq-card-id">{{ $equipment['assetId'] }}</div>
+                            </div>
+                            <div class="status-badge {{ $equipment['status'] == 'Operational' ? 'status-operational' : 'status-maintenance' }}">
+                                {{ $equipment['status'] }}
+                            </div>
+                        </div>
+                        
+                        <div class="eq-card-details">
+                            <div><strong>Category:</strong> {{ $equipment['category'] }}</div>
+                            <div><strong>Location:</strong> {{ $equipment['location'] }}</div>
+                        </div>
+                        
+                        <div class="eq-card-footer">
+                            <div class="eq-card-owner">{{ $equipment['owner'] }}</div>
+                            <div class="eq-card-time">{{ $equipment['time'] }}</div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            
+            <div class="equipment-list" id="equipmentList">
+                <table class="equipment-table">
+                    <thead>
+                        <tr>
+                            <th>Name / Asset ID</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Operator</th>
+                            <th>Last Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($equipmentList as $equipment)
+                        <tr>
+                            <td>
+                                <div class="eq-table-title">{{ $equipment['title'] }}</div>
+                                <div class="eq-table-id">{{ $equipment['assetId'] }}</div>
+                            </td>
+                            <td>{{ $equipment['category'] }}</td>
+                            <td>{{ $equipment['location'] }}</td>
+                            <td>
+                                <div class="status-badge {{ $equipment['status'] == 'Operational' ? 'status-operational' : 'status-maintenance' }}">
+                                    {{ $equipment['status'] }}
                                 </div>
-                                <h3 class="qd-equipment-title">{{ $equipment['brand'] }} {{ \Illuminate\Support\Str::limit($equipment['sub_category'], 20) }}</h3>
-
-                                <div class="qd-equipment-price">{{ $equipment['category'] }}</div>
-
-                                <div class="qd-card-body">
-                                    <div class="qd-equipment-details">
-                                        <div class="qd-detail-row">
-                                            <span class="qd-detail-icon">
-                                                <ion-icon name="settings-outline"></ion-icon>
-                                            </span>
-                                            <span class="qd-detail-label">Model:</span>
-                                            <span class="qd-detail-value">{{ $equipment['model'] }}</span>
+                            </td>
+                            <td>{{ $equipment['owner'] }}</td>
+                            <td>{{ $equipment['time'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="table-pagination">
+                    <div class="table-info">Showing {{ count($equipmentList) }} of {{ count($equipmentList) }} status</div>
+                    <div class="table-btns">
+                        <button disabled>Previous</button>
+                        <button>Next</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="right-sidebar">
+            <div class="location-sidebar">
+                <h3>Location</h3>
+                <p>Filter by location</p>
+                
+                <button class="location-btn">All Locations</button>
+                
+                <div class="tree-view">
+                    <div class="tree-node">
+                        <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                            <ion-icon name="chevron-down-outline"></ion-icon> Block A
+                        </div>
+                        <div class="tree-children" style="display: block;">
+                            <div class="tree-node">
+                                <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                                    <ion-icon name="chevron-down-outline"></ion-icon> Production Site
+                                </div>
+                                <div class="tree-children" style="display: block;">
+                                    <div class="tree-node">
+                                        <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                                            <ion-icon name="chevron-down-outline"></ion-icon> Assembly Plant
                                         </div>
-                                        <div class="qd-detail-row">
-                                            <span class="qd-detail-icon">
-                                                <ion-icon name="settings-outline"></ion-icon>
-                                            </span>
-                                            <span class="qd-detail-label">Serial Number:</span>
-                                            <span class="qd-detail-value">{{ $equipment['serial_number'] }}</span>
+                                        <div class="tree-children" style="display: block;">
+                                            <div class="tree-leaf">Unit 1 <span class="leaf-badge">12</span></div>
+                                            <div class="tree-leaf">Unit 2 <span class="leaf-badge">10</span></div>
+                                            <div class="tree-leaf">Unit 3 <span class="leaf-badge">4</span></div>
                                         </div>
-                                        <div class="qd-detail-row">
-                                            <span class="qd-detail-icon">
-                                                <ion-icon name="settings-outline"></ion-icon>
-                                            </span>
-                                            <span class="qd-detail-label">Asset ID:</span>
-                                            <span class="qd-detail-value">{{ $equipment['assetId'] }}</span>
-                                        </div>
-
-                                        <div class="qd-detail-row">
-                                            <span class="qd-detail-icon">
-                                                <ion-icon name="build-outline"></ion-icon>
-                                            </span>
-                                            <span class="qd-detail-label">Department:</span>
-                                            <span class="qd-detail-value">{{ $equipment['department'] }}</span>
-                                        </div>
-                                        <div class="qd-detail-row">
-                                            <span class="qd-detail-icon">
-                                                <ion-icon name="build-outline"></ion-icon>
-                                            </span>
-                                            <span class="qd-detail-label">Plant / Facility:</span>
-                                            <span class="qd-detail-value">{{ $equipment['plant'] }}</span>
-                                        </div>
-
-                                        <div class="qd-status-badge">{{ $equipment['status'] }}</div>
                                     </div>
-                                </div>
-
-                                <div class="qd-card-actions">
-                                    <button class="qd-action-btn">
-                                        <ion-icon name="settings-outline"></ion-icon>
-                                        View Details
-                                    </button>
-                                    <button class="qd-action-btn">
-                                        <ion-icon name="build-outline"></ion-icon>
-                                        Change Status
-                                    </button>
+                                    <div class="tree-node">
+                                        <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                                            <ion-icon name="chevron-forward-outline"></ion-icon> Packaging Plant
+                                        </div>
+                                        <div class="tree-children">
+                                            <div class="tree-leaf">Unit 1 <span class="leaf-badge">12</span></div>
+                                            <div class="tree-leaf">Unit 2 <span class="leaf-badge">10</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="tree-node">
+                                        <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                                            <ion-icon name="chevron-forward-outline"></ion-icon> Warehouse
+                                        </div>
+                                        <div class="tree-children">
+                                        </div>
+                                    </div>
+                                    <div class="tree-node">
+                                        <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                                            <ion-icon name="chevron-forward-outline"></ion-icon> Storage Plant
+                                        </div>
+                                        <div class="tree-children">
+                                            <div class="tree-leaf">Unit 1 <span class="leaf-badge">4</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    </div>
+                    
+                    <div class="tree-node">
+                        <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                            <ion-icon name="chevron-down-outline"></ion-icon> Block B
+                        </div>
+                        <div class="tree-children" style="display: block;">
+                            <div class="tree-node">
+                                <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                                    <ion-icon name="chevron-forward-outline"></ion-icon> Distribution Center
+                                </div>
+                                <div class="tree-children">
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="tree-node-item" onclick="toggleTreeNode(this)">
+                                    <ion-icon name="chevron-forward-outline"></ion-icon> Logistics Plant
+                                </div>
+                                <div class="tree-children">
+                                    <div class="tree-leaf">Unit 1 <span class="leaf-badge">9</span></div>
+                                    <div class="tree-leaf">Unit 2 <span class="leaf-badge">12</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- listings tab -->
-        <!-- <div class="tab-pane fade" id="listings" role="tabpanel" aria-labelledby="listings-tab">
-
-            <!-- <ul class="nav nav-tabs listings-section mt-5" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="all-bookings-tab" data-bs-toggle="tab" data-bs-target="#all-bookings" type="button" role="tab" aria-controls="all-bookings" aria-selected="true">
-                        <ion-icon name="layers-outline"></ion-icon> All Bookings
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="active-bookings-tab" data-bs-toggle="tab" data-bs-target="#active-bookings" type="button" role="tab" aria-controls="active-bookings" aria-selected="false">
+<!-- Modal add equipment -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header qp-modal-header">
+                <div class="icon-modal-title">
+                    <div class="modal-desc-icon">
                         <ion-icon name="newspaper-outline"></ion-icon>
-                        Active Bookings
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pending-bookings-tab" data-bs-toggle="tab" data-bs-target="#pending-bookings" type="button" role="tab" aria-controls="pending-bookings" aria-selected="false">
-                        <ion-icon name="checkbox-outline"></ion-icon> Pending Bookings
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="completed-bookings-tab" data-bs-toggle="tab" data-bs-target="#completed-bookings" type="button" role="tab" aria-controls="completed-bookings" aria-selected="false">
-                        <ion-icon name="folder-open-outline"></ion-icon> Completed Bookings
-                    </button>
-                </li>
-            </ul> -->
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="all-bookings" role="tabpanel" aria-labelledby="all-bookings-tab">
-                    <div class="equipment-container">
-                        <!-- Header Controls -->
-                        <!-- <div class="table-controls">
-                            <div class="left-controls">
-                                <div class="search-box">
-                                    <input type="text" id="customSearch" placeholder="Search here...">
-                                    <span class="search-icon">
-                                        <ion-icon name="search-outline"></ion-icon>
-                                    </span>
-                                </div>
-                                
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="funnel-outline"></ion-icon>
-                                    Filter
-                                </button>
-                            </div>
-                            <div class="right-controls">
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="download-outline"></ion-icon>
-                                    Export Data
-                                </button>
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="share-social-outline"></ion-icon>
-                                    Share
-                                </button>
-                            </div>
-                        </div> -->
-                        
-                        <!-- DataTable -->
-                        <!-- <table class="display equipmentTable">
-                            <thead>
-                                <tr>
-                                    <th>Equipment</th>
-                                    <th>Lessee</th>
-                                    <th width="100">Lease Date</th>
-                                    <th>Status</th>
-                                    <th width="100"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge active">Active</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge pending">Pending</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge completed">completed</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                            </tbody>
-                        </table> -->
-                        
-                        <!-- Footer Controls -->
-                        <!-- <div class="footer-controls">
-                            <div class="left-footer">
-                                <div class="rows-per-page">
-                                    Rows per Page:
-                                    <select id="rowsPerPage">
-                                        <option value="10" selected>10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="right-footer">
-                                <div class="go-to-page">
-                                    Go to Page:
-                                    <input type="number" id="pageInput" min="1" value="1">
-                                    <button class="go-btn" onclick="goToPage()">Go</button>
-                                </div>
-                            </div>
-                        </div> -->
+                    </div>
+                    <div class="modal-desc">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel"><b>Add New Equipment</b></h1>
+                        <h6>Add a new equipment to your assets</h6>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="active-bookings" role="tabpanel" aria-labelledby="active-bookings-tab">
-                    <div class="equipment-container">
-                        <!-- Header Controls -->
-                        <div class="table-controls">
-                            <div class="left-controls">
-                                <div class="search-box">
-                                    <input type="text" id="customSearch" placeholder="Search here...">
-                                    <span class="search-icon">
-                                        <ion-icon name="search-outline"></ion-icon>
-                                    </span>
-                                </div>
-                                
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="funnel-outline"></ion-icon>
-                                    Filter
-                                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form action="#">
+                    @csrf
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                Equipment Model
                             </div>
-                            <div class="right-controls">
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="download-outline"></ion-icon>
-                                    Export Data
-                                </button>
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="share-social-outline"></ion-icon>
-                                    Share
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- DataTable -->
-                        <table class="display equipmentTable">
-                            <thead>
-                                <tr>
-                                    <th>Equipment</th>
-                                    <th>Lessee</th>
-                                    <th width="100">Lease Date</th>
-                                    <th>Status</th>
-                                    <th width="100"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge active">Active</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge active">active</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge active">active</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                        
-                        <!-- Footer Controls -->
-                        <div class="footer-controls">
-                            <div class="left-footer">
-                                <div class="rows-per-page">
-                                    Rows per Page:
-                                    <select id="rowsPerPage">
-                                        <option value="10" selected>10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="right-footer">
-                                <div class="go-to-page">
-                                    Go to Page:
-                                    <input type="number" id="pageInput" min="1" value="1">
-                                    <button class="go-btn" onclick="goToPage()">Go</button>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="eqp_name" name="eqp_name" placeholder="Enter Equipment Name">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="pending-bookings" role="tabpanel" aria-labelledby="pending-bookings-tab">
-                    <div class="equipment-container">
-                        <!-- Header Controls -->
-                        <div class="table-controls">
-                            <div class="left-controls">
-                                <div class="search-box">
-                                    <input type="text" id="customSearch" placeholder="Search here...">
-                                    <span class="search-icon">
-                                        <ion-icon name="search-outline"></ion-icon>
-                                    </span>
-                                </div>
-                                
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="funnel-outline"></ion-icon>
-                                    Filter
-                                </button>
+                    
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                Year of Production
                             </div>
-                            <div class="right-controls">
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="download-outline"></ion-icon>
-                                    Export Data
-                                </button>
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="share-social-outline"></ion-icon>
-                                    Share
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- DataTable -->
-                        <table class="display equipmentTable">
-                            <thead>
-                                <tr>
-                                    <th>Equipment</th>
-                                    <th>Lessee</th>
-                                    <th width="100">Lease Date</th>
-                                    <th>Status</th>
-                                    <th width="100"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge pending">pending</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge pending">Pending</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge pending">pending</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                        
-                        <!-- Footer Controls -->
-                        <div class="footer-controls">
-                            <div class="left-footer">
-                                <div class="rows-per-page">
-                                    Rows per Page:
-                                    <select id="rowsPerPage">
-                                        <option value="10" selected>10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="right-footer">
-                                <div class="go-to-page">
-                                    Go to Page:
-                                    <input type="number" id="pageInput" min="1" value="1">
-                                    <button class="go-btn" onclick="goToPage()">Go</button>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="year" name="year" placeholder="Enter Year Of Production">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="completed-bookings" role="tabpanel" aria-labelledby="completed-bookings-tab">
-                    <div class="equipment-container">
-                        <!-- Header Controls -->
-                        <div class="table-controls">
-                            <div class="left-controls">
-                                <div class="search-box">
-                                    <input type="text" id="customSearch" placeholder="Search here...">
-                                    <span class="search-icon">
-                                        <ion-icon name="search-outline"></ion-icon>
-                                    </span>
-                                </div>
-                                
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="funnel-outline"></ion-icon>
-                                    Filter
-                                </button>
+                    
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                Registration Number
                             </div>
-                            <div class="right-controls">
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="download-outline"></ion-icon>
-                                    Export Data
-                                </button>
-                                <button class="table-ctrl-btn">
-                                    <ion-icon name="share-social-outline"></ion-icon>
-                                    Share
-                                </button>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="reg_no" name="reg_no" placeholder="Enter Registration Number">
+                                </div>
                             </div>
                         </div>
-                        
-                        <!-- DataTable -->
-                        <table class="display equipmentTable">
-                            <thead>
-                                <tr>
-                                    <th>Equipment</th>
-                                    <th>Lessee</th>
-                                    <th width="100">Lease Date</th>
-                                    <th>Status</th>
-                                    <th width="100"></th>
-                                </tr>
-                            </thead>
-                            
-                            <tbody>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td>
-                                        <span class="status-badge completed">completed</span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge completed">completed</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CAT 320D Excavator</td>
-                                    <td>Gibraltar Construction</td>
-                                    <td>Jun 25 - Jul 12 2025</td>
-                                    <td><span class="status-badge completed">completed</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="qp-table-btn edit-btn" title="Edit">
-                                                <ion-icon name="pencil-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn delete-btn" title="Delete">
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button class="qp-table-btn general-pop-opt" title="More">
-                                                <ion-icon name="ellipsis-vertical-outline" class="open-drops"></ion-icon>
-                                                <div class="side-dropdown options">
-                                                    <ul class="list-unstyled">
-                                                        <li><a href="#">Menu 1</a></li>
-                                                        <li><a href="#">Menu 2</a></li>
-                                                        <li><a href="#">Menu 3</a></li>
-                                                    </ul>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                        
-                        <!-- Footer Controls -->
-                        <div class="footer-controls">
-                            <div class="left-footer">
-                                <div class="rows-per-page">
-                                    Rows per Page:
-                                    <select id="rowsPerPage">
-                                        <option value="10" selected>10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
+                    </div>
+                    
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                Equipment ID
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="equipment_id" name="equipment_id" placeholder="Enter ID Number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                Industry
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <select name="industry" id="industry" required class="form-control">
+                                        <option value="">Select Industry</option>
+                                        <option value="Industry 1">Industry 1</option>
+                                        <option value="Industry 2">Industry 2</option>
+                                        <option value="Industry 3">Industry 3</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="right-footer">
-                                <div class="go-to-page">
-                                    Go to Page:
-                                    <input type="number" id="pageInput" min="1" value="1">
-                                    <button class="go-btn" onclick="goToPage()">Go</button>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                Equipment Description (optional)
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <textarea name="description" class="form-control" id="description" cols="30" rows="4" placeholder="Write a sentence ..."></textarea>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                State/City of Operation
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="city_of_operation" name="city_of_operation" placeholder="State/City Of Operation">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                Upload Document
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="upload-document">
+                                    <div class="file-icon">
+                                        <i class="fa fa-file-text" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="document-box">
+                                        <a href="#">Click to upload</a> an image or document
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-lg-12 p-4">
+                <div class="row">
+                    <div class="col-lg-6 d-grid">
+                        <a href="javascript:void(0)" class="btn qd-button" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                    </div>
+                    <div class="col-lg-6 d-grid">
+                        <a href="javascript:void(0)" class="btn qd-button active">
+                            <ion-icon name="add-outline"></ion-icon>
+                            Add New Equipment
+                        </a>
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
+</div>
 @endsection
 
 @section('local_js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
-
 <script>
-    $(document).ready(function() {
-        var table = $('.equipmentTable').DataTable({
-            pageLength: 10,
-            lengthChange: false,
-            searching: false,
-            info: true,
-            pagingType: "full_numbers",
-            language: {
-                info: "Showing _START_-_END_ of _TOTAL_",
-                paginate: {
-                    first: "<<",
-                    last: ">>",
-                    next: ">",
-                    previous: "<"
-                }
-            },
-            drawCallback: function(settings) {
-                var api = this.api();
-                var page = api.page.info();
-                $('#pageInput').val(page.page + 1);
-            }
-        });
+    function toggleCard(element) {
+        element.classList.toggle('expanded');
+    }
+
+    function toggleView(viewType) {
+        const gridView = document.getElementById('equipmentGrid');
+        const listView = document.getElementById('equipmentList');
+        const btnGrid = document.getElementById('btnGrid');
+        const btnList = document.getElementById('btnList');
         
-        $('#customSearch').on('keyup', function() {
-            table.search(this.value).draw();
-        });
-        
-        $('#rowsPerPage').on('change', function() {
-            table.page.len(parseInt(this.value)).draw();
-        });
-        
-        $(document).on('keydown', function(e) {
-            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-                e.preventDefault();
-                $('#customSearch').focus();
-            }
-        });
-        
-        $('.export-btn').on('click', function() {
-            alert('Export functionality would be implemented here');
-        });
-        
-        $('.share-btn').on('click', function() {
-            alert('Share functionality would be implemented here');
-        });
-        
-        $('.filter-btn').on('click', function() {
-            alert('Filter functionality would be implemented here');
-        });
-        
-        $('.edit-btn').on('click', function() {
-            var row = $(this).closest('tr');
-            var equipment = row.find('td:first').text();
-            alert('Edit: ' + equipment);
-        });
-        
-        $('.delete-btn').on('click', function() {
-            var row = $(this).closest('tr');
-            var equipment = row.find('td:first').text();
-            if (confirm('Delete: ' + equipment + '?')) {
-                table.row(row).remove().draw();
-            }
-        });
-        
-        $('.more-btn').on('click', function() {
-            alert('More options menu would appear here');
-        });
-    });
-    
-    function goToPage() {
-        var page = parseInt($('#pageInput').val()) - 1;
-        var table = $('.equipmentTable').DataTable();
-        var pageInfo = table.page.info();
-        
-        if (page >= 0 && page < pageInfo.pages) {
-            table.page(page).draw('page');
+        if (viewType === 'grid') {
+            gridView.style.display = 'grid';
+            listView.style.display = 'none';
+            btnGrid.classList.add('active');
+            btnList.classList.remove('active');
         } else {
-            alert('Invalid page number');
-            $('#pageInput').val(pageInfo.page + 1);
+            gridView.style.display = 'none';
+            listView.style.display = 'block';
+            btnGrid.classList.remove('active');
+            btnList.classList.add('active');
         }
     }
-    
-    $('#pageInput').on('keypress', function(e) {
-        if (e.which === 13) {
-            goToPage();
+
+    function toggleTreeNode(element) {
+        const parentNode = element.closest('.tree-node');
+        const children = parentNode.querySelector('.tree-children');
+        const icon = element.querySelector('ion-icon');
+        
+        if (children) {
+            const isVisible = children.style.display === 'block';
+            if (isVisible) {
+                children.style.display = 'none';
+                icon.name = 'chevron-forward-outline';
+            } else {
+                children.style.display = 'block';
+                icon.name = 'chevron-down-outline';
+            }
         }
-    });
+    }
 </script>
 @endsection
