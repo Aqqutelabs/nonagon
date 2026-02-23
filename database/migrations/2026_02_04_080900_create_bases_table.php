@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('bases', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('organization_id')->constrained();
-            $table->string('name');
+            $table->string('name')->default('Company');
+            $table->boolean('is_default')->default(true);
             $table->unique(['organization_id', 'name']);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
