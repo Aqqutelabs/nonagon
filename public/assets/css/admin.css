@@ -4,7 +4,7 @@
 :root {
     --primary-color: #0A6FB8;
     --secondary-color: #fff;
-    --grey-color: #4D4D4D;
+    --grey-color: #868C98;
     --tertiary-color: #f6f8fa;
     --radius: 10px;
 }
@@ -245,10 +245,11 @@ a {
     font-size: 25px;
     font-weight: 500;
     text-transform: capitalize;
+    color: #525866;
 }
 .title-section h6 {
     color: var(--grey-color);
-    margin-top: -10px;
+    margin-top: 10px;
 }
 .title-icon {
     font-size: 25px;
