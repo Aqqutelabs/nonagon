@@ -56,13 +56,13 @@
                 <h6 class="sidebar-header">main menu</h6>
 
                 {{-- Overview --}}
-                <a href="{{ url('/home') }}" class="icon-link {{ Request::is('home') ? 'active' : '' }}">
+                {{-- <a href="{{ url('/home') }}" class="icon-link {{ Request::is('home') ? 'active' : '' }}">
                     <svg viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6.38925 2.13012L2.57133 5.28012C1.93383 5.80512 1.41675 6.92262 1.41675 7.77012V13.3276C1.41675 15.0676 2.7555 16.4926 4.39883 16.4926H12.6013C14.2447 16.4926 15.5834 15.0676 15.5834 13.3351V7.87512C15.5834 6.96762 15.0097 5.80512 14.3084 5.28762L9.93092 2.04012C8.93925 1.30512 7.3455 1.34262 6.38925 2.13012Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M8.5 13.4924V11.2424" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <h6>overview</h6>
-                </a>
+                </a> --}}
 
                 {{-- Equipment --}}
                 <a href="{{ route('equipments.index') }}" class="icon-link {{ Request::is('equipment') ? 'active' : '' }}">
