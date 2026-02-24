@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->foreignUuid('equipment_category_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('organization_id')->constrained();
+            $table->foreignUuid('organization_id')->nullable()->constrained();
             $table->string('description')->nullable();
             $table->string('photo_url')->nullable();
             $table->timestamps();

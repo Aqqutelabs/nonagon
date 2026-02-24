@@ -36,15 +36,14 @@ class StoreEquipmentRequest extends FormRequest
             'city' => 'nullable|string',
             'last_maintenance' => 'nullable|string',
 
-            'organization_id' => 'required|uuid',
-            'base_id' => 'required|uuid',
-            'site_id' => 'required|uuid',
-            'plant_id' => 'required|uuid',
-            'unit_id' => 'required|uuid',
+            'base_id' => 'required|uuid|exists:bases,id',
+            'site_id' => 'required|uuid|exists:sites,id',
+            'plant_id' => 'required|uuid|exists:plants,id',
+            'unit_id' => 'required|uuid|exists:units,id',
 
             'equipment_category_id' => 'required|uuid|exists:equipment_categories,id',
-            'equipment_subcategory_id' => 'required|uuid|exists:equipment_subcategories,id',
-            'equipment_type_id' => 'required|uuid|exists:equipment_types,id',
+            'equipment_subcategory_id' => 'nullable|uuid|exists:equipment_subcategories,id',
+            'equipment_type_id' => 'nullable|uuid|exists:equipment_types,id',
             'equipment_status_id' => 'required|uuid|exists:equipment_statuses,id',
         ];
     }

@@ -11,12 +11,18 @@ use App\Models\Site;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -113,43 +119,47 @@ class AuthController extends Controller
     }
 
     // Login
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        $user = User::where('email', $request->email)->first();
-
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Invalid credentials'
-            ], 401);
+        if (! Auth::attempt($credentials)) {
+            return back()->withErrors([
+                'email' => 'Invalid credentials',
+            ])->withInput();
         }
+
+        $user = Auth::user();
 
         if (! $user->is_active) {
-            return response()->json([
-                'message' => 'Account is inactive'
-            ], 403);
+            Auth::logout();
+            return back()->withErrors([
+                'email' => 'Account is inactive',
+            ]);
         }
 
-        // email verification
-        // if (! $user->email_verified_at) {
-        //     return response()->json([
-        //         'message' => 'Email not verified'
-        //     ], 403);
-        // }
+        $request->session()->regenerate();
 
-        // Login
-        auth()->login($user);
-
-        return response()->json([
-            'message' => 'Login successful',
-            'user' => $user,
-            'token' => $user->createToken('auth_token')->plainTextToken,
-        ]);
+        return redirect('/equipments');
     }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/auth/login');
+    }
+
 
     // Send Invite
     public function sendInvite(Request $request)

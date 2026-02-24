@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('equipment_statuses', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->nullable();
-            $table->foreignUuid('organization_id')->constrained();
+            $table->foreignUuid('organization_id')->nullable()->constrained();
             $table->integer('severity')->nullable();
-            $table->boolean('is_terminal');
+            $table->boolean('is_terminal')->nullable();
             $table->timestamps();
         });
     }

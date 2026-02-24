@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('name')->default('Company');
             $table->text('description')->nullable();
             $table->string('department_code')->nullable();
-            $table->foreignUuid('plant_id')->constrained();
-            $table->foreignUuid('site_id')->constrained();
-            $table->foreignUuid('base_id')->constrained();
-            $table->foreignUuid('organization_id')->constrained();
-            $table->boolean('is_default')->default(true);
+            $table->foreignUuid('plant_id')->nullable()->constrained();
+            $table->foreignUuid('site_id')->nullable()->constrained();
+            $table->foreignUuid('base_id')->nullable()->constrained();
+            $table->foreignUuid('organization_id')->nullable()->constrained();
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
     }

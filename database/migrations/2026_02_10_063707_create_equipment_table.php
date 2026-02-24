@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('aid')->nullable(); // Asset ID
             $table->string('type')->nullable();
-            $table->string('status')->default('Operational');
+            //$table->string('status')->default('Operational');
             $table->string('reg_no')->nullable();
             $table->string('brand')->nullable();
             $table->string('model')->nullable();
@@ -26,15 +26,16 @@ return new class extends Migration
             $table->string('industry')->nullable();
             $table->string('city')->nullable();
             $table->string('last_maintenance')->nullable();
+            // $table->foreignUuid('operator_id')->nullable()->constrained()->on('users');
             $table->foreignUuid('organization_id')->constrained();
-            $table->foreignUuid('base_id')->constrained();
-            $table->foreignUuid('site_id')->constrained();
-            $table->foreignUuid('plant_id')->constrained();
-            $table->foreignUuid('unit_id')->constrained();
-            $table->foreignUuid('equipment_category_id')->constrained();
-            $table->foreignUuid('equipment_subcategory_id')->constrained();
-            $table->foreignUuid('equipment_type_id')->constrained();
-            $table->foreignUuid('equipment_status_id')->constrained();
+            $table->foreignUuid('base_id')->nullable()->constrained();
+            $table->foreignUuid('site_id')->nullable()->constrained();
+            $table->foreignUuid('plant_id')->nullable()->constrained();
+            $table->foreignUuid('unit_id')->nullable()->constrained();
+            $table->foreignUuid('equipment_category_id')->nullable()->constrained();
+            $table->foreignUuid('equipment_subcategory_id')->nullable()->constrained();
+            $table->foreignUuid('equipment_type_id')->nullable()->constrained();
+            $table->foreignUuid('equipment_status_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

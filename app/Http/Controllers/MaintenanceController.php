@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\LogType;
 use App\Models\Equipment;
 use App\Models\MaintenanceWorkOrder;
 use App\Models\MaintenanceWorkOrderAttachment;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Enum;
 
 class MaintenanceController extends Controller
 {
@@ -118,5 +120,21 @@ class MaintenanceController extends Controller
         $breakdown = $equipment->maintenanceSchedule()->create($validated);
 
         return back()->with('success', 'Maintenance schedule created successfully');
+    }
+
+    public function maintenanceLogs(Request $request, Equipment $equipment)
+    {
+        $user = auth()->user();
+
+        $mL = $request->validate([
+            'log_type' => ['nullable', new Enum(LogType::class)],
+            'message' => 'nullable|string',
+        ]);
+
+        $validated['organization_id'] = $user->organization_id;
+        $validated['created_by'] = $user->id;
+        $breakdown = $equipment->maintenanceLog()->create($validated);
+
+        return back()->with('success', 'Maintenance log created successfully');
     }
 }

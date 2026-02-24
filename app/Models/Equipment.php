@@ -3,12 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Equipment extends Model
 {
-    use HasUuids;
+    use HasUuids, HasFactory;
     protected $guarded = [];
+
+    public function category()
+    {
+        return $this->belongsTo(EquipmentCategory::class, 'equipment_category_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(EquipmentStatus::class, 'equipment_status_id');
+    }
+
+    // public function operator()
+    // {
+    //     return $this->belongsTo(User::class, 'operator_id');
+    // }
 
     public function unit()
     {
@@ -65,4 +81,8 @@ class Equipment extends Model
         return $this->hasOne(MaintenanceSchedule::class);
     }
 
+    public function maintenanceLog()
+    {
+        return $this->hasMany(EquipmentMaintenanceLog::class);
+    }
 }

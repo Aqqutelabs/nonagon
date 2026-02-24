@@ -17,7 +17,7 @@ class EnsureLocationAccess
     {
         $user = auth()->user();
 
-        if ($user->role == 'admin') {
+        if ($user->role == 'owner') {
             return $next($request);
         }
 

@@ -15,4 +15,9 @@ class Site extends Model
     {
         return $this->belongsTo(Base::class);
     }
+
+    public function plants()
+    {
+        return $this->hasMany(Plant::class);
+    }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('organization_id')->constrained();
             $table->string('name')->default('Company');
-            $table->boolean('is_default')->default(true);
+            $table->boolean('is_default')->default(false);
             $table->unique(['organization_id', 'name']);
             $table->text('description')->nullable();
             $table->timestamps();

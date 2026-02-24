@@ -15,4 +15,9 @@ class Plant extends Model
     {
         return $this->belongsTo(Site::class);
     }
+
+    public function units()
+    {
+        return $this->hasMany(Unit::class);
+    }
 }
