@@ -11,6 +11,7 @@ composer install --no-interaction
 
 # Run database migrations
 # php artisan migrate --force
+
 php artisan migrate:fresh --seed --force
 
 # Clear caches
