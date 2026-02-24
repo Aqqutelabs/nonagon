@@ -15,4 +15,9 @@ class Unit extends Model
     {
         return $this->belongsTo(Plant::class);
     }
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
 }

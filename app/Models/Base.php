@@ -19,5 +19,10 @@ class Base extends Model
         return $this->belongsTo(Organization::class);
     }
 
+    public function sites()
+    {
+        return $this->hasMany(Site::class);
+    }
+
     protected $guarded = [];
 }

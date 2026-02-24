@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreignUuid('recorded_by')->constrained()->on('users');
             $table->timestamps();
 
-            $table->index(['meter_id', 'reading_at']);
-            $table->index(['meter_id', 'created_at']);
+            $table->index(['equipment_meter_id', 'reading_at']);
+            $table->index(['equipment_meter_id', 'created_at']);
         });
     }
 

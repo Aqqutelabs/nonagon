@@ -20,8 +20,8 @@ return new class extends Migration
             $table->decimal('gps_lng', 10, 7)->nullable();
             $table->string('address')->nullable();
             $table->foreignUuid('base_id')->constrained();
-            $table->foreignUuid('organization_id')->constrained();
-            $table->boolean('is_default')->default(true);
+            $table->foreignUuid('organization_id')->nullable()->constrained();
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
     }

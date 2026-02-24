@@ -20,41 +20,59 @@ Route::get('/', function () {
 
 // Admin routes - require authentication
 // Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    Route::get('/equipment', function () {
-        return view('admin.equipment');
-    });
+// Route::get('/equipment', function () {
+//     return view('admin.equipment');
+// });
 
-    Route::get('/maintenance', function () {
-        return view('admin.maintenance');
-    });
+Route::get('/maintenance', function () {
+    return view('admin.maintenance');
+});
 
-    Route::get('/users',function () {
-        return view('admin.users');
-    });
+Route::get('/users', function () {
+    return view('admin.users');
+});
 
-    Route::get('/reports',function () {
-        return view('admin.reports');
-    });
+Route::get('/reports', function () {
+    return view('admin.reports');
+});
 
-    Route::get('/settings',function () {
-        return view('admin.settings');
-    });
+Route::get('/settings', function () {
+    return view('admin.settings');
+});
 
-    Route::get('/profile',function () {
-        return view('admin.profile');
-    });
+Route::get('/profile', function () {
+    return view('admin.profile');
+});
 
-    Route::get('/account',function () {
-        return view('admin.account');
-    });
+Route::get('/account', function () {
+    return view('admin.account');
+});
 // });
 
 
-Auth::routes();
+// Auth::routes();
+Route::prefix('auth')->group(function () {
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    // Login form (Blade)
+    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+
+    // Login POST
+    Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+
+    // Logout
+    Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+    // Register form
+    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
+
+    // Register POST
+    Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+
+});
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -69,4 +87,9 @@ Route::post('/complete/invite', [AuthController::class, 'completeInvite'])->name
 
 Route::get('/equipment/category', [EquipmentCategory::class, 'index'])->name('equipmentcategory.index');
 Route::post('/equipment/category', [EquipmentCategory::class, 'store'])->name('equipmentcategory.store');
-Route::resource('equipments', EquipmentController::class);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/equipments-search', [EquipmentController::class, 'search'])->name('equipments.search');
+    Route::resource('equipments', EquipmentController::class);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});

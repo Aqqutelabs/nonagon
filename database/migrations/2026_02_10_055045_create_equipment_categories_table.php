@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->foreignUuid('organization_id')->constrained();
+            $table->foreignUuid('organization_id')->nullable()->constrained();
             $table->boolean('is_global')->default(true);
             $table->timestamps();
         });
