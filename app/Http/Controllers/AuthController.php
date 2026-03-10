@@ -26,39 +26,41 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'organization_name' => 'required|string|max:255',
+            'organization_name' => 'nullable|string|max:255',
             'organization_email' => 'nullable|email|unique:organizations,email',
-            'organization_phone' => 'nullable|string|max:20',
+            'phone_no' => 'nullable|string|max:20',
             'organization_address' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'position' => 'nullable|string',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
         $data = DB::transaction(function () use ($request) {
 
             // Create Organization
+            $organizationName = $request->organization_name ?: $request->name;
+
             $organization = Organization::create([
-                'id' => Str::uuid(),
-                'name' => $request->organization_name,
+                'name' => $organizationName,
                 'email' => $request->organization_email,
-                'phone_no' => $request->organization_phone,
+                'phone_no' => $request->phone_no,
                 'address' => $request->organization_address,
             ]);
 
             // Create Owner User
             $user = User::create([
-                'id' => Str::uuid(),
                 'organization_id' => $organization->id,
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone_no' => $request->phone_no,
+                'position' => $request->position,
                 'password' => Hash::make($request->password),
                 'role' => 'owner',
             ]);
 
             // Default Base
             $base = Base::create([
-                'id' => Str::uuid(),
                 'organization_id' => $organization->id,
                 'name' => 'Default',
                 'is_default' => true,
@@ -66,7 +68,6 @@ class AuthController extends Controller
 
             // Default Site
             $site = Site::create([
-                'id' => Str::uuid(),
                 'organization_id' => $organization->id,
                 'base_id' => $base->id,
                 'name' => 'Default',
@@ -75,7 +76,6 @@ class AuthController extends Controller
 
             // Default Plant
             $plant = Plant::create([
-                'id' => Str::uuid(),
                 'organization_id' => $organization->id,
                 'base_id' => $base->id,
                 'site_id' => $site->id,
@@ -85,7 +85,6 @@ class AuthController extends Controller
 
             // Default Unit
             $unit = Unit::create([
-                'id' => Str::uuid(),
                 'organization_id' => $organization->id,
                 'base_id' => $base->id,
                 'site_id' => $site->id,
@@ -97,6 +96,7 @@ class AuthController extends Controller
             // Attach creator as organization admin
             LocationUser::create([
                 'user_id' => $user->id,
+                'organization_id' => $organization->id,
                 'location_type' => 'organization',
                 'location_id' => $organization->id,
             ]);
@@ -110,12 +110,8 @@ class AuthController extends Controller
         // Login the user immediately
         auth()->login($data['user']);
 
-        return response()->json([
-            'message' => 'Organization and owner account created successfully',
-            'organization' => $data['organization'],
-            'user' => $data['user'],
-            'token' => $data['user']->createToken('auth_token')->plainTextToken,
-        ]);
+        return redirect()->route('equipments.index')
+            ->with('success', 'Organization and owner account created successfully');
     }
 
     // Login

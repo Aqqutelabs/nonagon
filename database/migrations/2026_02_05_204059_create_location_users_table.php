@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('location_users', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('organization_id')->constrained();
             $table->string('location_type'); // base, site, plant, unit
             $table->uuid('location_id');
