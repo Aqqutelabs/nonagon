@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Equipment\EquipmentController;
+use App\Http\Middleware\EnsureLocationAccess;
 use App\Models\EquipmentCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -52,26 +53,25 @@ Route::get('/account', function () {
 // });
 
 
-// Auth::routes();
-Route::prefix('auth')->group(function () {
 
-    // Login form (Blade)
-    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+// Route::prefix('auth')->group(function () {
 
-    // Login POST
-    Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+//     // Login form (Blade)
+//     Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 
-    // Logout
-    Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+//     // Login POST
+//     Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 
-    // Register form
-    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
+//     // Logout
+//     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    // Register POST
-    Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+//     // Register form
+//     Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
 
-});
-
+//     // Register POST
+//     Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+// });
+Auth::routes();
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -89,7 +89,9 @@ Route::get('/equipment/category', [EquipmentCategory::class, 'index'])->name('eq
 Route::post('/equipment/category', [EquipmentCategory::class, 'store'])->name('equipmentcategory.store');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/equipments-search', [EquipmentController::class, 'search'])->name('equipments.search');
-    Route::resource('equipments', EquipmentController::class);
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::middleware([EnsureLocationAccess::class])->group(function () {
+        Route::get('/equipments/search', [EquipmentController::class, 'search'])->name('equipments.search');
+        Route::resource('equipments', EquipmentController::class);
+    });
+    // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

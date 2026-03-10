@@ -16,6 +16,7 @@ use App\Models\Site;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EquipmentController extends Controller
 {
@@ -40,35 +41,138 @@ class EquipmentController extends Controller
     //         ->get();
     // }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         $organizationId = $user->organization_id;
 
-        // Load equipments with relationships
-        $equipments = Equipment::with([
+        /*
+    |--------------------------------------------------------------------------
+    | Base Query
+    |--------------------------------------------------------------------------
+    */
+
+        $query = Equipment::with([
             'status',
             'category',
-            // 'operator',
             'base',
             'site',
             'plant',
             'unit'
-        ])
-            ->where('organization_id', $organizationId)
-            ->latest()
-            ->get();
+        ])->where('organization_id', $organizationId);
 
-        // Categories and statuses for dropdowns
+
+        /*
+    |--------------------------------------------------------------------------
+    | LOCATION ACCESS CONTROL (NEW)
+    |--------------------------------------------------------------------------
+    */
+
+        if ($user->role !== 'owner') {
+
+            $locationAccess = DB::table('location_users')
+                ->where('user_id', $user->id)
+                ->where('organization_id', $organizationId)
+                ->get();
+
+            $baseIds = $locationAccess->where('location_type', 'base')->pluck('location_id');
+            $siteIds = $locationAccess->where('location_type', 'site')->pluck('location_id');
+            $plantIds = $locationAccess->where('location_type', 'plant')->pluck('location_id');
+            $unitIds = $locationAccess->where('location_type', 'unit')->pluck('location_id');
+
+            $query->where(function ($q) use ($baseIds, $siteIds, $plantIds, $unitIds) {
+
+                if ($baseIds->isNotEmpty()) {
+                    $q->orWhereIn('base_id', $baseIds);
+                }
+
+                if ($siteIds->isNotEmpty()) {
+                    $q->orWhereIn('site_id', $siteIds);
+                }
+
+                if ($plantIds->isNotEmpty()) {
+                    $q->orWhereIn('plant_id', $plantIds);
+                }
+
+                if ($unitIds->isNotEmpty()) {
+                    $q->orWhereIn('unit_id', $unitIds);
+                }
+            });
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Filters
+    |--------------------------------------------------------------------------
+    */
+
+        // Search
+        if ($request->filled('search')) {
+
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('aid', 'like', "%{$search}%")
+                    ->orWhere('brand', 'like', "%{$search}%")
+                    ->orWhere('model', 'like', "%{$search}%");
+            });
+        }
+
+        // Status
+        if ($request->filled('status')) {
+            $query->where('equipment_status_id', $request->status);
+        }
+
+        // Category
+        if ($request->filled('category')) {
+            $query->where('equipment_category_id', $request->category);
+        }
+
+        // Unit
+        if ($request->filled('unit')) {
+            $query->where('unit_id', $request->unit);
+        }
+
+        // Critical Only
+        if ($request->filled('critical')) {
+            $query->whereHas('status', function ($q) {
+                $q->where('name', 'Critical');
+            });
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Get Equipments
+    |--------------------------------------------------------------------------
+    */
+
+        $equipments = $query->latest()->get();
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Dropdown Data
+    |--------------------------------------------------------------------------
+    */
+
         $categories = EquipmentCategory::where(function ($query) use ($organizationId) {
             $query->where('is_global', true)
                 ->orWhere('organization_id', $organizationId);
         })->orderBy('name')->get();
 
+
         $statuses = EquipmentStatus::where(function ($query) use ($organizationId) {
             $query->whereNull('organization_id')
                 ->orWhere('organization_id', $organizationId);
         })->orderBy('name')->get();
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Location Tree
+    |--------------------------------------------------------------------------
+    */
 
         $bases = Base::where('organization_id', $organizationId)
             ->with(['sites.plants.units' => function ($query) {
@@ -76,17 +180,67 @@ class EquipmentController extends Controller
             }])
             ->get();
 
-        // --- Stats ---
+
+        /*
+    |--------------------------------------------------------------------------
+    | Filter Location Tree for Operators
+    |--------------------------------------------------------------------------
+    */
+
+        if ($user->role !== 'owner') {
+
+            $bases = $bases->filter(function ($base) use ($baseIds, $siteIds, $plantIds, $unitIds) {
+
+                if ($baseIds->contains($base->id)) {
+                    return true;
+                }
+
+                $base->sites = $base->sites->filter(function ($site) use ($siteIds, $plantIds, $unitIds) {
+
+                    if ($siteIds->contains($site->id)) {
+                        return true;
+                    }
+
+                    $site->plants = $site->plants->filter(function ($plant) use ($plantIds, $unitIds) {
+
+                        if ($plantIds->contains($plant->id)) {
+                            return true;
+                        }
+
+                        $plant->units = $plant->units->filter(function ($unit) use ($unitIds) {
+                            return $unitIds->contains($unit->id);
+                        });
+
+                        return $plant->units->isNotEmpty();
+                    });
+
+                    return $site->plants->isNotEmpty();
+                });
+
+                return $base->sites->isNotEmpty();
+            });
+        }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | Stats
+    |--------------------------------------------------------------------------
+    */
+
         $totalAssets = $equipments->count();
 
-        $maintenanceStatus = EquipmentStatus::where('name', 'Maintenance')->first();
+        $maintenanceStatus = $statuses->where('name', 'Maintenance')->first();
+
         $underMaintenance = $maintenanceStatus
             ? $equipments->where('equipment_status_id', $maintenanceStatus->id)->count()
             : 0;
 
+
         $totalOperators = User::where('organization_id', $organizationId)
             ->where('role', 'operator')
             ->count();
+
 
         return view('admin.equipment', compact(
             'equipments',

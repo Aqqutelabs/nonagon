@@ -19,7 +19,6 @@ class EquipmentHierarchySeeder extends Seeder
         DB::transaction(function () {
 
             $structure = [
-
                 'Artificial lift equipment' => [
                     'ESP systems' => [
                         'Submersible pump assembly',
@@ -388,6 +387,374 @@ class EquipmentHierarchySeeder extends Seeder
                     ],
                 ],
 
+                'Lifting equipment' => [
+                    'Cranes' => [
+                        'Truck crane',
+                        'All-terrain crane',
+                        'Crawler crane',
+                        'Tower crane',
+                        'Overhead crane',
+                    ],
+                    'Forklifts' => [
+                        'Diesel forklift',
+                        'Rough-terrain forklift',
+                    ],
+                    'Aerial Lifts' => [
+                        'Scissor lift',
+                        'Boom lift',
+                    ],
+                    'Hoists' => [
+                        'Chain hoist',
+                        'Lever hoist',
+                    ],
+                ],
+
+                'Perforating equipment' => [
+                    'Perforating Systems' => [
+                        'Hollow carrier gun',
+                        'Tubing-conveyed perforator (TCP)',
+                        'Expendable gun',
+                    ],
+                ],
+
+                'Pipeline equipment' => [
+                    'Pipelines' => [
+                        'Onshore pipeline',
+                        'Offshore pipeline',
+                    ],
+                    'Pig Launchers/Receivers' => [
+                        'Launcher barrel',
+                        'Receiver barrel',
+                    ],
+                ],
+
+                'Pumping equipment' => [
+                    'Centrifugal Pumps' => [
+                        'Single-stage centrifugal pump',
+                        'Multistage centrifugal pump',
+                        'API-standard pump',
+                    ],
+                    'Rotary Pumps' => [
+                        'Gear pump',
+                        'Screw pump',
+                    ],
+                    'Reciprocating Pumps' => [
+                        'Piston pump',
+                        'Plunger pump',
+                        'Diaphragm pump'
+                    ],
+                    'Blowers' => [
+                        'Centrifugal blower',
+                    ],
+                    'Fans' => [
+                        'Axial fan',
+                    ],
+                ],
+
+                'Reactor Equipment' => [
+                    'Catalytic Reactors' => [
+                        'Hydrogenation reactor',
+                        'Catalytic reforming reactor',
+                        'Disproportionation reactor',
+                        'Isomerization reactor'
+                    ],
+                    'Polymerization Reactors' => [
+                        'Batch polymerization reactor',
+                        'Continuous polymerization reactor',
+                    ],
+                    'Cracking Reactors' => [
+                        'Fluid catalytic cracking reactor',
+                        'Delayed coker drum',
+                    ],
+                ],
+
+                'Seperation Equipment' => [
+                    'Separators' => [
+                        'Horizontal separator',
+                        'Vertical separator',
+                        'Compact separator',
+                    ],
+                    'Slug Catchers' => [
+                        'Finger-type slug catcher',
+                        'Vessel-type slug catcher',
+                    ],
+                    'Dehydration Units' => [
+                        'TEG (glycol) contactor',
+                        'Molecular sieve dryer',
+                    ],
+                    'Sweetening Units' => [
+                        'Amine contactor',
+                        'Sulfur recovery unit',
+                    ],
+                    'Produced Water Treatment' => [
+                        'Hydrocyclone',
+                        'Flotation unit',
+                        'Walnut shell filter'
+                    ],
+                    'Flare Systems' => [
+                        'Flare stack',
+                        'Knock-out drum',
+                        'Ignition system'
+                    ],
+                    'Compressor Stations' => [
+                        'Sieve tray column',
+                        'Valve tray column',
+                        'Bubble cap column'
+                    ],
+                    'Packed Columns' => [
+                        'Random packing column',
+                        'Structured packing column',
+                    ],
+                ],
+
+                'Storage Equipment' => [
+                    'Metal Tanks' => [
+                        'Floating Roof',
+                        'Fixed Roof',
+                    ],
+                    'Spherical Tanks' => [
+                        'Spherical LPG tank',
+                    ],
+                    'Non-metal Tanks' => [
+                        'FRP (fiberglass) tank',
+                    ],
+                    'Gas Cabinets' => [
+                        'Gas cylinder storage cabinet',
+                    ],
+                    'Mixing Tanks' => [
+                        'Agitated storage tank',
+                    ],
+                ],
+
+                'Subsea Equipment' => [
+                    'Subsea Trees' => [
+                        'Horizontal subsea tree',
+                        'Vertical subsea tree',
+                    ],
+                    'Subsea Manifolds' => [
+                        'Production manifold',
+                        'Injection manifold'
+                    ],
+                    'Umbilicals' => [
+                        'Static umbilical',
+                        'Dynamic umbilical'
+                    ],
+                    'Subsea Pumps' => [
+                        'Subsea booster pump',
+                        'Subsea compressor unit'
+                    ],
+                    'Risers' => [
+                        'Flexible riser',
+                        'Steel catenary riser'
+                    ],
+                ],
+
+                'Thermal Equipment' => [
+                    'Shell & Tube Exchangers' => [
+                        'Fixed tubesheet exchanger',
+                        'Floating head exchanger',
+                        'U-tube exchanger'
+                    ],
+                    'Plate Exchangers' => [
+                        'Gasketed plate exchanger',
+                        'Welded plate exchanger'
+                    ],
+                    'Air Coolers' => [
+                        'Fin-fan cooler',
+                        'Forced draft cooler'
+                    ],
+                    'Fired Heaters' => [
+                        'Box-type furnace',
+                        'Cylindrical furnace',
+                        'Tube-type furnace'
+                    ],
+                    'Boilers' => [
+                        'Package boiler',
+                        'Heat recovery steam generator (HRSG)'
+                    ],
+                    'Cooling Towers' => [
+                        'Induced draft cooling tower',
+                        'Forced draft cooling tower'
+                    ],
+                ],
+
+                'Valve Equipment' => [
+                    'Ball Valves' => [
+                        'Floating ball valve',
+                        'Trunnion-mounted ball valve',
+                        'Rising Stem Ball Valve'
+                    ],
+                    'Butterfly Valves' => [
+                        'Wafer butterfly valve',
+                        'Lug butterfly valve',
+                        'Rubberlinned Butterfly',
+                        'Double offset Butterfly',
+                        'Triple Offset Butterfly Valve'
+                    ],
+                    'Gate Valves' => [
+                        'Rising stem gate valve',
+                        'Non-rising stem gate valve'
+                    ],
+                    'Globe Valves' => [
+                        'Angle globe valve',
+                    ],
+                    'Check Valves' => [
+                        'Swing check valve',
+                        'Lift check valve'
+                    ],
+                    'Pressure Relief Valves' => [
+                        'Spring-loaded PSV (safety valve)',
+                        'Pilot-operated PSV'
+                    ],
+                ],
+
+                'Wellhead Equipment' => [
+                    'Surface Wellheads' => [
+                        'Casing head',
+                        'Tubing head',
+                        'Multi-bowl wellhead'
+                    ],
+                    'Christmas Trees' => [
+                        'Conventional tree',
+                        'Dual completion tree',
+                    ],
+                    'Welding Machines' => [
+                        'Diesel welding generator',
+                        'Electric inverter welder'
+                    ],
+                    'Wireline Units' => [
+                        'Truck-mounted wireline unit',
+                        'Skid-mounted wireline unit',
+                        'Offshore wireline unit'
+                    ],
+                    'Pressure Control' => [
+                        'Wireline grease injector',
+                        'Wireline lubricator',
+                        'Wireline BOP'
+                    ],
+                    'Open-hole Logging' => [
+                        'Resistivity logging tool',
+                        'Density logging tool',
+                        'Sonic logging tool'
+                    ],
+                    'Cased-hole Logging' => [
+                        'Cement bond logging tool',
+                        'Production logging tool'
+                    ],
+                    'Slickline Tools' => [
+                        'Pulling tool',
+                        'Running tool',
+                        'Gauge cutter',
+                        'Jar'
+                    ],
+                ],
+
+                'Truck equipment' => [
+                    'Light Duty Trucks' => [
+                        'Pickup truck',
+                        '4x4 pickup',
+                        'Crew cab pickup',
+                    ],
+                    'Flatbed' => [
+                        'Flatbed truck',
+                        'Stake truck',
+                        'Box truck',
+                    ],
+                    'Heavy Duty Trucks' => [
+                        'Tractor head',
+                        'Prime mover',
+                        'Heavy haul truck'
+                    ],
+                    'Dump Trucks' => [
+                        'Articulated dump truck',
+                        'Rigid dump truck',
+                        'Tipper truck'
+                    ],
+                    'Tanker Trucks' => [
+                        'Fuel tanker truck',
+                        'Water tanker truck',
+                        'Chemical tanker truck'
+                    ],
+                    'Vacuum Trucks' => [
+                        'Vacuum tanker',
+                        'Hydro-vac truck',
+                        'Sludge truck'
+                    ],
+                    'Cementing Trucks' => [
+                        'Bulk cement truck',
+                        'Pneumatic cement carrier'
+                    ],
+                    'Fracturing Trucks' => [
+                        'Frac pump truck',
+                        'Blender truck',
+                        'Hydration unit truck',
+                    ],
+                    'Logging Trucks' => [
+                        'Wireline logging truck',
+                        'Slickline unit truck',
+                    ],
+                    'Crane Trucks' => [
+                        'Boom truck',
+                        'Knuckle boom truck',
+                    ],
+                    'Service Trucks' => [
+                        'Lube truck',
+                        'Maintenance truck',
+                        'Field service truck',
+                    ],
+                    'Fire Trucks' => [
+                        'Industrial fire truck',
+                        'Foam tender',
+                    ],
+                    'Utility Trucks' => [
+                        'Utility body truck',
+                        'Line truck',
+                        'Cable reel truck',
+                    ],
+                    'Refrigerated Trucks' => [
+                        'Reefer truck',
+                        'Insulated box truck',
+                    ],
+                    'Lowbed Trucks' => [
+                        'Lowboy trailer truck',
+                        'Equipment transport truck',
+                    ],
+                    'Winch Trucks' => [
+                        'Oilfield winch truck',
+                        'Recovery truck',
+                    ],
+                    'Personnel Trucks' => [
+                        'Crew transport bus',
+                        'Personnel carrier'
+                    ],
+                    'Pipe Transport Trucks' => [
+                        'Pipe rack truck',
+                        'Tubular hauling truck',
+                    ],
+                    'Water Spray Trucks' => [
+                        'Dust suppression truck',
+                        'Road spray truck',
+                    ],
+                    'Garbage Trucks' => [
+                        'Compactor truck',
+                        'Roll-off truck',
+                    ],
+                ],
+
+                'Midstream Equipment' => [
+                    'Metering Stations' => [
+                        'Fiscal flow meter',
+                        'LACT unit (lease automatic custody transfer)',
+                    ],
+                    'Compressor Stations' => [
+                        'Gas compressor train',
+                        'Booster station'
+                    ],
+                    'Loading Systems' => [
+                        'Marine loading arm',
+                        'Truck loading arm'
+                    ],
+                ],
             ];
 
             foreach ($structure as $categoryName => $subcategories) {

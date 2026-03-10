@@ -162,6 +162,9 @@
                         <!-- <a href="#" id="logout-btn">
                             <ion-icon name="power-outline" class="title-icon"></ion-icon>
                         </a> -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+    @csrf
+</form>
                     </div>
                 </nav>
 
@@ -188,9 +191,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
     <script>
-        $('#logout-btn, #logout-dropdown').click(function () {
-            $('#logout').click();
-        });
+        $('#logout-dropdown, #logout-btn').on('click', function(e) {
+    e.preventDefault();
+    document.getElementById('logout-form').submit();
+});
 
         var t = 0;
         $('.iconic-size-ctrl').click(function () {
