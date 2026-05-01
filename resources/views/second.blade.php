@@ -31,7 +31,7 @@
 </head>
 
 <body>
-    <nav class="nonagon-nav nav">
+    <!-- <nav class="nonagon-nav nav">
         <div class="logo-box">
             <img src="{{ asset('assets/img/logo-dark.svg') }}" alt="nonagon logo">
         </div>
@@ -53,9 +53,9 @@
                 </div>
             </form>
         </div> --}}
-    </nav>
+    </nav> -->
 
-    <section class="hero-section">
+    <!-- <section class="hero-section">
         <div class="w-100 d-flex justify-content-center mt-3">
             <div class="connective">connectivity, secure, insured</div>
         </div>
@@ -74,9 +74,9 @@
                     class="fa fa-angle-right"></i></a>
         </div>
 
-    </section>
+    </section> -->
 
-    <div class="count-section padded">
+    <!-- <div class="count-section padded">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-12">
@@ -112,9 +112,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="how-it-works padded">
+    <!-- <div class="how-it-works padded">
         <div class="d-flex justify-content-center">
             <h5 class="labeled-sect">how it works</h5>
         </div>
@@ -155,9 +155,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="why-nonagon padded">
+    <!-- <div class="why-nonagon padded">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-6">
@@ -201,9 +201,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="trust-us padded" style="display: none">
+    <!-- <div class="trust-us padded" style="display: none">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-12">
@@ -264,9 +264,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="trusted padded">
+    <!-- <div class="trusted padded">
         <h6 class="trusted-title">Our trusted equipment brands</h6>
         <div class="logo-trusted">
             <div class="marquee">
@@ -283,7 +283,7 @@
                     <img src="{{ asset('assets/img/companies/10.png') }}" alt="">
                     <img src="{{ asset('assets/img/companies/11.png') }}" alt="">
                     <img src="{{ asset('assets/img/companies/12.png') }}" alt="">
-                    <!-- duplicate for seamless scroll -->
+
                     <img src="{{ asset('assets/img/companies/1.png') }}" alt="">
                     <img src="{{ asset('assets/img/companies/2.png') }}" alt="">
                     <img src="{{ asset('assets/img/companies/3.png') }}" alt="">
@@ -299,15 +299,15 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="trust-us padded">
-        <div class="d-flex justify-content-center mt-5 mb-4">
+        <!-- <div class="d-flex justify-content-center mt-5 mb-4">
             <h5 class="labeled-sect">Start Now</h5>
-        </div>
+        </div> -->
 
         <div class="equipment-grid">
-            <div class="equipment-card">
+            <!-- <div class="equipment-card">
                 <div class="equipment-background equipment-bg-1"></div>
                 <div class="equipment-content">
                     <h2 class="equipment-title">Get the right equipment, fast.</h2>
@@ -321,10 +321,10 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Card 2: Verified Owners -->
-            <div class="equipment-card">
+            <!-- <div class="equipment-card">
                 <div class="equipment-background equipment-bg-2"></div>
                 <div class="equipment-content">
                     <h2 class="equipment-title">Earn Commissions when Equipment gets hired.</h2>
@@ -338,10 +338,10 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Card 3: Perfect Match -->
-            <div class="equipment-card">
+            <!-- <div class="equipment-card">
                 <div class="equipment-background equipment-bg-3"></div>
                 <div class="equipment-content">
                     <h2 class="equipment-title">Make your equipment work for you.</h2>
@@ -355,14 +355,15 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
-    <div class="newsletter-parent padded mt-5 mb-5">    
-        <div class="newsletter-signup-container">
+    <!-- <div class="newsletter-parent padded mt-5 mb-5">     -->
+        <!-- <div class="newsletter-signup-container"> -->
+             
             <!-- Main Content -->
-            <div class="signup-content-wrapper">
+            <!-- <div class="signup-content-wrapper">
                 <h1 class="newsletter-headline">
                     Join our list and be the first to know when new equipment becomes available <span
                         class="highlight-text">near you.</span>
@@ -376,15 +377,22 @@
                         <span class="btn-icon">→</span>
                     </button>
                 </form>
-            </div>
-        </div>
-    </div>
+            </div> -->
+        <!-- </div> -->
+    <!-- </div> -->
 
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-content">
+    <p class="text-3xl px-20">This project is currently suspended due to outstanding payments owed to the developer for work completed between December and February.
+
+            Despite multiple attempts to resolve this privately, the balance remains unpaid. Development will resume once all outstanding invoices have been settled.
+
+            For resolution, please contact the developer directly.
+            </p>
+
+    <!-- <footer class="footek"> -->
+        <div class="footer-containerk">
+            <div class="footer-contentk">
                 <!-- Brand Section -->
-                <div class="footer-brand">
+                <!-- <div class="footer-brand">
                     <div class="logo">
                         <img src="{{ asset('assets/img/logo-white.svg') }}" alt="">
                     </div>
@@ -406,10 +414,10 @@
                             <i class="fab fa-twitter"></i>
                         </a>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Quick Links -->
-                <div class="footer-section">
+                <!-- <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="#">Company</a></li>
@@ -418,10 +426,10 @@
                         <li><a href="#">Blog</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- Our Services -->
-                <div class="footer-section">
+                <!-- <div class="footer-section">
                     <h3>Our Services</h3>
                     <ul class="footer-links">
                         <li><a href="#">Browse Equipment</a></li>
@@ -430,10 +438,10 @@
                         <li><a href="#">Pricing</a></li>
                         <li><a href="#">Safety Guidelines</a></li>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- Contact -->
-                <div class="footer-section">
+                <!-- <div class="footer-section">
                     <h3>Contact</h3>
                     <ul class="contact-info">
                         <li>
@@ -449,7 +457,7 @@
                             <span>45 Orominieke street Dline</span>
                         </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </div>
     </footer>
