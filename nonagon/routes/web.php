@@ -1,0 +1,97 @@
+<?php
+
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Equipment\EquipmentController;
+use App\Http\Middleware\EnsureLocationAccess;
+use App\Models\EquipmentCategory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/second', function () {
+    return view('welcome');
+});
+
+Route::get('/', function () {
+    return view('second');
+});
+
+
+// Admin routes - require authentication
+// Route::middleware(['auth'])->group(function () {
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Route::get('/equipment', function () {
+//     return view('admin.equipment');
+// });
+
+Route::get('/maintenance', function () {
+    return view('admin.maintenance');
+});
+
+Route::get('/users', function () {
+    return view('admin.users');
+});
+
+Route::get('/reports', function () {
+    return view('admin.reports');
+});
+
+Route::get('/settings', function () {
+    return view('admin.settings');
+});
+
+Route::get('/profile', function () {
+    return view('admin.profile');
+});
+
+Route::get('/account', function () {
+    return view('admin.account');
+});
+// });
+
+
+
+// Route::prefix('auth')->group(function () {
+
+//     // Login form (Blade)
+//     Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+
+//     // Login POST
+//     Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+
+//     // Logout
+//     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+//     // Register form
+//     Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
+
+//     // Register POST
+//     Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+// });
+Auth::routes();
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+Route::post('/send/invite', [AuthController::class, 'sendInvite'])->name('send.invite');
+Route::get('/accept/invite', [AuthController::class, 'acceptInvite'])->name('accept.invite');
+Route::post('/complete/invite', [AuthController::class, 'completeInvite'])->name('complete.invite');
+
+Route::get('/equipment/category', [EquipmentCategory::class, 'index'])->name('equipmentcategory.index');
+Route::post('/equipment/category', [EquipmentCategory::class, 'store'])->name('equipmentcategory.store');
+
+Route::middleware(['auth'])->group(function () {
+    Route::middleware([EnsureLocationAccess::class])->group(function () {
+        Route::get('/equipments/search', [EquipmentController::class, 'search'])->name('equipments.search');
+        Route::resource('equipments', EquipmentController::class);
+    });
+    // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});

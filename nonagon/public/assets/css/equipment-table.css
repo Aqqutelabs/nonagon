@@ -1,0 +1,241 @@
+.equipment-container {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+.table-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.left-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.right-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box {
+    position: relative;
+    min-width: 200px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 8px 12px 8px 35px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 16px;
+    margin-top: 4px;
+}
+
+.table-ctrl-btn{
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+
+.table-ctrl-btn:hover {
+    background-color: #f8f9fa;
+}
+
+.keyboard-shortcut {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-left: 10px;
+    color: #666;
+}
+
+/* DataTable Customization */
+.dataTables_wrapper {
+    width: 100%;
+}
+
+.dataTables_length,
+.dataTables_filter {
+    display: none; /* Hide default controls since we have custom ones */
+}
+
+.dataTables_info {
+    float: left;
+    color: #666;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.dataTables_paginate {
+    float: right;
+    margin-top: 10px;
+}
+
+table.dataTable {
+    width: 100% !important;
+    border-collapse: collapse;
+    margin-top: 0;
+}
+
+table.dataTable thead th {
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 12px 8px;
+    font-weight: 600;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #666;
+    position: relative;
+}
+
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+table.dataTable tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+table.dataTable tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+table.dataTable tbody td {
+    padding: 12px 8px;
+    vertical-align: middle;
+    border: none;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.status-badge.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.completed {
+    background: #cce7ff;
+    color: #004085;
+}
+
+/* Custom pagination */
+.dataTables_paginate .paginate_button {
+    padding: 6px 12px !important;
+    margin-left: 2px !important;
+    border: 1px solid #dee2e6 !important;
+    background: white !important;
+    color: #fff !important;
+    border-radius: 4px !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: #e9ecef !important;
+    border-color: #adb5bd !important;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: #007bff !important;
+    border-color: #007bff !important;
+    color: white !important;
+}
+
+.dataTables_paginate .paginate_button.disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+/* Footer controls */
+.footer-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.rows-per-page {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rows-per-page select {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.go-to-page {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.go-to-page input {
+    width: 60px;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.go-btn {
+    padding: 4px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.go-btn:hover {
+    background: #0056b3;
+}
