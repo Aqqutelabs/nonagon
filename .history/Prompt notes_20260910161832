@@ -1,0 +1,22 @@
+so lets talk about the Project architecture
+
+Equipment.ng(Equipment market place(seller/buyer, owner/renter(seamless on one platfrom)),Nonagon Insights(Insights(news, Analysis, Glossary(wordpress)), Eqiupment(Modern equipment learning platform using equipment breakdown systems), Nonagon Project Osint (Live platform checking, companies, assets, Projects, Tenders, etc, overlated on map)), Nonagon ERP(Equipment Management(linked to Equipmet Market place), People management, Project management, Site Mangement, Procurement) )
+
+
+Platforms
+
+Web(HTML, JS, CSS. PHP, MySQL (+ PWA)) (ALL)
+
+
+Desktop(Flutter, PHP, MySQL)
+(
+    Nonagon ERP
+    (backend- local, offline, syncs with internet)
+)
+
+Android/IOS (Flutter, )
+
+(
+    Equipment market place
+    Nonagon Erp
+)

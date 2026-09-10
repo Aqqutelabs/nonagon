@@ -10,7 +10,3 @@
 **/database/*.sqlite-*
 **/storage/framework/sessions/*
 **/storage/*.key
-/prompt_notes.md
-/nonagon.md
-/PROJECT-ANALYSIS.md
-/dns.pdf
