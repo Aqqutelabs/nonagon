@@ -1,6 +1,89 @@
 ﻿# Nonagon Project File Analysis
 
-## Executive Summary
+## Current architecture direction — 10 September 2026
+
+This section records the current product requirements and architecture discussion. It describes the target platform, not completed functionality. The earlier Laravel analysis is preserved below as historical context.
+
+### Products
+
+| Product | Scope |
+| --- | --- |
+| Equipment.ng | Seamless equipment marketplace for buyers, sellers, equipment owners, renters and agents (middlemen). |
+| Nonagon Insights | News, analysis and glossary managed through WordPress. |
+| Equipment Learning (working name) | Modern learning through equipment breakdowns: equipment type → system → subsystem → component → lessons and assessments. Final name remains open. |
+| Nonagon Project OSINT | Monitoring companies, assets, projects, tenders and related information, overlaid on a map with sources and update history. |
+| Nonagon ERP | Equipment management linked to the marketplace, people management, project management, site management and procurement. |
+
+### Platforms
+
+| Platform | Products | Target stack |
+| --- | --- | --- |
+| Web — first | All products | HTML, CSS, JavaScript, plain PHP and MySQL, with PWA support. Insights uses WordPress. No Laravel, Next.js or React in the target custom application. |
+| Desktop | Nonagon ERP | Flutter, with the user-proposed local PHP/MySQL backend, offline operation and internet synchronization. Local deployment topology remains undecided. |
+| Android and iOS | Equipment.ng and Nonagon ERP | Flutter clients using the PHP backend API. ERP offline scope remains to be defined. |
+
+Native Android and iOS now form part of the target roadmap, expanding the earlier platform plan. Web remains the first implementation priority. PWA installation and offline functionality require separate implementation.
+
+### Marketplace users: Agent added
+
+Supported participants are Buyer, Seller, Equipment Owner, Renter and **Agent (middleman)**. An agent connects parties and facilitates equipment sales or rentals on behalf of a buyer, seller, owner or renter.
+
+Recommended identity design: these are overlapping marketplace capabilities, not mutually exclusive account types. One account can operate in several capacities and belong to multiple organizations. Organization administrator is a separate permission role from equipment owner.
+
+Proposed agent workflow, subject to detailed design:
+
+- Record the represented party and the scope of the agent's authorization.
+- Support authorized introductions, listing management, enquiries and negotiations, with agent participation visible to the relevant parties.
+- Keep the agent, represented party and actual equipment owner distinct; representation does not transfer ownership.
+- Agent status alone grants no private ERP access or authority to accept contracts, confirm payments or transfer assets.
+- Record agent involvement in transaction history. Commission model, payer, payout timing, verification and dispute handling remain undecided; no fee structure has been approved.
+
+### Shared application architecture — proposal
+
+Start with one modular plain-PHP backend, separating Marketplace, ERP, Learning and OSINT business modules. Share identity, organizations, memberships, permissions, equipment taxonomy, files and audit history. Keep WordPress in its own installation/database and integrate published editorial content through its REST API.
+
+PHP-rendered web pages and a versioned JSON API should use the same business services. Flutter clients communicate through authenticated HTTPS API requests, not direct cloud MySQL connections. Separate presentation, business rules and PDO database access. Media/documents need file storage alongside MySQL; ingestion, notifications and synchronization need background processing.
+
+Organization permissions belong to memberships, allowing one user to work for multiple organizations. Public OSINT observations, verified marketplace companies, generic learning definitions and private ERP records remain distinct even when linked through shared identifiers.
+
+### ERP and marketplace integration
+
+An ERP asset is a private operational record. A listing is an explicitly published selection of information. Publishing must not automatically expose internal costs, staff assignments, maintenance documents or other private records. Marketplace users can create standalone listings without an ERP subscription and optionally link listings to ERP assets.
+
+Availability checks must account for project assignments, maintenance and rental reservations before confirming a booking online. Agent-mediated transactions follow the same authorization and availability rules as direct transactions.
+
+### Offline ERP — decision still open
+
+The user proposed Flutter with local PHP/MySQL. Two possible deployment models were discussed; neither has been selected:
+
+1. **Independent computer:** Flutter with local SQLite, syncing through the PHP API to cloud MySQL. This was recommended for a single device and would revise the proposed local stack.
+2. **Shared offline office/site:** Flutter clients connect to a local PHP/MySQL server over the site network; that server synchronizes with the cloud.
+
+The unanswered question is whether each computer works independently or several computers share one local server during internet outages.
+
+Synchronization needs offline-generated IDs, a durable pending-operation queue, safe retries, record versions, conflict detection, propagated deletions, attachment synchronization and rules for permissions revoked while offline. Notes can append; conflicting asset edits require resolution; stock movements should remain transactions. Purchase requests can be drafted offline, while rental and payment confirmation should initially require online access. Mobile/PWA offline scope and conflict-resolution responsibilities remain open.
+
+### Learning, Insights and OSINT
+
+WordPress owns articles and glossary content. Learning owns structured equipment breakdowns and learning progress, with links to glossary definitions and shared equipment categories. Generic learning models are distinct from individual customer assets.
+
+OSINT needs source attribution, collection time, last verification, confidence, entity matching and change history before map presentation. An observation must not automatically become a verified company or ERP asset. Define "live" by source and refresh frequency rather than assuming continuous updates everywhere.
+
+### Proposed delivery sequence
+
+1. Shared identity, organizations, permissions, taxonomy, files, audit history and API conventions.
+2. ERP web asset register, location hierarchy and maintenance records.
+3. Marketplace web listings, agent representation, ERP publishing, enquiries and availability.
+4. WordPress Insights integration, which can progress alongside ERP.
+5. A bounded offline ERP pilot before expanding synchronization.
+6. Flutter desktop and Android/iOS applications.
+7. Structured Learning and OSINT workflows using established identifiers and taxonomy.
+
+This sequence and backend design are recommendations from the discussion, not finalized implementation decisions. Existing Laravel code remains a reference for the plain-PHP rebuild. See PROJECT-ANALYSIS.md for the earlier workspace review.
+
+References discussed: [Flutter offline-first architecture](https://docs.flutter.dev/app-architecture/design-patterns/offline-first), [SQLite deployment guidance](https://www.sqlite.org/whentouse.html), [WordPress REST API](https://developer.wordpress.org/plugins/rest-api/).
+
+## Historical analysis — Executive Summary
 
 Nonagon is a Laravel-based business platform with a role-aware auth flow, admin dashboard management screens, and a marketing/public landing experience. Its core features include user registration and login, admin vs. non-admin routing, equipment and maintenance management views, reporting dashboards, PWA support, and a static asset-heavy frontend built around Blade templates and CDN libraries.
 

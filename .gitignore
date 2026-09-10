@@ -1,4 +1,5 @@
 # Private credentials and runtime files containing sessions or request data.
+/nonagon.old/
 **/.env
 **/.env.*
 !**/.env.example
