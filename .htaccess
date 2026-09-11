@@ -1,0 +1,51 @@
+# Nonagon clean URLs and production access controls (Apache 2.4+)
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block internal application code and archived/source material.
+    RewriteRule ^(?:app|includes|database|nonagon\.old)(?:/|$) - [F,L,NC]
+    RewriteRule ^assets/.*\.php$ - [F,L,NC]
+
+    # Never serve hidden files. Keep ACME/SSL validation available.
+    RewriteRule ^(?!\.well-known(?:/|$))(?:.*/)?\. - [F,L]
+
+    # /index and /index.php are both canonicalized to the directory root.
+    RewriteCond %{THE_REQUEST} \s/+(.*/)?index(?:\.php)?(?:[?\s]) [NC]
+    RewriteRule ^index(?:\.php)?$ /%1 [R=301,L,NE]
+
+    # Remove PHP and HTML extensions when they appear in a browser request.
+    # THE_REQUEST prevents a redirect loop after the internal rewrite below.
+    RewriteCond %{THE_REQUEST} \s/+(.+?)\.(?:php|html?)(?:[?\s]) [NC]
+    RewriteRule ^(.+?)\.(?:php|html?)$ /%1 [R=301,L,NE]
+
+    # Resolve clean routes such as /login to login.php.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+?)/?$ $1.php [END,QSA]
+
+    # Also support static HTML pages without exposing their extension.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.html -f
+    RewriteRule ^(.+?)/?$ $1.html [END,QSA]
+</IfModule>
+
+# Prevent downloads of configuration, database, log, source-note and backup files.
+<FilesMatch "(?i)(^\.|\.(?:env|ini|log|sql|sqlite|sqlite3|md|lock|ya?ml|bak|dist)$)">
+    Require all denied
+</FilesMatch>
+
+<Files "dns.pdf">
+    Require all denied
+</Files>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>

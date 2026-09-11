@@ -1,0 +1,40 @@
+.location-tree li.parts-level {
+    margin-left: 110px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.level-label {
+    padding: 14px 20px;
+    background: #fff;
+    border: 1px solid #a7cbe4;
+    border-radius: 5px;
+}
+
+.parts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 9px;
+}
+
+.parts-grid div {
+    padding: 13px 8px;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: .6px;
+}
+
+@media (max-width: 760px) {
+    .location-tree li.parts-level {
+        margin-left: 66px;
+    }
+
+    .parts-grid {
+        gap: 5px;
+    }
+}

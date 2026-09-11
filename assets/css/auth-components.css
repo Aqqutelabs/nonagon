@@ -1,0 +1,69 @@
+select {
+    display: block;
+    width: 100%;
+    border: 1px solid #bdcbd4;
+    border-radius: 5px;
+    padding: 14px;
+    margin-top: 8px;
+    font: inherit;
+    color: var(--ink);
+    background: #fff;
+}
+
+select:focus {
+    outline: 3px solid rgba(10, 111, 184, .15);
+    border-color: var(--blue);
+}
+
+.assignment {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px;
+    background: var(--pale);
+    border-radius: 6px;
+    margin: 20px 0;
+    font-size: 13px;
+}
+
+.assignment span {
+    color: var(--blue);
+    font-size: 11px;
+}
+
+.password-control {
+    position: relative;
+    display: block;
+}
+
+.password-control input {
+    padding-right: 52px;
+}
+
+.password-eye {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    width: 42px;
+    height: 38px;
+    padding: 0;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.password-eye:hover,
+.password-eye[aria-pressed="true"] {
+    color: var(--blue);
+    background: var(--pale);
+}
+
+.password-eye:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 1px;
+}

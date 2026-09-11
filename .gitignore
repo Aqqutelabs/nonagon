@@ -1,8 +1,9 @@
 # Private credentials and runtime files containing sessions or request data.
+*.md
 /nonagon.old/
-**/.env
-**/.env.*
+**/.env*
 !**/.env.example
+/.history/
 **/auth.json
 **/.vscode/sftp.json
 **/storage/logs/*.log
@@ -10,7 +11,4 @@
 **/database/*.sqlite-*
 **/storage/framework/sessions/*
 **/storage/*.key
-/prompt_notes.md
-/nonagon.md
-/PROJECT-ANALYSIS.md
 /dns.pdf
