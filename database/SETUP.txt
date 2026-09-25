@@ -1,9 +1,42 @@
 NONAGON LOCAL DATABASE SETUP
 
+LOCAL EMAIL VERIFICATION BYPASS
+Set these values in .env (the application does not load .env2):
+  APP_ENV=local
+  DEV_BYPASS_EMAIL_VERIFICATION=true
+Reload the dashboard. Existing and new users can access their permitted
+operations without verifying email. This does not change verification records,
+roles, passwords, or location scopes. Set the switch to false to test the real
+verification flow. The bypass is ignored unless APP_ENV is exactly local.
+
 1. Start Apache and MySQL in XAMPP.
 2. Copy .env.example to .env and update the database credentials if needed.
-3. Import database/schema.sql through phpMyAdmin or the MySQL client.
-4. Open http://localhost/nonagon/register.php.
+3. From the project directory, run:
+   C:\xampp\php\php.exe database/setup.php
+   This uses your .env database settings and creates missing tables without
+   deleting existing records. Re-running it is safe; it does not upgrade the
+   structure of tables that already exist.
+   Alternatively, import database/schema.sql through phpMyAdmin or the MySQL
+   client (the SQL file uses the default database name: nonagon).
+4. Apply versioned operational schema migrations:
+   C:\xampp\php\php.exe database/migrate.php
+   This adds equipment, maintenance, alerts, events, audit logs, dashboard
+   caches/history, read views, and the Operations Manager role. Re-run it
+   after pulling new migrations. Existing accounts are preserved.
+   It also seeds the 80 base equipment subcategories and adds company catalogs,
+   photos, depreciation/value history, assembly templates, and installed parts.
+   See database/EQUIPMENT.txt for the equipment workflow and compatibility notes.
+5. Open http://localhost/nonagon/register.php.
+6. Verify the database with:
+   C:\xampp\php\php.exe database/check.php
+   The check creates temporary owner/user/location records inside a transaction
+   and rolls them back. It also checks password verification, roles, unique
+   emails, and the owner foreign key.
+
+Owners and users are tables in the same database. Each user belongs to an
+owner through users.owner_id. Registration creates the owner, OWNER_ADMIN
+user, and default space/site/plant/unit hierarchy together. Invitations add
+users to the existing owner with assigned roles and location scopes.
 
 In APP_ENV=local, failed email delivery exposes the verification or invitation
 link on the relevant page so the complete flow can be tested without a mail

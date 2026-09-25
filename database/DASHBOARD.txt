@@ -1,0 +1,79 @@
+NONAGON OPERATIONS DASHBOARD
+
+Setup
+  C:\xampp\php\php.exe database/setup.php
+  C:\xampp\php\php.exe database/migrate.php
+
+Open http://localhost/nonagon/dashboard using a verified account.
+Register equipment from Equipment, then use its record to assign an operator,
+update status, schedule maintenance, or record a safety/compliance risk.
+Operators must first be invited into the relevant site and unit.
+
+Permissions
+  OWNER_ADMIN: organization-wide operational access.
+  ADMIN / OPS_MANAGER / SUPERVISOR: assigned site/unit access; may perform
+  operational actions within that scope.
+  OPERATOR: assigned site/unit access, read-only operational dashboard.
+  Unverified and inactive accounts cannot access operational data.
+  Scope predicates apply to queries, lists, details, live updates, and actions.
+  An ADMIN can only invite people into locations assigned to that ADMIN.
+
+Data and live updates
+  The three read views are equipment_status_view, maintenance_summary_view,
+  and alert_priority_view. SQL views reflect their underlying tables directly.
+  Per-user scope caches hold aggregated KPI results and bounded detail lists;
+  event revisions invalidate them immediately and a 15-second TTL is the
+  fallback for clock-driven changes and user/profile edits.
+  INSERT, UPDATE, and DELETE triggers on equipment, maintenance_records, and
+  alerts append transactional dashboard_events, including changes from imports.
+  Dashboard SSE checks every 3 seconds, releases the PHP session lock, and
+  rechecks account/session/scope authorization on each iteration.
+  Streams last at most 24 seconds; disconnection falls back to 10-second polling.
+  Only changed sections are transmitted, with snapshot freshness metadata.
+  The overview includes 8 equipment records, 5 alerts, and a 64 KB payload cap.
+  Full lists use 25-record pages. Aggregate counts include the entire scope.
+  Maintenance passing its due date generates an overdue alert automatically;
+  completing, cancelling, or rescheduling that work resolves its overdue alert.
+  Changing equipment to Down through the application generates a breakdown
+  alert; restoring its status resolves that breakdown alert.
+
+Scheduling and trends
+  For unattended alert generation and daily snapshots, run every minute using
+  Windows Task Scheduler (or your production scheduler):
+    Program: C:\xampp\php\php.exe
+    Arguments: C:\xampp\htdocs\nonagon\database\refresh-dashboard.php
+  This command is supplied; an operating-system scheduled task is not installed.
+  Live requests also refresh time-dependent risks while the dashboard is open.
+  Seven-day deltas compare against the first observed snapshot for that exact
+  user/access/filter scope seven days earlier. Until that baseline exists the
+  UI says "Collecting 7-day history". The scheduled job snapshots each user's
+  full accessible scope; filtered baselines are collected on visits.
+  The refresh command removes cache entries older than 2 days, snapshots older
+  than 35 days, and events older than 7 days. Audit records are not pruned.
+
+Offline and observability
+  An open dashboard retains its last-known state in memory and sessionStorage,
+  keyed by the login session and server-derived scope fingerprint. Cached state
+  is restored after connection failures, labeled stale, and mutations disabled.
+  Signing out clears the dashboard cache. Access revocation clears visible data
+  and reloads. No background action queue or offline mutation is implemented.
+  A cold offline page load is not supported; this is degraded-state support for
+  an already-open dashboard, not a full offline PWA.
+  Query timing, capture time, last scoped event time, event lag, and cache-hit metadata are
+  available in dashboard-data; polling also sends Server-Timing. The interface
+  shows last-check age and event lag. Event lag measures the oldest newly
+  observed scoped event since the previous cached revision; first loads have
+  no lag baseline. Production SLA benchmarking still requires production traffic.
+  SSE servers/proxies must allow streaming and avoid response buffering.
+  Protocol reference: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+  Session-lock reference: https://www.php.net/manual/en/function.session-write-close.php
+
+Verification
+  C:\xampp\php\php.exe database/check.php
+  C:\xampp\php\php.exe database/test-dashboard.php
+  The dashboard tests create isolated example.invalid fixtures and remove them
+  in a finally block. HTTP checks target http://localhost/nonagon with Apache
+  and MySQL running. Never run fixture tests against a production database.
+  Operational actions use POST, CSRF validation, role/scope checks, transactions,
+  and append-only application audit inserts. Alert actions lock the target row
+  and reject repeated acknowledgements/escalations.

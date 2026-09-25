@@ -1,0 +1,40 @@
+Marketplace Sprint 1
+
+Delivered
+- Public marketplace landing, search, commercial/equipment/location/compliance/pricing filters, equipment cards, owner profiles, and public equipment detail pages.
+- Owner workspace for existing Equipment assets and standard assets registered through Marketplace.
+- Equipment registered through Marketplace is created as a standard Operational company asset, appears immediately in the main Equipment register, and remains there when a listing is paused or closed.
+- Marketplace image uploads are linked to the same asset and can serve as its primary Equipment photo.
+- Draft, preview, publish, pause, close, and edit listing lifecycle with permission checks and audit events.
+- Lease and sale configuration, public pricing, availability periods, approved media, OEM/model suggestions, and marketplace-safe public projections.
+- Searchable category, OEM, and OEM model controls. New OEM/model suggestions retain PENDING verification status.
+- Structured lease terms: Hour/Day/Week/Month rate, minimum duration, deposit, operator rate, consumables, mobilization, demobilization, maintenance, and insurance.
+- Structured sale terms: asking price, payment terms, inspection requirement, condition, taxes/fees, and additional notes.
+- Canonical global country directory plus hierarchical region/city records. Listing rules store canonical location IDs as ALLOW or RESTRICT chips; no rules means unrestricted.
+- Existing legacy lease/sale columns remain nullable and readable. Migration 012 backfills the unified lease rate without deleting legacy data.
+
+Setup
+php database/migrate.php
+
+Key migrations
+009_marketplace_sprint1.sql
+010_marketplace_equipment_views.sql
+011_marketplace_availability_compliance.sql
+012_marketplace_structured_terms.sql
+013_marketplace_assets_are_standard.sql
+
+Verification
+php database/test-marketplace.php
+php database/test-dashboard.php
+php database/test-equipment-catalog.php
+php database/test-verification-bypass.php
+php database/check.php
+
+Browser verification
+- Created a marketplace-only equipment record with a new pending OEM and dependent OEM model.
+- Saved an hourly USD lease with an operator rate, consumables, custom mobilization terms, and an allowed-country rule.
+- Added classification and approved media, previewed, and published.
+- Confirmed the structured terms on the public equipment page.
+- Cleared the owner session and found the listing through public marketplace search.
+- Confirmed zero browser console errors.
+- Temporary browser records were removed.

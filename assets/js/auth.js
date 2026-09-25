@@ -51,12 +51,14 @@ document.querySelectorAll('input[type="password"]').forEach((input) => {
     button.addEventListener('click', (event) => event.preventDefault());
 });
 function assessPassword() {
+    if (!password || !meter || !strength) return;
     const value = password.value;
     const score = [value.length >= 8, /[a-z]/.test(value), /[A-Z]/.test(value), /\d/.test(value)].filter(Boolean).length;
     meter.value = score;
     strength.textContent = score === 4 ? 'Strong password.' : 'Use 8+ characters, uppercase, lowercase and a number.';
 }
 function updateLocations() {
+    if (!locationFields) return;
     const selected = document.querySelector('[name="location_mode"]:checked');
     locationFields.hidden = !selected || selected.value !== 'custom';
 }

@@ -1,0 +1,35 @@
+.lease-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 4px;
+    background: #fff;
+    border: 1px solid #e1e7ed;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+.lease-tabs a,
+.lease-tabs span {
+    white-space: nowrap;
+    padding: 9px 13px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 650;
+}
+.lease-tabs a[aria-current="page"] { background: #eaf3fb; color: #0a6fb8; }
+.lease-tabs span[aria-disabled="true"] { color: #98a3ae; }
+.lease-tabs small { margin-left: 5px; font-size: 9px; text-transform: uppercase; letter-spacing: .5px; }
+.record-page .manage-tabs { display: none; }
+.record-page .manage-head { padding: 24px 0 12px; }
+.record-page .manage-table { margin-top: 12px; }
+.record-page .listing-form { padding: 8px 0 40px; }
+.record-page .preview-banner { margin-top: 16px; }
+.record-page .preview-actions { padding-bottom: 30px; }
+.auth-card.compact { max-width: 620px; padding: 24px; background: #fff; border: 1px solid #e1e7ed; border-radius: 8px; }
+.auth-card .kicker { margin: 0 0 5px; color: #0a6fb8; font-size: 10px; font-weight: 700; letter-spacing: 1.8px; }
+.auth-card .back-link { display: inline-block; margin-top: 20px; }
+.publish-readiness { max-width: 1240px; margin: 18px auto 0; padding: 16px 18px; border: 1px solid #efd092; border-radius: 8px; background: #fff8e8; color: #6f5115; }
+.publish-readiness.ready { border-color: #a9dac1; background: #edf9f2; color: #17663b; }
+.publish-readiness p { margin: 4px 0; color: inherit; }
+.publish-readiness ul { margin: 8px 0 10px; padding-left: 20px; }

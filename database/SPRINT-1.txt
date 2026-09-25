@@ -1,0 +1,42 @@
+Sprint 1: Equipment Register Foundation
+Scope: four-sprint Equipment Management breakdown. Marketplace commercial
+listings and transactions are a separate domain and are not published here.
+
+Delivered foundation
+- General navigation, equipment route, responsive three-column register.
+- Owner-linked equipment, unique (owner_id, asset_code), statuses and taxonomy.
+- Create and edit forms, company-private inline category creation, CSV import.
+- Removal uses an explicit archive action (soft deletion) with exact AID entry.
+  Open maintenance and active alerts block archival. Assignments are closed.
+  Photos, financial observations, maintenance and audit history remain stored.
+  Archived assets disappear from operational views, photos and KPI totals.
+  AIDs remain reserved, and no restoration UI is included in this sprint.
+- KPI cards, default card grid, sortable list, pagination and URL state.
+- Loading, empty and recoverable register error states.
+- Tenant/unit RBAC, assignment scope for operators, CSRF and mutation audits.
+- Existing later-sprint search/detail features remain available.
+
+Setup
+php database/setup.php
+php database/migrate.php
+Migration 008 adds archival metadata and updates active-equipment views.
+Existing equipment is preserved. No user equipment is archived by migration.
+
+Verification
+php database/test-equipment-catalog.php
+php database/test-dashboard.php
+php database/test-verification-bypass.php
+Tests include tenant isolation, duplicate AIDs, classification, create/update,
+archive confirmation, active-work blockers, scoped reads, KPI exclusion,
+pagination, CSRF, retained history, photos and operational integrations.
+
+Browser verification (temporary company, removed after checks)
+- Desktop 1280px: card grid, next-page cursor and list toggle.
+- Tablet 820px and mobile 390px: no page-level horizontal overflow.
+- Created company-only category/subcategory/type and registered an asset.
+- Edited the asset and archived it using the exact AID confirmation.
+- Simulated HTTP 503 on live refresh, verified visible error and recovery.
+- Fixed missing accessible names on enhanced classification comboboxes.
+- Added asset versioning so returning browsers receive updated combobox code.
+- Fixed an unrelated shared login-script null reference found during testing.
+Screenshots are local-only in output/playwright/.

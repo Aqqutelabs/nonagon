@@ -1,14 +1,12 @@
 <?php
 declare(strict_types=1);
-require __DIR__ . '/app/bootstrap.php';
+require __DIR__ . '/app/operations.php';
 $user = require_verified();
 if (!in_array($user['role'], ['OWNER_ADMIN', 'ADMIN'], true)) {
     http_response_code(403);
     exit('You do not have permission to invite users.');
 }
-$stmt = db()->prepare('SELECT s.id AS site_id,s.name AS site_name,u.id AS unit_id,u.name AS unit_name FROM spaces sp JOIN sites s ON s.space_id=sp.id JOIN plants p ON p.site_id=s.id JOIN units u ON u.plant_id=p.id WHERE sp.owner_id=? ORDER BY s.name,u.name');
-$stmt->execute([$user['owner_id']]);
-$locations = $stmt->fetchAll();
+$locations = operation_locations($user);
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
@@ -17,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $siteId = $_POST['site_id'] ?? '';
     $unitId = $_POST['unit_id'] ?? '';
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Enter a valid email address.';
-    if (!in_array($role, ['OPERATOR', 'SUPERVISOR', 'ADMIN'], true)) $errors[] = 'Choose a valid role.';
+    if (!in_array($role, ['OPERATOR', 'SUPERVISOR', 'ADMIN', 'OPS_MANAGER'], true)) $errors[] = 'Choose a valid role.';
     $validLocation = false;
     foreach ($locations as $location) {
         if ($location['site_id'] === $siteId && $location['unit_id'] === $unitId) $validLocation = true;
@@ -39,8 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 $pageTitle = 'Invite a user';
-require __DIR__ . '/includes/auth-header.php';
+$active = 'operators';
+require __DIR__ . '/includes/operations-header.php';
 ?>
-<section class="auth-card compact"><p class="kicker">TEAM ACCESS</p><h1>Invite someone.</h1><p>Their company, role and work location are fixed by this invitation.</p><?php if ($errors): ?><div class="notice error" role="alert"><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?><form method="post" class="stack"><?= csrf_field() ?><label>Email address<input type="email" name="email" required></label><label>Role<select name="role" required><option value="OPERATOR">Operator</option><option value="SUPERVISOR">Supervisor</option><option value="ADMIN">Admin</option></select></label><label>Assigned site and unit<select id="location" required><option value="">Choose a location</option><?php foreach ($locations as $location): ?><option value="<?= e($location['site_id'] . '|' . $location['unit_id']) ?>"><?= e($location['site_name'] . ' → ' . $location['unit_name']) ?></option><?php endforeach; ?></select><input type="hidden" name="site_id" id="site-id"><input type="hidden" name="unit_id" id="unit-id"></label><button class="primary">Send invitation</button></form><?php if (!empty($_SESSION['dev_invitation_url'])): ?><p class="dev-link">Local development link: <a href="<?= e($_SESSION['dev_invitation_url']) ?>">Open invitation</a></p><?php endif; ?><a class="back-link" href="dashboard">← Back to dashboard</a></section>
+<section class="auth-card compact"><p class="kicker">TEAM ACCESS</p><h1>Invite someone.</h1><p>Their company, role and work location are fixed by this invitation.</p><?php if ($errors): ?><div class="notice error" role="alert"><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?><form method="post" class="stack"><?= csrf_field() ?><label>Email address<input type="email" name="email" required></label><label>Role<select name="role" required><option value="OPERATOR">Operator</option><option value="SUPERVISOR">Supervisor</option><option value="ADMIN">Admin</option><option value="OPS_MANAGER">Operations Manager</option></select></label><label>Assigned site and unit<select id="location" required><option value="">Choose a location</option><?php foreach ($locations as $location): ?><option value="<?= e($location['site_id'] . '|' . $location['unit_id']) ?>"><?= e($location['site_name'] . ' → ' . $location['unit_name']) ?></option><?php endforeach; ?></select><input type="hidden" name="site_id" id="site-id"><input type="hidden" name="unit_id" id="unit-id"></label><button class="primary">Send invitation</button></form><?php if (!empty($_SESSION['dev_invitation_url'])): ?><p class="dev-link">Local development link: <a href="<?= e($_SESSION['dev_invitation_url']) ?>">Open invitation</a></p><?php endif; ?><a class="back-link" href="dashboard">← Back to dashboard</a></section>
 <script>document.querySelector('#location').addEventListener('change',function(){const p=this.value.split('|');document.querySelector('#site-id').value=p[0]||'';document.querySelector('#unit-id').value=p[1]||'';});</script>
-<?php require __DIR__ . '/includes/auth-footer.php'; ?>
+<?php require __DIR__ . '/includes/operations-footer.php'; ?>

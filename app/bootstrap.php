@@ -16,9 +16,11 @@ function config(string $key, mixed $default = null): mixed
     return $value;
 }
 
-$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-session_set_cookie_params(['httponly' => true, 'secure' => $secure, 'samesite' => 'Lax', 'path' => '/']);
-if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (PHP_SAPI !== 'cli') {
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    session_set_cookie_params(['httponly' => true, 'secure' => $secure, 'samesite' => 'Lax', 'path' => '/']);
+    if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+}
 
 function db(): PDO
 {
@@ -34,6 +36,7 @@ function db(): PDO
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
+    $pdo->exec("SET time_zone = '+00:00'");
     return $pdo;
 }
 
@@ -60,23 +63,36 @@ function flash(string $key, ?string $value = null): ?string
 function current_user(): ?array
 {
     if (empty($_SESSION['user_id'])) return null;
-    $stmt = db()->prepare('SELECT u.*, o.name AS company_name FROM users u JOIN owners o ON o.id=u.owner_id WHERE u.id=? LIMIT 1');
+    $stmt = db()->prepare("SELECT u.*, COALESCE(NULLIF(o.name,''),'My workspace') AS company_name FROM users u JOIN owners o ON o.id=u.owner_id WHERE u.id=? AND u.is_active=1 LIMIT 1");
     $stmt->execute([$_SESSION['user_id']]); return $stmt->fetch() ?: null;
 }
 function require_login(): array
 {
     $user = current_user(); if (!$user) { flash('error', 'Please sign in to continue.'); redirect('login'); } return $user;
 }
+function development_verification_bypass(): bool
+{
+    return config('app.environment') === 'local' && config('app.bypass_email_verification', false) === true;
+}
+function email_access_allowed(array $user): bool
+{
+    return (bool)($user['is_email_verified'] ?? false) || development_verification_bypass();
+}
 function require_verified(): array
 {
-    $user = require_login(); if (!(bool)$user['is_email_verified']) { flash('error', 'Verify your email to access operational features.'); redirect('dashboard'); } return $user;
+    $user = require_login(); if (!email_access_allowed($user)) { flash('error', 'Verify your email to access operational features.'); redirect('dashboard'); } return $user;
 }
 function require_scope(string $siteId, string $unitId): array
 {
     $user = require_verified();
-    if ($user['role'] === 'OWNER_ADMIN') return $user;
-    $stmt = db()->prepare('SELECT 1 FROM user_scopes WHERE user_id=? AND site_id=? AND unit_id=? LIMIT 1');
-    $stmt->execute([$user['id'], $siteId, $unitId]);
+    $sql = 'SELECT 1 FROM units un JOIN plants p ON p.id=un.plant_id JOIN sites s ON s.id=p.site_id JOIN spaces sp ON sp.id=s.space_id WHERE sp.owner_id=? AND s.id=? AND un.id=?';
+    $params = [$user['owner_id'], $siteId, $unitId];
+    if ($user['role'] !== 'OWNER_ADMIN') {
+        $sql .= ' AND EXISTS(SELECT 1 FROM user_scopes us WHERE us.user_id=? AND us.site_id=s.id AND us.unit_id=un.id)';
+        $params[] = $user['id'];
+    }
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
     if (!$stmt->fetch()) { http_response_code(403); exit('You do not have access to this site and unit.'); }
     return $user;
 }

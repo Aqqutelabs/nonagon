@@ -1,0 +1,402 @@
+[
+  {
+    "industry": "Agriculture",
+    "category": "Tractors & Field Machinery",
+    "subcategory": "Compact Tractor"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Tractors & Field Machinery",
+    "subcategory": "Large Tractor"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Tractors & Field Machinery",
+    "subcategory": "Combine Harvester"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Irrigation Equipment",
+    "subcategory": "Pump"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Irrigation Equipment",
+    "subcategory": "Sprinkler System"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Harvesting Equipment",
+    "subcategory": "Maize Harvester"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Harvesting Equipment",
+    "subcategory": "Cassava Harvester"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Harvesting Equipment",
+    "subcategory": "Sugarcane Harvester"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Tillage Equipment",
+    "subcategory": "Plough"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Tillage Equipment",
+    "subcategory": "Harrow"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Tillage Equipment",
+    "subcategory": "Cultivator"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Planting Equipment",
+    "subcategory": "Seed Drill"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Planting Equipment",
+    "subcategory": "Transplanter"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Fertilizing & Spraying",
+    "subcategory": "Boom Sprayer"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Fertilizing & Spraying",
+    "subcategory": "Knapsack Sprayer"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Post-Harvest Equipment",
+    "subcategory": "Grain Dryer"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Post-Harvest Equipment",
+    "subcategory": "Baler Machine"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Farm Transport",
+    "subcategory": "Utility Vehicle"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Small Tools",
+    "subcategory": "Hand Hoe"
+  },
+  {
+    "industry": "Agriculture",
+    "category": "Small Tools",
+    "subcategory": "Wheelbarrow"
+  },
+  {
+    "industry": "Construction",
+    "category": "Earthmoving",
+    "subcategory": "Excavator"
+  },
+  {
+    "industry": "Construction",
+    "category": "Earthmoving",
+    "subcategory": "Bulldozer"
+  },
+  {
+    "industry": "Construction",
+    "category": "Earthmoving",
+    "subcategory": "Backhoe Loader"
+  },
+  {
+    "industry": "Construction",
+    "category": "Lifting & Access",
+    "subcategory": "Articulating Boom Lift"
+  },
+  {
+    "industry": "Construction",
+    "category": "Lifting & Access",
+    "subcategory": "Scissor Lift"
+  },
+  {
+    "industry": "Construction",
+    "category": "Lifting & Access",
+    "subcategory": "Tower Crane"
+  },
+  {
+    "industry": "Construction",
+    "category": "Compaction",
+    "subcategory": "Plate Compactor"
+  },
+  {
+    "industry": "Construction",
+    "category": "Compaction",
+    "subcategory": "Single Drum Roller"
+  },
+  {
+    "industry": "Construction",
+    "category": "Compaction",
+    "subcategory": "Double Drum Roller"
+  },
+  {
+    "industry": "Construction",
+    "category": "Concrete & Masonry",
+    "subcategory": "Concrete Mixer"
+  },
+  {
+    "industry": "Construction",
+    "category": "Concrete & Masonry",
+    "subcategory": "Concrete Pump"
+  },
+  {
+    "industry": "Construction",
+    "category": "Concrete & Masonry",
+    "subcategory": "Concrete Vibrator"
+  },
+  {
+    "industry": "Construction",
+    "category": "Power Tools",
+    "subcategory": "Jackhammer"
+  },
+  {
+    "industry": "Construction",
+    "category": "Power Tools",
+    "subcategory": "Demolition Hammer"
+  },
+  {
+    "industry": "Construction",
+    "category": "Site Services",
+    "subcategory": "Generator"
+  },
+  {
+    "industry": "Construction",
+    "category": "Site Services",
+    "subcategory": "Lighting Tower"
+  },
+  {
+    "industry": "Construction",
+    "category": "Site Services",
+    "subcategory": "Temporary Site Office"
+  },
+  {
+    "industry": "Construction",
+    "category": "Material Handling",
+    "subcategory": "Forklift"
+  },
+  {
+    "industry": "Construction",
+    "category": "Material Handling",
+    "subcategory": "Telehandler"
+  },
+  {
+    "industry": "Construction",
+    "category": "Roadwork Equipment",
+    "subcategory": "Asphalt Paver"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Drilling Equipment",
+    "subcategory": "Offshore Rig"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Drilling Equipment",
+    "subcategory": "Workover Rig"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Drilling Equipment",
+    "subcategory": "Mud Pump"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Pipeline Equipment",
+    "subcategory": "Pipe Handling Tools"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Pipeline Equipment",
+    "subcategory": "Pipe Welding Machine"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Pipeline Equipment",
+    "subcategory": "Flange Spreader"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Pressure Control",
+    "subcategory": "Blowout Preventer"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Pressure Control",
+    "subcategory": "Wellhead Control Panel"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Fluid Handling",
+    "subcategory": "Separator Unit"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Fluid Handling",
+    "subcategory": "Pump Skid"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Subsea Equipment",
+    "subcategory": "Subsea Tree"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Heavy Lifting",
+    "subcategory": "Derrick Crane"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Heavy Lifting",
+    "subcategory": "Crawler Crane"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Monitoring & Safety",
+    "subcategory": "Gas Detector"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Monitoring & Safety",
+    "subcategory": "Flame Arrestor"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Power Supply",
+    "subcategory": "Diesel Generator"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Mobile Support",
+    "subcategory": "Offshore Accommodation Unit"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Mobile Support",
+    "subcategory": "Heavy Duty Compressor"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Mobile Support",
+    "subcategory": "Coil Tubing Unit"
+  },
+  {
+    "industry": "Oil & Gas",
+    "category": "Logistics Equipment",
+    "subcategory": "Oilfield Truck"
+  },
+  {
+    "industry": "General",
+    "category": "Power & Lighting",
+    "subcategory": "Generator"
+  },
+  {
+    "industry": "General",
+    "category": "Power & Lighting",
+    "subcategory": "Towable Light Tower"
+  },
+  {
+    "industry": "General",
+    "category": "Power & Lighting",
+    "subcategory": "Solar Light Plant"
+  },
+  {
+    "industry": "General",
+    "category": "Storage Solutions",
+    "subcategory": "Conex Box"
+  },
+  {
+    "industry": "General",
+    "category": "Storage Solutions",
+    "subcategory": "Job Box"
+  },
+  {
+    "industry": "General",
+    "category": "Site Equipment",
+    "subcategory": "Mobile Toilet"
+  },
+  {
+    "industry": "General",
+    "category": "Site Equipment",
+    "subcategory": "Temporary Fence"
+  },
+  {
+    "industry": "General",
+    "category": "Site Equipment",
+    "subcategory": "Ramp"
+  },
+  {
+    "industry": "General",
+    "category": "Cleaning Equipment",
+    "subcategory": "Industrial Vacuum"
+  },
+  {
+    "industry": "General",
+    "category": "Cleaning Equipment",
+    "subcategory": "Pressure Washer"
+  },
+  {
+    "industry": "General",
+    "category": "Cleaning Equipment",
+    "subcategory": "Floor Scrubber"
+  },
+  {
+    "industry": "General",
+    "category": "Ladders & Scaffolding",
+    "subcategory": "Ladder"
+  },
+  {
+    "industry": "General",
+    "category": "Ladders & Scaffolding",
+    "subcategory": "Mobile Scaffold"
+  },
+  {
+    "industry": "General",
+    "category": "Safety & Testing",
+    "subcategory": "Gas Detection Device"
+  },
+  {
+    "industry": "General",
+    "category": "Safety & Testing",
+    "subcategory": "Personal Protective Equipment"
+  },
+  {
+    "industry": "General",
+    "category": "Fluid Solutions",
+    "subcategory": "Submersible Pump"
+  },
+  {
+    "industry": "General",
+    "category": "Fluid Solutions",
+    "subcategory": "Centrifugal Pump"
+  },
+  {
+    "industry": "General",
+    "category": "Vehicles & Trailers",
+    "subcategory": "Flatbed Trailer"
+  },
+  {
+    "industry": "General",
+    "category": "Vehicles & Trailers",
+    "subcategory": "Utility Trailer"
+  },
+  {
+    "industry": "General",
+    "category": "Small Tools",
+    "subcategory": "Hand Tool Set"
+  }
+]

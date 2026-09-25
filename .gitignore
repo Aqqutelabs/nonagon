@@ -12,3 +12,7 @@
 **/storage/framework/sessions/*
 **/storage/*.key
 /dns.pdf
+
+# Local browser verification artifacts and session metadata.
+/.playwright-cli/
+/output/playwright/

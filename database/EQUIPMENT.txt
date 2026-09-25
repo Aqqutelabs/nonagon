@@ -1,0 +1,101 @@
+EQUIPMENT CATALOG, VALUES, ASSEMBLIES AND PARTS
+
+Apply upgrades:
+  C:\xampp\php\php.exe database/migrate.php
+
+Start in Equipment > Register equipment or Equipment Settings.
+
+Catalog
+- 80 base subcategories across Agriculture, Construction, Oil & Gas, General.
+- Optional category, subcategory, equipment type, brand, model, manufacture year,
+  manufacturer number (EMD), descriptions, and company-defined status.
+- Create categories/subcategories/types during registration or bulk import.
+- Classification selected for a spreadsheet applies to every row in that batch.
+- Custom catalogs belong to the signed-in company. Base entries are read-only.
+- Company statuses map to Operational, Maintenance, or Down for dashboard
+  compatibility. Existing status meanings are preserved.
+- No equipment types, brand/model catalogs, or engineering BOMs are invented:
+  create the actual definitions for your fleet under Equipment Settings.
+
+Compatibility and default hierarchy
+- Internal spaces remain the storage for Blocks; the blocks view exposes that
+  terminology. sites.block_id aliases sites.space_id. Existing IDs and scope
+  relationships remain intact.
+- On signup, unspecified Block/Site/Plant/Unit levels are named Default.
+- An owner can leave the unit blank during registration/import to create or
+  reuse its default path. Other roles must select an explicitly assigned unit.
+- Existing named locations are preserved. The company owner can create/rename
+  levels and edit site state/LGA/address/GPS, plant GPS, descriptions, and unit
+  department codes in Equipment Settings.
+- All company contact/profile fields are optional. Sign-in identity remains in
+  users and is independent of company contact details.
+- Existing equipment.asset_code and serial_no remain authoritative; generated
+  aid and emd aliases expose the requested names without breaking imports.
+
+Photos
+- JPEG, PNG, WebP; up to 2 MB and 40 megapixels each.
+- Photos are stored transactionally in equipment_photos, served through an
+  authenticated endpoint with the same equipment access checks.
+- Uploading does not silently select a primary. Tick the primary choice during
+  upload or choose Make primary afterwards. Only one primary is permitted.
+- Clearing primary selection restores subcategory artwork. Shared subcategories
+  initially use neutral placeholder artwork. Company subcategories can reference
+  an HTTPS image URL; the browser loads it, the server does not fetch remote URLs.
+
+Values
+- Straight-line book value uses actual elapsed days / 365, never depreciates
+  before start_date, and never falls below salvage. Money inputs use two decimal
+  places, useful life can have three. Zero acquisition cost has no percentage
+  change baseline. Currency defaults to NGN and cannot change once observations
+  in another currency exist.
+- Saving a depreciation profile records purchase and formula book snapshots.
+- External market and AI value observations retain as-of date, source type, and
+  source detail. AI book estimates do not overwrite formula book value.
+- AI estimates must be supplied by the user from an actual source; there is no
+  connected AI valuation agent or market-data provider in this implementation.
+- The value chart includes up to 200 most recent observations and current formula
+  book value. Exact values and provenance are available in the observation table.
+- Disabling a profile stops current formula calculations; prior history remains.
+- database/refresh-dashboard.php also refreshes current values and records a
+  daily book snapshot if none exists. Schedule it as described in DASHBOARD.txt
+  for unattended history. Opening an equipment record refreshes its current value.
+
+Assemblies and parts
+- Create company-private canonical parts with manufacturer/OEM numbers,
+  brand/model, unit, function, serviceable/consumable flags.
+- Create assembly templates for an equipment type, optionally brand/model.
+- Template items choose exactly one part, nested assembly, or custom slot, with
+  quantity, display order, required flag, and notes. Cycles are rejected.
+- Matching top-level templates are cloned automatically when equipment is typed;
+  nested quantities multiply. Cloning is capped at 500 nodes / 16 levels.
+- Cloned names, quantities, template references and asset-specific flags persist.
+  Template edits do not alter existing assets; Load missing matching templates
+  only adds templates not yet instantiated.
+- Custom assemblies and installed parts remain asset-specific. Removing a part
+  records removed_at and REMOVED state instead of deleting its installation.
+- Tenant users cannot self-promote private entries to verified global standards.
+  Global promotion is reserved for a future reviewed administration workflow.
+
+Security / verification
+- All mutations require authenticated, verified (or local bypass) management
+  access, valid CSRF, owner/scope checks, a transaction, and audit logging.
+- Cross-tenant catalog references and mismatched category/type/model chains are
+  rejected. Users cannot upload equipment into another company's default path.
+- Tests:
+  C:\xampp\php\php.exe database/test-equipment-catalog.php
+  C:\xampp\php\php.exe database/test-dashboard.php
+  C:\xampp\php\php.exe database/test-verification-bypass.php
+
+EQUIPMENT REGISTER UPDATE
+Run php database/migrate.php to apply migration 007 and atomic history triggers.
+The equipment route defaults to a 12-card cursor-paginated register. List mode
+supports name/status/activity sorting and page navigation. Search and catalog,
+status, assignment and location filters stack. Non-JavaScript GET forms work.
+Operators require both unit access and an active assignment for equipment,
+photos, alerts and maintenance. Legacy operator_id writes maintain assignment
+history atomically through database triggers. Status changes are also recorded.
+FEATURE_CHANGE_STATUS and FEATURE_OPERATORS default to true; disabling either
+blocks its action on the server. Existing management roles still apply.
+KPI changes compare actual snapshots from 30 days ago. A dash means no usable
+baseline; keep the existing refresh-dashboard.php scheduled job running daily.
+Photos use the existing scoped photo endpoint and category/default fallback.

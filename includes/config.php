@@ -29,6 +29,7 @@ load_environment(APP_ROOT . '/.env');
 return [
     'app' => [
         'environment' => env_value('APP_ENV', 'production'),
+        'bypass_email_verification' => filter_var(env_value('DEV_BYPASS_EMAIL_VERIFICATION', 'false'), FILTER_VALIDATE_BOOLEAN),
         'url' => rtrim(env_value('APP_URL'), '/'),
     ],
     'database' => [
@@ -38,6 +39,10 @@ return [
         'username' => env_value('DB_USERNAME', 'root'),
         'password' => env_value('DB_PASSWORD'),
         'charset' => 'utf8mb4',
+    ],
+    'features' => [
+        'change_status' => filter_var(env_value('FEATURE_CHANGE_STATUS', 'true'), FILTER_VALIDATE_BOOLEAN),
+        'operators' => filter_var(env_value('FEATURE_OPERATORS', 'true'), FILTER_VALIDATE_BOOLEAN),
     ],
     'mail' => [
         'from' => env_value('MAIL_FROM', 'no-reply@nonagon.ng'),

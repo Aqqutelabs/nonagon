@@ -1,0 +1,1 @@
+ALTER TABLE equipment ADD COLUMN sequence_no VARCHAR(50) NULL AFTER asset_code;
