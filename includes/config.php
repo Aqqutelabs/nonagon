@@ -47,4 +47,7 @@ return [
     'mail' => [
         'from' => env_value('MAIL_FROM', 'no-reply@nonagon.ng'),
     ],
+    'marketplace' => [
+        'payment_webhook_secret' => env_value('MARKETPLACE_PAYMENT_WEBHOOK_SECRET'),
+    ],
 ];
