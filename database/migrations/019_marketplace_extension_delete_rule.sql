@@ -1,0 +1,2 @@
+ALTER TABLE marketplace_lease_extensions DROP FOREIGN KEY marketplace_lease_extensions_ibfk_4;
+ALTER TABLE marketplace_lease_extensions ADD CONSTRAINT marketplace_extension_accepted_version FOREIGN KEY(accepted_version_id) REFERENCES marketplace_lease_extension_versions(id) ON DELETE SET NULL;
