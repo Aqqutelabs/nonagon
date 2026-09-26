@@ -141,17 +141,60 @@ function marketplace_owned_listing(array $user,string $id,bool $lock=false):arra
     if(!$row)throw new DomainException('Marketplace listing not found.',404);
     return $row;
 }
-function marketplace_public_listing(string $id):array
+function marketplace_listing_for_equipment(array $user,string $equipmentId,bool $includeClosed=false):?array
 {
-    $row=rows("SELECT l.*,e.name AS equipment_name,e.asset_code,e.manufacture_year,e.short_description,e.marketplace_specifications,e.marketplace_oem_id,e.marketplace_oem_model_id,c.name category_name,t.name type_name,o.brand_name oem_name,o.slug oem_slug,o.verification_status oem_verification,m.model_name,own.name owner_name,own.public_description owner_description,own.public_city owner_city,own.public_state owner_state,own.public_country owner_country,own.marketplace_verified,lt.daily_rate,lt.weekly_rate,lt.monthly_rate,lt.project_rate,lt.currency lease_currency,lt.rate lease_rate,lt.negotiable lease_negotiable,lt.operator_included,lt.operator_rate,lt.fuel_included,lt.consumables_included,lt.consumables_details,lt.minimum_duration,lt.maximum_duration,lt.duration_unit,lt.security_deposit,lt.mobilization_terms,lt.mobilization_option,lt.mobilization_custom,lt.demobilization_terms,lt.demobilization_option,lt.demobilization_custom,lt.maintenance_responsibility,lt.maintenance_option,lt.maintenance_details,lt.insurance_requirement,lt.insurance_option,lt.insurance_details,st.asking_price,st.currency sale_currency,st.negotiable sale_negotiable,st.payment_terms,st.payment_terms_custom,st.inspection_allowed,st.condition sale_condition,st.taxes_fees,st.delivery_terms,st.sale_notes FROM marketplace_listings l JOIN equipment e ON e.id=l.asset_id JOIN owners own ON own.id=l.organization_id LEFT JOIN equipment_categories c ON c.id=e.category_id LEFT JOIN equipment_types t ON t.id=e.type_id LEFT JOIN marketplace_oems o ON o.id=e.marketplace_oem_id LEFT JOIN marketplace_oem_models m ON m.id=e.marketplace_oem_model_id LEFT JOIN marketplace_lease_terms lt ON lt.listing_id=l.id LEFT JOIN marketplace_sale_terms st ON st.listing_id=l.id WHERE l.id=? AND l.listing_status='ACTIVE' AND l.visibility='PUBLIC' AND e.archived_at IS NULL",[$id])[0]??null;
+    operation_equipment($user,$equipmentId);
+    $sql="SELECT l.* FROM marketplace_listings l WHERE l.asset_id=? AND l.organization_id=?".($includeClosed?'':" AND l.listing_status<>'CLOSED'")." ORDER BY FIELD(l.listing_status,'ACTIVE','RESERVED','PAUSED','DRAFT','CLOSED'),l.updated_at DESC LIMIT 1";
+    return rows($sql,[$equipmentId,$user['owner_id']])[0]??null;
+}
+function marketplace_equipment_readiness(array $user,string $equipmentId):array
+{
+    $equipment=operation_equipment($user,$equipmentId);$missing=[];$blocking=[];
+    if(!$equipment['name'])$missing[]='Equipment name';
+    if(!$equipment['asset_code'])$missing[]='Asset ID';
+    if(!$equipment['category_id']&&!$equipment['subcategory_id']&&!$equipment['type_id'])$missing[]='Classification';
+    if(!$equipment['marketplace_oem_id'])$missing[]='OEM / manufacturer';
+    if(!$equipment['short_description']&&!$equipment['long_description'])$missing[]='Description';
+    if(!rows('SELECT id FROM equipment_photos WHERE equipment_id=? LIMIT 1',[$equipmentId]))$missing[]='Equipment photo';
+    if($equipment['archived_at']??null)$blocking[]='Archived equipment cannot be listed.';
+    if(in_array($equipment['status'],['DOWN'],true))$blocking[]='Equipment in a down state cannot be published.';
+    $listing=marketplace_listing_for_equipment($user,$equipmentId);
+    return ['ready'=>!$missing&&!$blocking,'missing_fields'=>$missing,'blocking_issues'=>$blocking,'listing_id'=>$listing['id']??null,'listing_status'=>$listing['listing_status']??null];
+}
+function marketplace_migrate_legacy_listing_asset(array $user,string $listingId):void
+{
+    $listing=marketplace_owned_listing($user,$listingId,true);$equipment=operation_equipment($user,$listing['asset_id']);
+    $description=trim((string)($equipment['long_description']?:$equipment['short_description']?:''));
+    if($description===''&&trim((string)$listing['description'])!=='')db()->prepare('UPDATE equipment SET long_description=? WHERE id=?')->execute([$listing['description'],$listing['asset_id']]);
+    if(!$equipment['marketplace_specifications']&&!empty($listing['public_specifications']))db()->prepare('UPDATE equipment SET marketplace_specifications=? WHERE id=?')->execute([$listing['public_specifications'],$listing['asset_id']]);
+    $legacy=rows("SELECT m.* FROM marketplace_listing_media m WHERE m.listing_id=? AND m.media_type='IMAGE' AND m.equipment_photo_id IS NULL AND m.file_data IS NOT NULL",[$listingId]);
+    foreach($legacy as $media){$photoId=uuid();$primary=!rows('SELECT id FROM equipment_photos WHERE equipment_id=? AND is_primary=1',[$listing['asset_id']]);$url='equipment-photo?id='.$photoId;db()->prepare('INSERT INTO equipment_photos(id,equipment_id,url,caption,is_primary,mime_type,image_data) VALUES(?,?,?,?,?,?,?)')->execute([$photoId,$listing['asset_id'],$url,$media['title']?:'Equipment photo',(int)$primary,$media['mime_type'],$media['file_data']]);db()->prepare('UPDATE marketplace_listing_media SET equipment_photo_id=?,file_data=NULL WHERE id=?')->execute([$photoId,$media['id']]);if($primary)db()->prepare('UPDATE equipment SET photo_primary_url=? WHERE id=?')->execute([$url,$listing['asset_id']]);}
+}
+function marketplace_start_listing(array $user,string $equipmentId):string
+{
+    $equipment=operation_equipment($user,$equipmentId);$existing=marketplace_listing_for_equipment($user,$equipmentId);
+    if($existing)return $existing['id'];
+    $location=rows('SELECT s.name city,s.state state_region,COALESCE(NULLIF(o.public_country,\'\'),\'Nigeria\') country FROM equipment e JOIN units u ON u.id=e.unit_id JOIN plants p ON p.id=u.plant_id JOIN sites s ON s.id=p.site_id JOIN owners o ON o.id=e.owner_id WHERE e.id=?',[$equipmentId])[0]??[];
+    $id=uuid();$description=trim((string)($equipment['long_description']?:$equipment['short_description']?:''));
+    db()->prepare("INSERT INTO marketplace_listings(id,asset_id,organization_id,created_by,purpose,title,description,listing_status,marketplace_status,visibility,country,state_region,city,price_visibility,compliance_status,public_specifications) VALUES(?,?,?,?,?,?,?,'DRAFT','AVAILABLE','PUBLIC',?,?,?,'REQUEST_QUOTE','NOT_PROVIDED',?)")->execute([$id,$equipmentId,$user['owner_id'],$user['id'],'LEASE',$equipment['name'],$description,$location['country']??'Nigeria',$location['state_region']??'',$location['city']??$equipment['site_name']??'', $equipment['marketplace_specifications']]);
+    $photos=rows('SELECT id,caption,is_primary FROM equipment_photos WHERE equipment_id=? ORDER BY is_primary DESC,created_at,id',[$equipmentId]);
+    $insert=db()->prepare("INSERT INTO marketplace_listing_media(id,listing_id,equipment_photo_id,media_type,title,visibility,is_primary,sequence) VALUES(?,?,?,'IMAGE',?,'PUBLIC',?,?)");
+    foreach($photos as $index=>$photo)$insert->execute([uuid(),$id,$photo['id'],$photo['caption']?:'Equipment photo',(int)($photo['is_primary']||$index===0),$index]);
+    operation_audit($user,'marketplace.listing_draft_created','listing',$id,null,['equipment_id'=>$equipmentId,'source'=>'equipment']);
+    return $id;
+}
+function marketplace_public_listing(string $id,?array $viewer=null):array
+{
+    $ownerId=$viewer['owner_id']??null;
+    $row=rows("SELECT l.*,e.name AS title,e.name AS equipment_name,COALESCE(NULLIF(e.long_description,''),NULLIF(e.short_description,''),l.description) AS description,e.asset_code,e.manufacture_year,e.short_description,e.marketplace_specifications AS public_specifications,e.marketplace_oem_id,e.marketplace_oem_model_id,COALESCE(NULLIF(s.state,''),l.state_region) state_region,COALESCE(NULLIF(s.name,''),l.city) city,c.name category_name,t.name type_name,o.brand_name oem_name,o.slug oem_slug,o.verification_status oem_verification,m.model_name,own.name owner_name,own.public_description owner_description,own.public_city owner_city,own.public_state owner_state,own.public_country owner_country,own.marketplace_verified,lt.daily_rate,lt.weekly_rate,lt.monthly_rate,lt.project_rate,lt.currency lease_currency,lt.rate lease_rate,lt.negotiable lease_negotiable,lt.operator_included,lt.operator_rate,lt.fuel_included,lt.consumables_included,lt.consumables_details,lt.minimum_duration,lt.maximum_duration,lt.duration_unit,lt.security_deposit,lt.mobilization_terms,lt.mobilization_option,lt.mobilization_custom,lt.demobilization_terms,lt.demobilization_option,lt.demobilization_custom,lt.maintenance_responsibility,lt.maintenance_option,lt.maintenance_details,lt.insurance_requirement,lt.insurance_option,lt.insurance_details,st.asking_price,st.currency sale_currency,st.negotiable sale_negotiable,st.payment_terms,st.payment_terms_custom,st.inspection_allowed,st.condition sale_condition,st.taxes_fees,st.delivery_terms,st.sale_notes FROM marketplace_listings l JOIN equipment e ON e.id=l.asset_id JOIN units u ON u.id=e.unit_id JOIN plants p ON p.id=u.plant_id JOIN sites s ON s.id=p.site_id JOIN owners own ON own.id=l.organization_id LEFT JOIN equipment_categories c ON c.id=e.category_id LEFT JOIN equipment_types t ON t.id=e.type_id LEFT JOIN marketplace_oems o ON o.id=e.marketplace_oem_id LEFT JOIN marketplace_oem_models m ON m.id=e.marketplace_oem_model_id LEFT JOIN marketplace_lease_terms lt ON lt.listing_id=l.id LEFT JOIN marketplace_sale_terms st ON st.listing_id=l.id WHERE l.id=? AND l.listing_status IN ('ACTIVE','RESERVED') AND (l.visibility='PUBLIC' OR l.organization_id=?) AND e.archived_at IS NULL",[$id,$ownerId])[0]??null;
     if(!$row)throw new DomainException('Marketplace listing not found.',404);
     return $row;
 }
 function marketplace_public_scope(array $input):array
 {
-    $sql="l.listing_status='ACTIVE' AND l.visibility='PUBLIC' AND e.archived_at IS NULL";$params=[];
+    $viewer=current_user();$ownerId=$viewer['owner_id']??null;$sql="l.listing_status IN ('ACTIVE','RESERVED') AND (l.visibility='PUBLIC' OR l.organization_id=?) AND e.archived_at IS NULL";$params=[$ownerId];
     $q=mb_substr(trim((string)($input['q']??'')),0,150);
-    if($q!=='')foreach(array_slice(preg_split('/\s+/',mb_strtolower($q))?:[],0,8) as $term){if($term==='')continue;$escaped='%'.str_replace(['!','%','_'],['!!','!%','!_'],$term).'%';$sql.=" AND LOWER(CONCAT_WS(' ',l.title,l.description,e.name,c.name,t.name,o.brand_name,m.model_name,l.city,l.state_region,l.public_specifications)) LIKE ? ESCAPE '!'";$params[]=$escaped;}
+    if($q!=='')foreach(array_slice(preg_split('/\s+/',mb_strtolower($q))?:[],0,8) as $term){if($term==='')continue;$escaped='%'.str_replace(['!','%','_'],['!!','!%','!_'],$term).'%';$sql.=" AND LOWER(CONCAT_WS(' ',e.name,e.short_description,e.long_description,l.title,l.description,c.name,t.name,o.brand_name,m.model_name,l.city,l.state_region,e.marketplace_specifications)) LIKE ? ESCAPE '!'";$params[]=$escaped;}
     $enums=['purpose'=>['LEASE','SALE','LEASE_OR_SALE'],'status'=>['AVAILABLE','RESERVED','MOBILIZING','IN_USE','MAINTENANCE','OFFLINE','BLOCKED'],'compliance'=>['NOT_PROVIDED','AVAILABLE_ON_REQUEST','VALID','EXPIRED']];
     foreach($enums as $field=>$allowed){$value=(string)($input[$field]??'');if($value!==''){if(!in_array($value,$allowed,true))throw new DomainException('Invalid marketplace filter.',422);$column=$field==='status'?'marketplace_status':($field==='compliance'?'compliance_status':$field);$sql.=" AND l.{$column}=?";$params[]=$value;}}
     foreach(['category'=>'e.category_id','type'=>'e.type_id','oem'=>'e.marketplace_oem_id','model'=>'e.marketplace_oem_model_id'] as $field=>$column){$value=trim((string)($input[$field]??''));if($value!==''){$sql.=" AND {$column}=?";$params[]=$value;}}
@@ -212,13 +255,8 @@ function marketplace_apply_operational_status(array $user,string $equipmentId):v
 }
 function marketplace_publish_issues(array $user,string $id):array
 {
-    $listing=marketplace_owned_listing($user,$id);$issues=[];
-    if(!$listing['title']||!$listing['description']||!$listing['country']||!$listing['state_region']||!$listing['city'])$issues[]='Complete the listing details and public location.';
-    $asset=rows('SELECT category_id,subcategory_id,type_id,marketplace_oem_id,archived_at FROM equipment WHERE id=?',[$listing['asset_id']])[0];
-    if($asset['archived_at'])$issues[]='Restore the archived equipment asset.';
-    if(!$asset['category_id']&&!$asset['subcategory_id']&&!$asset['type_id'])$issues[]='Choose an equipment category, subcategory, or type.';
-    if(!$asset['marketplace_oem_id'])$issues[]='Choose or create the equipment OEM.';
-    if(!rows("SELECT id FROM marketplace_listing_media WHERE listing_id=? AND media_type='IMAGE' AND visibility='PUBLIC'",[$id]))$issues[]='Add at least one public image.';
+    $listing=marketplace_owned_listing($user,$id);$readiness=marketplace_equipment_readiness($user,$listing['asset_id']);$issues=array_merge($readiness['missing_fields'],$readiness['blocking_issues']);
+    if(!$listing['country']||!$listing['state_region']||!$listing['city'])$issues[]='Complete the public location.';
     if($listing['purpose']!=='SALE'){
         $lease=rows('SELECT rate,duration_unit,minimum_duration,operator_included,operator_rate FROM marketplace_lease_terms WHERE listing_id=?',[$id])[0]??null;
         if(!$lease||$lease['rate']===null||!$lease['duration_unit']||(int)$lease['minimum_duration']<1)$issues[]='Add the lease duration, rate, and minimum duration.';
@@ -229,7 +267,7 @@ function marketplace_publish_issues(array $user,string $id):array
 }
 function marketplace_publish(array $user,string $id):void
 {
-    $listing=marketplace_owned_listing($user,$id,true);marketplace_sync_erp_status($id);$listing=marketplace_owned_listing($user,$id,true);
+    $listing=marketplace_owned_listing($user,$id,true);marketplace_migrate_legacy_listing_asset($user,$id);marketplace_sync_erp_status($id);$listing=marketplace_owned_listing($user,$id,true);
     if(!in_array($listing['listing_status'],['DRAFT','PAUSED'],true))throw new DomainException('Only draft or paused listings can be published.',409);
     $issues=marketplace_publish_issues($user,$id);if($issues)throw new DomainException(implode(' ',$issues),422);
     $before=$listing;db()->prepare("UPDATE marketplace_listings SET listing_status='ACTIVE',published_at=COALESCE(published_at,UTC_TIMESTAMP()) WHERE id=?")->execute([$id]);
@@ -237,7 +275,7 @@ function marketplace_publish(array $user,string $id):void
 }
 function marketplace_transition(array $user,string $id,string $target):void
 {
-    $before=marketplace_owned_listing($user,$id,true);$allowed=['ACTIVE'=>['PAUSED','CLOSED'],'RESERVED'=>['PAUSED','CLOSED'],'DRAFT'=>['CLOSED'],'PAUSED'=>['CLOSED'],'CLOSED'=>[]];
+    $before=marketplace_owned_listing($user,$id,true);$allowed=['ACTIVE'=>['PAUSED'],'RESERVED'=>['PAUSED'],'DRAFT'=>['CLOSED'],'PAUSED'=>['CLOSED'],'CLOSED'=>[]];
     if(!in_array($target,$allowed[$before['listing_status']]??[],true))throw new DomainException('That listing transition is not available.',409);
     db()->prepare('UPDATE marketplace_listings SET listing_status=? WHERE id=?')->execute([$target,$id]);
     operation_audit($user,'marketplace.listing_'.strtolower($target),'listing',$id,$before,marketplace_owned_listing($user,$id));

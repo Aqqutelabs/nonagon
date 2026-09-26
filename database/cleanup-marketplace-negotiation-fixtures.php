@@ -1,0 +1,16 @@
+<?php
+declare(strict_types=1);if(PHP_SAPI!=='cli'){http_response_code(404);exit;}require dirname(__DIR__).'/app/operations.php';$pdo=db();$owners=array_column(rows("SELECT id FROM owners WHERE name IN ('Negotiation supplier','Negotiation buyer','Negotiation outsider')"),'id');if(!$owners){exit("No negotiation fixtures found.\n");}$marks=implode(',',array_fill(0,count($owners),'?'));
+$offerWhere="buyer_organization_id IN ($marks) OR seller_organization_id IN ($marks)";$party=[...$owners,...$owners];
+$pdo->prepare("DELETE FROM marketplace_notifications WHERE user_id IN (SELECT id FROM users WHERE owner_id IN ($marks))")->execute($owners);
+$pdo->prepare("DELETE FROM marketplace_message_attachments WHERE message_id IN (SELECT id FROM marketplace_messages WHERE conversation_id IN (SELECT id FROM marketplace_conversations WHERE buyer_organization_id IN ($marks) OR owner_organization_id IN ($marks)))")->execute($party);
+$pdo->prepare("DELETE FROM marketplace_messages WHERE conversation_id IN (SELECT id FROM marketplace_conversations WHERE buyer_organization_id IN ($marks) OR owner_organization_id IN ($marks))")->execute($party);
+$pdo->prepare("DELETE FROM marketplace_transactions WHERE supplier_organization_id IN ($marks) OR customer_organization_id IN ($marks)")->execute($party);
+$pdo->prepare("DELETE FROM marketplace_reservations WHERE offer_id IN (SELECT id FROM marketplace_offers WHERE $offerWhere)")->execute($party);
+$pdo->prepare("UPDATE marketplace_offers SET accepted_version_id=NULL WHERE $offerWhere")->execute($party);
+$pdo->prepare("UPDATE marketplace_offer_versions SET response_to_version_id=NULL WHERE offer_id IN (SELECT id FROM marketplace_offers WHERE $offerWhere)")->execute($party);
+$pdo->prepare("DELETE FROM marketplace_offer_versions WHERE offer_id IN (SELECT id FROM marketplace_offers WHERE $offerWhere)")->execute($party);
+$pdo->prepare("DELETE FROM marketplace_offers WHERE $offerWhere")->execute($party);
+$pdo->prepare("DELETE FROM marketplace_conversations WHERE buyer_organization_id IN ($marks) OR owner_organization_id IN ($marks)")->execute($party);
+$pdo->prepare("DELETE FROM marketplace_enquiries WHERE buyer_organization_id IN ($marks) OR owner_organization_id IN ($marks)")->execute($party);
+$pdo->prepare("DELETE s FROM marketplace_saved_listings s JOIN users u ON u.id=s.user_id WHERE u.owner_id IN ($marks)")->execute($owners);
+$pdo->prepare("DELETE lt FROM marketplace_lease_terms lt JOIN marketplace_listings l ON l.id=lt.listing_id WHERE l.organization_id IN ($marks)")->execute($owners);$pdo->prepare("DELETE st FROM marketplace_sale_terms st JOIN marketplace_listings l ON l.id=st.listing_id WHERE l.organization_id IN ($marks)")->execute($owners);$pdo->prepare("DELETE FROM marketplace_listings WHERE organization_id IN ($marks)")->execute($owners);$pdo->prepare("DELETE FROM equipment WHERE owner_id IN ($marks)")->execute($owners);$pdo->prepare("DELETE FROM audit_logs WHERE owner_id IN ($marks)")->execute($owners);$pdo->prepare("DELETE FROM dashboard_events WHERE owner_id IN ($marks)")->execute($owners);$pdo->prepare("DELETE FROM equipment_statuses WHERE owner_id IN ($marks)")->execute($owners);$pdo->prepare("DELETE FROM owners WHERE id IN ($marks)")->execute($owners);echo "Negotiation fixtures removed.\n";

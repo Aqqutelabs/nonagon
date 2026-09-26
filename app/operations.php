@@ -78,15 +78,16 @@ function equipment_upload_rows(array $file): array
     $rows = $extension === 'csv' ? equipment_csv_rows((string)$file['tmp_name']) : equipment_xlsx_rows((string)$file['tmp_name']);
     if (count($rows) < 2) throw new DomainException('The file must contain a header row and at least one equipment row.', 422);
     $header = array_map('equipment_upload_key', array_shift($rows));
-    $required = ['sn','equipment','serialnumber','equipmentid','owner','conditionremarks'];
+    $required = ['equipment','serialnumber','equipmentid','owner','conditionremarks'];
     $missing = array_values(array_diff(array_unique($required), $header));
     if ($missing) throw new DomainException('Missing required columns: ' . implode(', ', $missing) . '.', 422);
-    $columns = array_flip($header);
+    $columns = array_flip($header);$companySerialColumn=$columns['companyserialnumber']??$columns['sn']??null;
+    if($companySerialColumn===null)throw new DomainException('Missing required column: Company Serial Number.',422);
     $result = [];
     foreach ($rows as $number => $row) {
         $row = array_pad($row, count($header), '');
         $record = [
-            'sequence_no' => trim((string)$row[$columns['sn']]),
+            'sequence_no' => trim((string)$row[$companySerialColumn]),
             'serial_no' => trim((string)$row[$columns['serialnumber']]),
             'name' => trim((string)$row[$columns['equipment']]),
             'asset_code' => trim((string)$row[$columns['equipmentid']]),

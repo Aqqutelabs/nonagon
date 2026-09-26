@@ -5,7 +5,9 @@ try{
  if($_SERVER['REQUEST_METHOD']!=='POST'){header('Allow: POST');throw new DomainException('Use POST for marketplace changes.',405);}
  $user=require_verified();verify_csrf();if(!marketplace_can_publish($user))throw new DomainException('Your role cannot manage marketplace listings.',403);
  $action=(string)($_POST['action']??'');$pdo=db();$pdo->beginTransaction();
- if(in_array($action,['listing.create','listing.update'],true)){
+ if($action==='listing.start'){
+  $assetId=marketplace_text($_POST,'asset_id',36,true);$id=marketplace_start_listing($user,$assetId);$destination='marketplace-manage?view=edit&id='.rawurlencode($id);
+ }elseif(in_array($action,['listing.create','listing.update'],true)){
   $id=$action==='listing.update'?marketplace_text($_POST,'id',36,true):uuid();$before=$action==='listing.update'?marketplace_owned_listing($user,$id,true):null;
   if($before){$asset=operation_equipment($user,$before['asset_id']);$assetId=$asset['id'];$classification=equipment_inline_catalog($user,$_POST);}
   else{
@@ -23,14 +25,14 @@ try{
     }
    }
   }
-  if(!$before&&rows("SELECT id FROM marketplace_listings WHERE asset_id=? AND organization_id=? AND listing_status<>'CLOSED' FOR UPDATE",[$assetId,$user['owner_id']]))throw new DomainException('This equipment already has an open marketplace listing. Edit or close that listing before creating another.',409);
+  if(!$before){$pdo->prepare('SELECT id FROM equipment WHERE id=? AND owner_id=? FOR UPDATE')->execute([$assetId,$user['owner_id']]);$existingListing=rows("SELECT id,listing_status FROM marketplace_listings WHERE asset_id=? AND organization_id=? AND listing_status<>'CLOSED' FOR UPDATE",[$assetId,$user['owner_id']])[0]??null;if($existingListing)throw new DomainException('This equipment is already listed. Continue or manage its existing '.strtolower($existingListing['listing_status']).' listing instead.',409);}
   $pdo->prepare('UPDATE equipment SET marketplace_only=0 WHERE id=? AND owner_id=?')->execute([$assetId,$user['owner_id']]);
   if(!empty($classification['type_id'])||!empty($classification['category_id']))equipment_apply_metadata($user,$assetId,$classification,false);
-  $equipment=operation_equipment($user,$assetId);$oem=marketplace_oem($user,$_POST);$model=marketplace_model($user,$_POST,$oem,$equipment['type_id']);$specs=marketplace_specs(marketplace_text($_POST,'specifications',10000));
+  $equipment=operation_equipment($user,$assetId);$submittedDescription=marketplace_text($_POST,'description',10000);if($submittedDescription!==null&&$submittedDescription!==trim((string)($equipment['long_description']??''))){$pdo->prepare('UPDATE equipment SET long_description=? WHERE id=? AND owner_id=?')->execute([$submittedDescription,$assetId,$user['owner_id']]);$equipment=operation_equipment($user,$assetId);}$oem=marketplace_oem($user,$_POST);$model=marketplace_model($user,$_POST,$oem,$equipment['type_id']);$specs=marketplace_specs(marketplace_text($_POST,'specifications',10000));$canonicalDescription=trim((string)($equipment['long_description']?:$equipment['short_description']?:''));
   $pdo->prepare('UPDATE equipment SET marketplace_oem_id=?,marketplace_oem_model_id=?,marketplace_specifications=? WHERE id=?')->execute([$oem,$model,json_encode($specs,JSON_THROW_ON_ERROR),$assetId]);
   $purpose=marketplace_enum($_POST,'purpose',['LEASE','SALE','LEASE_OR_SALE']);$status=marketplace_enum($_POST,'marketplace_status',['AVAILABLE','RESERVED','MOBILIZING','IN_USE','MAINTENANCE','OFFLINE','BLOCKED'],'AVAILABLE');
   $visibility=marketplace_enum($_POST,'visibility',['PUBLIC','NETWORK','PRIVATE'],'PUBLIC');$price=marketplace_enum($_POST,'price_visibility',['PUBLIC','REQUEST_QUOTE'],'REQUEST_QUOTE');$compliance=marketplace_enum($_POST,'compliance_status',['NOT_PROVIDED','AVAILABLE_ON_REQUEST','VALID','EXPIRED'],'NOT_PROVIDED');
-  $fields=[marketplace_text($_POST,'title',255,true),marketplace_text($_POST,'description',10000,true),$purpose,$status,$visibility,(int)!empty($_POST['public_asset_code']),marketplace_text($_POST,'country',100,true),marketplace_text($_POST,'state_region',100,true),marketplace_text($_POST,'city',100,true),marketplace_text($_POST,'available_from',10),$price,$compliance,marketplace_text($_POST,'certification_type',150),marketplace_text($_POST,'certification_valid_until',10),marketplace_text($_POST,'last_inspected_on',10),json_encode($specs,JSON_THROW_ON_ERROR)];
+  $fields=[$equipment['name'],$canonicalDescription,$purpose,$status,$visibility,(int)!empty($_POST['public_asset_code']),marketplace_text($_POST,'country',100,true),marketplace_text($_POST,'state_region',100,true),marketplace_text($_POST,'city',100,true),marketplace_text($_POST,'available_from',10),$price,$compliance,marketplace_text($_POST,'certification_type',150),marketplace_text($_POST,'certification_valid_until',10),marketplace_text($_POST,'last_inspected_on',10),json_encode($specs,JSON_THROW_ON_ERROR)];
   if($before)$pdo->prepare('UPDATE marketplace_listings SET title=?,description=?,purpose=?,marketplace_status=?,visibility=?,public_asset_code=?,country=?,state_region=?,city=?,available_from=?,price_visibility=?,compliance_status=?,certification_type=?,certification_valid_until=?,last_inspected_on=?,public_specifications=? WHERE id=?')->execute([...$fields,$id]);
   else $pdo->prepare('INSERT INTO marketplace_listings(id,asset_id,organization_id,created_by,title,description,purpose,marketplace_status,visibility,public_asset_code,country,state_region,city,available_from,price_visibility,compliance_status,certification_type,certification_valid_until,last_inspected_on,public_specifications) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')->execute([$id,$assetId,$user['owner_id'],$user['id'],...$fields]);
   $equipmentPhoto=marketplace_text($_POST,'equipment_photo_id',36);
@@ -71,7 +73,7 @@ try{
   $id=marketplace_text($_POST,'id',36,true);marketplace_owned_listing($user,$id);$period=marketplace_text($_POST,'period_id',36,true);$before=rows('SELECT * FROM marketplace_availability_periods WHERE id=? AND listing_id=?',[$period,$id])[0]??null;if(!$before)throw new DomainException('Availability period not found.',404);$pdo->prepare('DELETE FROM marketplace_availability_periods WHERE id=?')->execute([$period]);operation_audit($user,'marketplace.availability_removed','listing',$id,$before,['removed'=>true]);$destination='marketplace-manage?view=edit&id='.rawurlencode($id);
  }elseif($action==='listing.publish'){$id=marketplace_text($_POST,'id',36,true);marketplace_publish($user,$id);$destination='marketplace-listing?id='.rawurlencode($id);
  }elseif(in_array($action,['listing.pause','listing.close'],true)){
-  $id=marketplace_text($_POST,'id',36,true);marketplace_transition($user,$id,$action==='listing.pause'?'PAUSED':'CLOSED');
+  $id=marketplace_text($_POST,'id',36,true);$target=$action==='listing.pause'?'PAUSED':'CLOSED';marketplace_transition($user,$id,$target);$destination='marketplace-manage?view=listings';
  }elseif($action==='company.public'){
   if($user['role']!=='OWNER_ADMIN')throw new DomainException('Only the company owner can update the public profile.',403);
   $before=rows('SELECT * FROM owners WHERE id=?',[$user['owner_id']])[0];$values=[marketplace_text($_POST,'public_description',5000),marketplace_text($_POST,'public_country',100),marketplace_text($_POST,'public_state',100),marketplace_text($_POST,'public_city',100)];

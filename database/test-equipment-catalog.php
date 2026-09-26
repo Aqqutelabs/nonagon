@@ -76,7 +76,7 @@ try{
     $third=uuid();$pdo->prepare('INSERT INTO equipment(id,owner_id,unit_id,asset_code,name) VALUES(?,?,?,?,?)')->execute([$third,$user['owner_id'],$unit,'CAT-003','Third import']);equipment_apply_metadata($user,$third,$inline);
     expect_equipment(operation_equipment($user,$second)['category_id']===operation_equipment($user,$third)['category_id'],'Bulk metadata shares the newly created category');
     equipment_denied(fn()=>equipment_primary_photo($foreign,$asset,null),404);
-    equipment_primary_photo($user,$asset,null);expect_equipment(operation_equipment($user,$asset)['photo_primary_url']===null,'Clearing primary restores artwork inheritance');
+    equipment_primary_photo($user,$asset,null);expect_equipment(operation_equipment($user,$asset)['photo_primary_url']===null,'Equipment without photos can use inherited artwork');
     $pdo->prepare('DELETE FROM equipment WHERE id=?')->execute([$third]);
     expect_equipment((int)rows('SELECT COUNT(*) AS n FROM audit_logs WHERE owner_id=?',[$user['owner_id']])[0]['n']>10,'Equipment mutations are audited');
     $archiveAsset=uuid();$pdo->prepare('INSERT INTO equipment(id,owner_id,unit_id,asset_code,name) VALUES(?,?,?,?,?)')->execute([$archiveAsset,$user['owner_id'],$unit,'ARCHIVE-001','Archive fixture']);

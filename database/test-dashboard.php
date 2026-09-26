@@ -127,10 +127,13 @@ try {
         [$status]=request('equipment-action',['action'=>'value','id'=>$created,'value_type'=>'MARKET','source_type'=>'USER','source_detail'=>'Fixture observation','as_of_date'=>gmdate('Y-m-d'),'amount'=>'8000','csrf'=>$csrf]);check($status===302,'Value source form saves');
         [$status,$body]=request('equipment?id='.$created);check($status===200&&str_contains($body,'Value over time'),'Value chart renders');
         $photoFixture=tempnam(sys_get_temp_dir(),'nonagon-photo-');file_put_contents($photoFixture,base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII='));
-        [$status]=request('equipment-action',['action'=>'photo.upload','id'=>$created,'photo'=>new CURLFile($photoFixture,'image/png','fixture.png'),'caption'=>'Fixture photo','make_primary'=>'1','csrf'=>$csrf]);check($status===302,'Photo upload saves');
+        [$status]=request('equipment-action',['action'=>'photo.upload','id'=>$created,'photos[0]'=>new CURLFile($photoFixture,'image/png','fixture-one.png'),'photos[1]'=>new CURLFile($photoFixture,'image/png','fixture-two.png'),'primary_photo_index'=>'1','csrf'=>$csrf]);check($status===302,'Multiple photo upload saves');
+        $uploadedPhotos=rows('SELECT id,is_primary FROM equipment_photos WHERE equipment_id=? ORDER BY created_at,id',[$created]);check(count($uploadedPhotos)===2&&array_sum(array_column($uploadedPhotos,'is_primary'))===1,'Multiple upload keeps exactly one primary photo');
         [$status,$bytes]=request('equipment-photo?equipment_id='.$created);check($status===200&&str_starts_with($bytes,"\x89PNG"),'Scoped primary photo is served');
         [$status]=request('equipment-photo?equipment_id='.$two);check($status===404,'Photo retrieval blocks inaccessible unit');
-        [$status]=request('equipment-action',['action'=>'photo.primary','id'=>$created,'csrf'=>$csrf]);check($status===302,'Primary photo can revert to artwork');
+        [$status]=request('equipment-action',['action'=>'photo.primary','id'=>$created,'photo_id'=>$uploadedPhotos[0]['id'],'csrf'=>$csrf]);check($status===302&&rows('SELECT is_primary FROM equipment_photos WHERE id=?',[$uploadedPhotos[0]['id']])[0]['is_primary'],'Primary photo can switch between uploads');
+        [$status]=request('equipment-action',['action'=>'photo.delete','id'=>$created,'photo_id'=>$uploadedPhotos[1]['id'],'csrf'=>$csrf]);check($status===302&&(int)rows('SELECT COUNT(*) n FROM equipment_photos WHERE equipment_id=?',[$created])[0]['n']===1,'Equipment photo can be deleted when another remains');
+        [$status]=request('equipment-action',['action'=>'photo.delete','id'=>$created,'photo_id'=>$uploadedPhotos[0]['id'],'csrf'=>$csrf]);check($status===409&&(int)rows('SELECT COUNT(*) n FROM equipment_photos WHERE equipment_id=?',[$created])[0]['n']===1,'Last equipment photo cannot be deleted');
         [$status]=request('equipment-action',['action'=>'assembly.add','id'=>$created,'name'=>'HTTP custom assembly','csrf'=>$csrf]);check($status===302,'Custom assembly form saves');
         $httpAssembly=rows('SELECT id FROM equipment_assemblies WHERE equipment_id=?',[$created])[0]['id'];
         [$status]=request('equipment-action',['action'=>'part.add','id'=>$created,'equipment_assembly_id'=>$httpAssembly,'custom_name'=>'Fixture bracket','quantity'=>'2','csrf'=>$csrf]);check($status===302,'Installed custom part form saves');
@@ -145,9 +148,11 @@ try {
         [$status,$detailBody]=request('equipment?id='.$one);
         check($status===200&&str_contains($detailBody,'asset-overview-columns'),'Equipment detail overview layout');
         check(str_contains($detailBody,'id="asset-main-photo"')&&str_contains($detailBody,'class="asset-tabs"'),'Detail gallery and section navigation');
+        check(str_contains($detailBody,'class="photo-add-card photo-upload-card"')&&str_contains($detailBody,'name="photos[]"')&&str_contains($detailBody,'multiple'),'Detail uses the multiple-photo add card');
         check(str_contains($detailBody,'id="schedule-maintenance"')&&str_contains($detailBody,'id="asset-edit"'),'Detail toolbar targets existing forms');
 
         [$status,$body]=request('equipment');check(str_contains($body,'register-grid'),'Grid is default');
+        [$status,$body]=request('equipment?create=1');check($status===200&&str_contains($body,'data-registration-photos')&&str_contains($body,'name="photos[]"')&&str_contains($body,'multiple'),'Registration uses the same multiple-photo card interaction');
         $paginationIds=[];
         for($i=0;$i<14;$i++){$paginationId=fixtureEquipment($a,$a['unit']);$paginationIds[]=$paginationId;$pdo->prepare('UPDATE equipment SET name=? WHERE id=?')->execute(['Register pagination fixture',$paginationId]);}
         [$status,$body]=request('equipment?q=Register+pagination+fixture');

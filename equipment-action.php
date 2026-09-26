@@ -12,7 +12,7 @@ try {
     if($action==='archive'){
         equipment_archive($user,$id??'',equipment_text($_POST,'confirmation',100,true));
         $destination='equipment';
-    }elseif(in_array($action,['details','depreciation','value','photo.upload','photo.primary','assembly.add','part.add','part.remove','templates.load'],true)){
+    }elseif(in_array($action,['details','depreciation','value','photo.upload','photo.primary','photo.delete','assembly.add','part.add','part.remove','templates.load'],true)){
         if(!$id)throw new DomainException('Equipment is required.',422);
         $before=operation_equipment($user,$id);$destination='equipment?id='.rawurlencode($id);
         rows('SELECT id FROM equipment WHERE id=? FOR UPDATE',[$id]);
@@ -24,8 +24,11 @@ try {
             operation_audit($user,'equipment.details','equipment',$id,$before,operation_equipment($user,$id));
         }elseif($action==='depreciation')equipment_save_depreciation($user,$id,$_POST);
         elseif($action==='value')equipment_add_value($user,$id,$_POST);
-        elseif($action==='photo.upload')equipment_upload_photo($user,$id,$_FILES['photo']??[],$_POST);
+        elseif($action==='photo.upload'){
+            if(isset($_FILES['photos']))equipment_upload_photos($user,$id,$_FILES['photos'],$_POST);else equipment_upload_photo($user,$id,$_FILES['photo']??[],$_POST);
+        }
         elseif($action==='photo.primary')equipment_primary_photo($user,$id,equipment_text($_POST,'photo_id',36));
+        elseif($action==='photo.delete')equipment_delete_photo($user,$id,equipment_text($_POST,'photo_id',36,true));
         elseif($action==='assembly.add')equipment_add_assembly($user,$id,$_POST);
         elseif($action==='part.add')equipment_add_part($user,$id,$_POST);
         elseif($action==='templates.load'){$count=equipment_load_templates($user,$id);operation_audit($user,'templates.load','equipment',$id,null,['loaded'=>$count]);}

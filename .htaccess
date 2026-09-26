@@ -16,6 +16,9 @@ DirectoryIndex index.php
     RewriteCond %{THE_REQUEST} \s/+(.*/)?index(?:\.php)?(?:[?\s]) [NC]
     RewriteRule ^index(?:\.php)?$ /%1 [R=301,L,NE]
 
+    # Public six-digit marketplace company share links.
+    RewriteRule ^company/([0-9]{6})/?$ marketplace-share.php?code=$1 [END,QSA]
+
     # Remove PHP and HTML extensions when they appear in a browser request.
     # THE_REQUEST prevents a redirect loop after the internal rewrite below.
     RewriteCond %{THE_REQUEST} \s/+(.+?)\.(?:php|html?)(?:[?\s]) [NC]

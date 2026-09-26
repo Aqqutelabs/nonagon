@@ -43,7 +43,8 @@ try {
             $id = uuid();
             $pdo->prepare('INSERT INTO equipment(id,owner_id,unit_id,asset_code,name) VALUES(?,?,?,?,?)')->execute([$id,$user['owner_id'],$unit,$code,$name]);
             equipment_apply_metadata($user,$id,$_POST);
-            if(($_FILES['photo']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE)equipment_upload_photo($user,$id,$_FILES['photo'],$_POST);
+            if(isset($_FILES['photos'])){$selected=array_filter((array)($_FILES['photos']['name']??[]));if($selected)equipment_upload_photos($user,$id,$_FILES['photos'],$_POST);}
+            elseif(($_FILES['photo']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE)equipment_upload_photo($user,$id,$_FILES['photo'],$_POST);
             operation_audit($user,$action,'equipment',$id,null,operation_equipment($user,$id));
             $destination = 'equipment?id=' . $id;
         } elseif ($action === 'equipment.status') {
