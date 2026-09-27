@@ -35,6 +35,8 @@ try {
             $destination = 'equipment';
             flash('success', count($records) . ' equipment record(s) imported and recorded in the audit log.');
         } elseif ($action === 'equipment.create') {
+            $destination = 'equipment?create=1';
+            if(($_POST['preview_confirmed']??'0')!=='1')throw new DomainException('Review the equipment preview before registering it.',422);
             $name = equipment_text($_POST,'name',255,true);
             $code = equipment_text($_POST,'asset_code',100,true);
             $unit = equipment_unit($user,equipment_text($_POST,'unit_id',36));
@@ -115,6 +117,7 @@ try {
     if($json){echo json_encode(['error'=>$message]);exit;}
     if(!$error instanceof DomainException)error_log('Operational action: '.$error->getMessage());
     if(!isset($user)||!$user){echo e($message);exit;}
+    if(($action??'')==='equipment.create'){flash('error',$message.' No equipment was registered. Your device draft is still available.');redirect($destination);}
     $pageTitle='Action not saved';require __DIR__.'/includes/operations-header.php';
     echo '<div class="notice error" role="alert">'.e($message).'</div><a href="'.e($destination).'">Return to operations</a>';
     require __DIR__.'/includes/operations-footer.php';

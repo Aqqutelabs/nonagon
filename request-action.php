@@ -1,8 +1,8 @@
 <?php
-declare(strict_types=1);require __DIR__.'/app/request-supply.php';header('Cache-Control: no-store, private');$destination='requests';
+declare(strict_types=1);require __DIR__.'/app/request-supply.php';header('Cache-Control: no-store, private');$destination='requests';$successMessage='Request workspace updated.';
 try{if($_SERVER['REQUEST_METHOD']!=='POST'){header('Allow: POST');throw new DomainException('Use POST for request changes.',405);}$user=require_verified();verify_csrf();$action=(string)($_POST['action']??'');$pdo=db();$pdo->beginTransaction();
- if($action==='request.create'){$id=request_create($user,$_POST,!empty($_POST['publish']));$destination='requests?view=detail&id='.rawurlencode($id);}
- elseif($action==='request.update'){$id=marketplace_text($_POST,'id',36,true);request_update($user,$id,$_POST);$destination='requests?view=detail&id='.rawurlencode($id);}
+ if($action==='request.create'){$destination='requests?view=create';$review=!empty($_POST['review']);$id=request_create($user,$_POST,false);request_photo_save($user,$id,$_FILES['photos']??[],(int)($_POST['primary_photo_index']??0));$destination=$review?'requests?view=detail&id='.rawurlencode($id):'requests';$successMessage=$review?'Draft saved. Review every detail below, then publish when ready.':'Request saved as a draft. It is not visible in the marketplace.';}
+ elseif($action==='request.update'){$id=marketplace_text($_POST,'id',36,true);request_update($user,$id,$_POST);request_photo_save($user,$id,$_FILES['photos']??[],(int)($_POST['primary_photo_index']??0));$destination='requests?view=detail&id='.rawurlencode($id);}
  elseif($action==='request.publish'){$id=marketplace_text($_POST,'id',36,true);request_publish($user,$id);$destination='requests?view=detail&id='.rawurlencode($id);}
  elseif($action==='request.extend'){$id=marketplace_text($_POST,'id',36,true);request_extend($user,$id,marketplace_text($_POST,'response_deadline',16,true));$destination='requests?view=detail&id='.rawurlencode($id);}
  elseif($action==='request.close'||$action==='request.cancel'){$id=marketplace_text($_POST,'id',36,true);request_close($user,$id,$action==='request.close'?'CLOSED':'CANCELLED');$destination='requests?view=detail&id='.rawurlencode($id);}
@@ -13,5 +13,5 @@ try{if($_SERVER['REQUEST_METHOD']!=='POST'){header('Allow: POST');throw new Doma
  elseif($action==='offer.not-select'){$id=marketplace_text($_POST,'id',36,true);supply_offer_not_select($user,$id);$destination='request-offer?id='.rawurlencode($id);}
  elseif($action==='offer.withdraw'){$id=marketplace_text($_POST,'id',36,true);supply_offer_withdraw($user,$id);$destination='request-offer?id='.rawurlencode($id);}
  elseif($action==='offer.award'){$id=marketplace_text($_POST,'id',36,true);$transaction=request_award_offer($user,$id,marketplace_text($_POST,'transaction_type',10,true));$destination='marketplace-transaction?id='.rawurlencode($transaction);}
- else throw new DomainException('Unknown request action.',422);$pdo->commit();flash('success','Request workspace updated.');redirect($destination);
+ else throw new DomainException('Unknown request action.',422);$pdo->commit();flash('success',$successMessage);redirect($destination);
 }catch(Throwable $error){if(isset($pdo)&&$pdo->inTransaction())$pdo->rollBack();flash('error',$error instanceof DomainException?$error->getMessage():'The request change could not be saved.');redirect($destination);}

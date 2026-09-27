@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);require __DIR__.'/app/marketplace.php';header('Cache-Control: no-store, private');
-$destination='marketplace-manage?view=listings';
+$destination='marketplace-manage?view=listings';$successMessage='Marketplace changes saved.';
 try{
  if($_SERVER['REQUEST_METHOD']!=='POST'){header('Allow: POST');throw new DomainException('Use POST for marketplace changes.',405);}
  $user=require_verified();verify_csrf();if(!marketplace_can_publish($user))throw new DomainException('Your role cannot manage marketplace listings.',403);
  $action=(string)($_POST['action']??'');$pdo=db();$pdo->beginTransaction();
  if($action==='listing.start'){
   $assetId=marketplace_text($_POST,'asset_id',36,true);$id=marketplace_start_listing($user,$assetId);$destination='marketplace-manage?view=edit&id='.rawurlencode($id);
- }elseif(in_array($action,['listing.create','listing.update'],true)){
+}elseif(in_array($action,['listing.create','listing.update'],true)){
+  $destination=$action==='listing.update'?'marketplace-manage?view=edit&id='.rawurlencode((string)($_POST['id']??'')):'marketplace-manage?view=create';
   $id=$action==='listing.update'?marketplace_text($_POST,'id',36,true):uuid();$before=$action==='listing.update'?marketplace_owned_listing($user,$id,true):null;
   if($before){$asset=operation_equipment($user,$before['asset_id']);$assetId=$asset['id'];$classification=equipment_inline_catalog($user,$_POST);}
   else{
@@ -58,7 +59,7 @@ try{
   }else $pdo->prepare('DELETE FROM marketplace_sale_terms WHERE listing_id=?')->execute([$id]);
   marketplace_save_location_rules($user,$id,(string)($_POST['location_rules']??''));
   if(($_FILES['media']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE)marketplace_media_upload($user,$id,$_FILES['media'],$_POST);
-  operation_audit($user,$action,'listing',$id,$before,marketplace_owned_listing($user,$id));$destination='marketplace-manage?view=preview&id='.rawurlencode($id);
+  operation_audit($user,$action,'listing',$id,$before,marketplace_owned_listing($user,$id));if(($_POST['workflow_action']??'review')==='draft'){$destination='marketplace-manage?view=listings';$successMessage='Listing saved as a draft. It has not been published.';}else{$issues=marketplace_publish_issues($user,$id);if($issues){$destination='marketplace-manage?view=edit&id='.rawurlencode($id);$warningMessage='Complete the required publishing information before preview: '.implode(' ',$issues);}else{$destination='marketplace-manage?view=preview&id='.rawurlencode($id);$successMessage='Draft saved. Review the listing before final publication.';}}
  }elseif($action==='media.add'){$id=marketplace_text($_POST,'id',36,true);marketplace_media_upload($user,$id,$_FILES['media']??[],$_POST);$destination='marketplace-manage?view=edit&id='.rawurlencode($id);
  }elseif($action==='media.external'){$id=marketplace_text($_POST,'id',36,true);marketplace_external_media($user,$id,$_POST);$destination='marketplace-manage?view=edit&id='.rawurlencode($id);
  }elseif($action==='media.link'){
@@ -79,5 +80,5 @@ try{
   $before=rows('SELECT * FROM owners WHERE id=?',[$user['owner_id']])[0];$values=[marketplace_text($_POST,'public_description',5000),marketplace_text($_POST,'public_country',100),marketplace_text($_POST,'public_state',100),marketplace_text($_POST,'public_city',100)];
   $pdo->prepare('UPDATE owners SET public_description=?,public_country=?,public_state=?,public_city=? WHERE id=?')->execute([...$values,$user['owner_id']]);operation_audit($user,$action,'owner',$user['owner_id'],$before,['public_description'=>$values[0],'public_country'=>$values[1],'public_state'=>$values[2],'public_city'=>$values[3]]);$destination='marketplace-company?id='.$user['owner_id'];
  }else throw new DomainException('Unknown marketplace action.',422);
- $pdo->commit();flash('success','Marketplace changes saved.');redirect($destination);
-}catch(Throwable $error){if(isset($pdo)&&$pdo->inTransaction())$pdo->rollBack();$code=$error instanceof DomainException?$error->getCode():500;if($error instanceof PDOException&&($error->errorInfo[1]??null)===1062){$code=409;$message=str_contains($error->getMessage(),'equipment_code')?'That Asset ID already belongs to equipment in your company. Select the existing equipment and try again.':'That marketplace record already exists.';}else $message=$error instanceof DomainException?$error->getMessage():'The marketplace change could not be saved.';if($message==='')$message='Check the listing fields and try again.';http_response_code($code);error_log('Marketplace action '.get_class($error).': '.$error->getMessage());$pageTitle='Lease change not saved';$active='marketplace';require __DIR__.'/includes/operations-header.php';echo '<section class="market-empty" role="alert"><h1>Change not saved</h1><p>'.e($message).'</p><a class="market-button" href="'.e($destination).'">Return</a></section>';require __DIR__.'/includes/operations-footer.php';}
+ $pdo->commit();flash(isset($warningMessage)?'error':'success',$warningMessage??$successMessage);redirect($destination);
+}catch(Throwable $error){if(isset($pdo)&&$pdo->inTransaction())$pdo->rollBack();$code=$error instanceof DomainException?$error->getCode():500;if($error instanceof PDOException&&($error->errorInfo[1]??null)===1062){$code=409;$message=str_contains($error->getMessage(),'equipment_code')?'That Asset ID already belongs to equipment in your company. Select the existing equipment and try again.':'That marketplace record already exists.';}else $message=$error instanceof DomainException?$error->getMessage():'The marketplace change could not be saved.';if($message==='')$message='Check the listing fields and try again.';http_response_code($code);error_log('Marketplace action '.get_class($error).': '.$error->getMessage());flash('error',$message.' Nothing was published.');redirect($destination);}
