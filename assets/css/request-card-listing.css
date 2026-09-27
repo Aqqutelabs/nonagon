@@ -1,0 +1,10 @@
+.request-card .market-card-image{background:#e9f1f8}
+.request-card .market-card-image img{filter:saturate(.82)}
+.request-ribbon{position:absolute;left:12px;top:12px;padding:6px 9px;border-radius:5px;background:#b42335;color:#fff;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.request-card .request-meta{margin:6px 0;color:#536475;font-size:12px}
+.request-countdown{display:grid;gap:1px;margin:10px 0 8px;padding:10px 12px;border-left:4px solid #b42335;border-radius:5px;background:#fff0f2}
+.request-countdown span{color:#7a3c45;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.request-countdown strong{color:#a61f32;font-size:18px;line-height:1.25;font-variant-numeric:tabular-nums}
+.request-countdown.is-urgent{background:#ffedef;border-left-color:#d11f35}
+.request-countdown.is-closed{background:#eef2f6;border-left-color:#64748b}
+.request-countdown.is-closed strong{color:#526171}
