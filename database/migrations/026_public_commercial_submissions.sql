@@ -1,0 +1,22 @@
+CREATE TABLE public_commercial_submissions (
+ id CHAR(36) PRIMARY KEY,
+ session_reference CHAR(64) NULL,
+ document_type ENUM('QUOTATION','INVOICE') NOT NULL,
+ document_number VARCHAR(80) NOT NULL,
+ issuer_name VARCHAR(255) NULL,
+ issuer_email VARCHAR(255) NULL,
+ customer_name VARCHAR(255) NULL,
+ customer_email VARCHAR(255) NULL,
+ payload JSON NOT NULL,
+ logo_mime VARCHAR(50) NULL,
+ logo_data MEDIUMBLOB NULL,
+ terms_version VARCHAR(30) NOT NULL,
+ terms_accepted_at DATETIME NOT NULL,
+ marketing_consent BOOLEAN NOT NULL DEFAULT TRUE,
+ ip_hash CHAR(64) NULL,
+ user_agent VARCHAR(500) NULL,
+ created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ INDEX public_commercial_created(created_at),
+ INDEX public_commercial_issuer_email(issuer_email),
+ INDEX public_commercial_customer_email(customer_email)
+) ENGINE=InnoDB;

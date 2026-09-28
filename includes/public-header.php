@@ -29,7 +29,7 @@ $titleSafe=htmlspecialchars((string)$pageTitle,ENT_QUOTES,'UTF-8');
     <a href="about" <?= $publicActive==='about'?'aria-current="page"':'' ?>>About</a>
     <a href="about#platform">Product</a>
     <a href="about#solutions">Solutions</a>
-    <a href="about#tools">Tools</a>
+    <details class="public-nav-dropdown" <?= $publicActive==='tools'?'open':'' ?>><summary <?= $publicActive==='tools'?'aria-current="page"':'' ?>>Tools <span aria-hidden="true">⌄</span></summary><div class="public-nav-menu"><a href="quote-invoice-generator?type=quotation">Quotation Generator</a><a href="quote-invoice-generator?type=invoice">Invoice Generator</a></div></details>
     <?php if($publicUser):?><a class="public-profile" href="profile" aria-label="Open profile for <?= htmlspecialchars((string)$publicUser['full_name'],ENT_QUOTES,'UTF-8') ?>"><span aria-hidden="true"><?= htmlspecialchars(strtoupper(substr((string)$publicUser['full_name'],0,1)),ENT_QUOTES,'UTF-8') ?></span></a><?php else:?><a class="nav-cta" href="login">Login / Sign up <span aria-hidden="true">↗</span></a><?php endif;?>
   </nav>
 </header>
