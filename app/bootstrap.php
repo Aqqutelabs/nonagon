@@ -105,17 +105,71 @@ function base_url(string $path = ''): string
     $dir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
     return $scheme . '://' . $host . $dir . '/' . ltrim($path, '/');
 }
-function issue_verification(array $user): string
+function send_transactional_email(string $to, string $subject, string $html): bool
+{
+    $apiKey = trim((string)config('mail.api_key', ''));
+    $apiUrl = rtrim((string)config('mail.api_url', 'https://api.sendbyte.africa/v1'), '/');
+    $from = trim((string)config('mail.from', ''));
+    if ($apiKey === '' || $from === '' || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
+        error_log('SendByte email skipped: mail configuration or recipient is invalid.');
+        return false;
+    }
+    if (!function_exists('curl_init')) {
+        error_log('SendByte email failed: the PHP cURL extension is unavailable.');
+        return false;
+    }
+
+    $payload = json_encode([
+        'from' => $from,
+        'to' => $to,
+        'subject' => $subject,
+        'html' => $html,
+    ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES);
+    $curl = curl_init($apiUrl . '/emails');
+    curl_setopt_array($curl, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 15,
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . $apiKey,
+            'Content-Type: application/json',
+            'Accept: application/json',
+        ],
+        CURLOPT_POSTFIELDS => $payload,
+    ]);
+    $response = curl_exec($curl);
+    $status = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($curl);
+    curl_close($curl);
+    if ($response !== false && $status >= 200 && $status < 300) return true;
+
+    $message = $curlError !== '' ? $curlError : 'HTTP ' . $status;
+    if (is_string($response) && $response !== '') {
+        $decoded = json_decode($response, true);
+        $apiMessage = $decoded['error']['message'] ?? null;
+        if (is_string($apiMessage) && $apiMessage !== '') $message .= ': ' . $apiMessage;
+    }
+    error_log('SendByte email failed: ' . substr($message, 0, 500));
+    return false;
+}
+function issue_verification(array $user): bool
 {
     $raw = bin2hex(random_bytes(32));
     $stmt = db()->prepare('INSERT INTO verification_tokens (id,user_id,token_hash,expires_at) VALUES (?,?,?,DATE_ADD(NOW(), INTERVAL 24 HOUR))');
     $stmt->execute([uuid(), $user['id'], hash('sha256', $raw)]);
     $url = base_url('verify?token=' . urlencode($raw));
     $subject = 'Verify your Nonagon account';
-    $body = "Hello {$user['full_name']},\n\nVerify your account: {$url}\n\nThis link expires in 24 hours.";
-    $sent = @mail($user['email'], $subject, $body, 'From: ' . config('mail.from'));
+    $name = htmlspecialchars((string)$user['full_name'], ENT_QUOTES, 'UTF-8');
+    $safeUrl = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+    $body = '<p>Hello ' . $name . ',</p>'
+        . '<p>Verify your Nonagon account to unlock operational features.</p>'
+        . '<p><a href="' . $safeUrl . '" style="display:inline-block;padding:12px 18px;background:#111827;color:#ffffff;text-decoration:none;border-radius:6px">Verify email address</a></p>'
+        . '<p>This link expires in 24 hours. If you did not create this account, you can ignore this email.</p>'
+        . '<p style="color:#6b7280;font-size:12px">If the button does not work, open: ' . $safeUrl . '</p>';
+    $sent = send_transactional_email((string)$user['email'], $subject, $body);
     if (!$sent && config('app.environment') === 'local') $_SESSION['dev_verification_url'] = $url;
-    return $url;
+    return $sent;
 }
 function password_error(string $password): ?string
 {

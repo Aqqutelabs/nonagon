@@ -48,7 +48,8 @@ CREATE TABLE equipment_photos (
  is_primary BOOLEAN NOT NULL DEFAULT FALSE, mime_type VARCHAR(30) NOT NULL, image_data MEDIUMBLOB NOT NULL,
  primary_equipment CHAR(36) AS (IF(is_primary=1,equipment_id,NULL)) STORED,
  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
- UNIQUE KEY primary_photo(primary_equipment), FOREIGN KEY(equipment_id) REFERENCES equipment(id) ON DELETE CASCADE
+ UNIQUE KEY primary_photo(primary_equipment),
+ CONSTRAINT fk_equipment_photos_equipment FOREIGN KEY(equipment_id) REFERENCES equipment(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 CREATE TABLE equipment_depreciation_profile (
  id CHAR(36) PRIMARY KEY, equipment_id CHAR(36) NOT NULL UNIQUE, method ENUM('STRAIGHT_LINE') NOT NULL DEFAULT 'STRAIGHT_LINE',

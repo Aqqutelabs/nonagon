@@ -39,12 +39,14 @@ try {
             if(($_POST['preview_confirmed']??'0')!=='1')throw new DomainException('Review the equipment preview before registering it.',422);
             $name = equipment_text($_POST,'name',255,true);
             $code = equipment_text($_POST,'asset_code',100,true);
+            $equipmentOwner=equipment_text($_POST,'equipment_owner',80,true);$lower=filter_var($_POST['measurement_lower']??null,FILTER_VALIDATE_FLOAT,FILTER_NULL_ON_FAILURE);$upper=filter_var($_POST['measurement_upper']??null,FILTER_VALIDATE_FLOAT,FILTER_NULL_ON_FAILURE);$rangeUnit=equipment_text($_POST,'measurement_unit',30,true);if($lower===null||$upper===null||$lower>$upper)throw new DomainException('Enter a valid range/capacity.',422);$ownerCustomer=null;if($equipmentOwner!=='ORGANIZATION'){[$ownerType,$ownerId]=array_pad(explode(':',$equipmentOwner,2),2,'');if($ownerType!=='CUSTOMER'||!rows('SELECT 1 FROM commercial_customers WHERE id=? AND organization_id=?',[$ownerId,$user['owner_id']]))throw new DomainException('Choose your company or one of your clients as owner.',422);$ownerCustomer=$ownerId;}
             $unit = equipment_unit($user,equipment_text($_POST,'unit_id',36));
             if ($name === '' || strlen($name)>255 || $code === '' || strlen($code)>100) throw new DomainException('Enter an equipment name (255 characters max) and asset ID (100 characters max).',422);
             if (!array_filter(operation_locations($user),fn($l)=>$l['unit_id']===$unit)) throw new DomainException('Choose an accessible unit.',403);
             $id = uuid();
             $pdo->prepare('INSERT INTO equipment(id,owner_id,unit_id,asset_code,name) VALUES(?,?,?,?,?)')->execute([$id,$user['owner_id'],$unit,$code,$name]);
             equipment_apply_metadata($user,$id,$_POST);
+            $pdo->prepare('UPDATE equipment SET measurement_lower=?,measurement_upper=?,measurement_unit=?,equipment_owner_user_id=NULL,equipment_owner_customer_id=? WHERE id=? AND owner_id=?')->execute([$lower,$upper,strtoupper($rangeUnit),$ownerCustomer,$id,$user['owner_id']]);
             if(isset($_FILES['photos'])){$selected=array_filter((array)($_FILES['photos']['name']??[]));if($selected)equipment_upload_photos($user,$id,$_FILES['photos'],$_POST);}
             elseif(($_FILES['photo']['error']??UPLOAD_ERR_NO_FILE)!==UPLOAD_ERR_NO_FILE)equipment_upload_photo($user,$id,$_FILES['photo'],$_POST);
             operation_audit($user,$action,'equipment',$id,null,operation_equipment($user,$id));
