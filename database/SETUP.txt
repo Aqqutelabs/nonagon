@@ -16,8 +16,8 @@ verification flow. The bypass is ignored unless APP_ENV is exactly local.
    This uses your .env database settings and creates missing tables without
    deleting existing records. Re-running it is safe; it does not upgrade the
    structure of tables that already exist.
-   Alternatively, select the intended database and import database/schema.sql
-   through phpMyAdmin or the MySQL client. The file never changes databases.
+   Alternatively, import database/schema.sql through phpMyAdmin or the MySQL
+   client (the SQL file uses the default database name: nonagon).
 4. Apply versioned operational schema migrations:
    C:\xampp\php\php.exe database/migrate.php
    This adds equipment, maintenance, alerts, events, audit logs, dashboard

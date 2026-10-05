@@ -46,11 +46,6 @@ return [
     ],
     'mail' => [
         'from' => env_value('MAIL_FROM', 'no-reply@nonagon.ng'),
-        'api_key' => env_value('MAIL_API_KEY'),
-        'api_url' => rtrim(env_value('MAIL_API_URL', 'https://api.sendbyte.africa/v1'), '/'),
-    ],
-    'investment' => [
-        'opportunity_stage' => (int)env_value('INVESTMENT_OPPORTUNITY_STAGE', '1'),
     ],
     'marketplace' => [
         'payment_webhook_secret' => env_value('MARKETPLACE_PAYMENT_WEBHOOK_SECRET'),
