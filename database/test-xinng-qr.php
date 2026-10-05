@@ -28,15 +28,19 @@ xinng_qr_check($invalidResponseRejected,'Non-JSON API responses must continue to
 
 $appConfig['xinng']['public_base_url']='https://xin.ng';
 $localLink=xinng_link_from_response(['short_link'=>['id'=>'42','full_short_url'=>'http://localhost/xinngqr/abcd','back_half'=>'abcd']]);
-xinng_qr_check($localLink['url']==='https://xin.ng/xinngqr/abcd','Local Xinng short URLs must use the configured HTTPS public base.');
-xinng_qr_check(xinng_short_url_has_back_half('https://xin.ng/xinngqr/abcd','abcd'),'A valid saved URL must use its four-letter back-half.');
+xinng_qr_check($localLink['url']==='https://xin.ng/abcd','Local Xinng short URLs must use the configured HTTPS public base without the xinngqr path.');
+$hostedLink=xinng_link_from_response(['short_link'=>['id'=>'44','full_short_url'=>'https://xin.ng/xinngqr/abcd','back_half'=>'abcd']]);
+xinng_qr_check($hostedLink['url']==='https://xin.ng/abcd','Hosted Xinng short URLs must not retain the xinngqr path.');
+xinng_qr_check(xinng_strip_xinngqr_path('https://xin.ng/xinngqr/abcd')==='https://xin.ng/abcd','Previously saved Xinng URLs must be normalized for display and reuse.');
+xinng_qr_check(xinng_strip_xinngqr_path('https://xin.ng/abcd')==='https://xin.ng/abcd','Root-level Xinng URLs must remain unchanged.');
+xinng_qr_check(xinng_short_url_has_back_half('https://xin.ng/abcd','abcd'),'A valid saved URL must use its four-letter back-half.');
 xinng_qr_check(!xinng_short_url_has_back_half('https://xin.ng/xinngqr/ng-eq-3b2d0d50055640b892b7-209df949','ng-eq-3b2d0d50055640b892b7-209df949'),'Saved URLs with long back-halves must be rejected.');
 xinng_qr_check(!xinng_short_url_has_back_half('https://xin.ng/xinngqr/abcd','wxyz'),'A saved back-half must match the final URL path segment.');
-$imageUrl=xinng_public_qr_image_url('https://api.qrserver.com/v1/create-qr-code/?size=260x260&data='.rawurlencode('http://localhost/xinngqr/abcd'),'https://xin.ng/xinngqr/abcd');
+$imageUrl=xinng_public_qr_image_url('https://api.qrserver.com/v1/create-qr-code/?size=260x260&data='.rawurlencode('http://localhost/xinngqr/abcd'),'https://xin.ng/abcd');
 parse_str((string)parse_url($imageUrl,PHP_URL_QUERY),$imageParameters);
-xinng_qr_check(($imageParameters['data']??null)==='https://xin.ng/xinngqr/abcd','QR images must encode the same public short URL shown to users.');
+xinng_qr_check(($imageParameters['data']??null)==='https://xin.ng/abcd','QR images must encode the same public short URL shown to users.');
 $qrList=xinng_qr_link_for_destination(['qr_codes'=>[['id'=>42,'destination_url'=>$destination,'back_half'=>'abcd','full_short_url'=>'http://localhost/xinngqr/abcd','qr_image_url'=>'https://api.qrserver.com/v1/create-qr-code/?data='.rawurlencode('http://localhost/xinngqr/abcd'),'status'=>'active']]],$destination);
-xinng_qr_check(($qrList['url']??null)==='https://xin.ng/xinngqr/abcd'&&($qrList['qr_image_url']??'')!=='','Equipment QR lookup must return the public URL and its matching QR image.');
+xinng_qr_check(($qrList['url']??null)==='https://xin.ng/abcd'&&($qrList['qr_image_url']??'')!=='','Equipment QR lookup must return the public URL and its matching QR image.');
 $invalidShortLinkRejected=false;
 try{xinng_link_from_response(['short_link'=>['id'=>'43','full_short_url'=>'https://xin.ng/xinngqr/ng-eq-long','back_half'=>'ng-eq-long']]);}catch(DomainException){$invalidShortLinkRejected=true;}
 xinng_qr_check($invalidShortLinkRejected,'Xinng responses with long back-halves must not be accepted.');

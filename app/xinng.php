@@ -124,7 +124,7 @@ function xinng_link_from_response(array $response): array
     if (!is_array($link) || !isset($link['id'], $link['full_short_url'], $link['back_half']) || !ctype_digit((string)$link['id'])) {
         throw new DomainException('Xinng returned an incomplete short-link record.', 502);
     }
-    $url = (string)$link['full_short_url'];
+    $url = xinng_strip_xinngqr_path((string)$link['full_short_url']);
     $parts = parse_url($url);
     $host = strtolower((string)($parts['host'] ?? ''));
     if (strtolower((string)($parts['scheme'] ?? '')) === 'http' && in_array($host, ['localhost','127.0.0.1','::1','[::1]'], true)) {
@@ -146,6 +146,11 @@ function xinng_link_from_response(array $response): array
         throw new DomainException('Xinng returned a short link whose URL does not use the requested four-letter back-half.',502);
     }
     return ['id'=>(int)$link['id'],'url'=>$url,'back_half'=>$backHalf];
+}
+
+function xinng_strip_xinngqr_path(string $url): string
+{
+    return preg_replace('~^(https?://[^/?#]+)/xinngqr(?=/)~', '$1', $url) ?? $url;
 }
 
 function xinng_short_url_has_back_half(string $url, ?string $backHalf): bool
@@ -223,7 +228,7 @@ function xinng_ensure_resource_link(string $type, string $resourceId, string $ow
             $link = xinng_qr_link_for_destination($qrResponse,$destination);
 
             if ($link && (!$existing || ($record['xinng_destination_url'] ?? '') === $destination)) {
-                if ($existing && (string)$record['xinng_short_url'] !== $link['url']) {
+                if ($existing && xinng_strip_xinngqr_path((string)$record['xinng_short_url']) !== $link['url']) {
                     if (!$confirmDestinationChange) {
                         throw new DomainException('The saved short link is not a four-letter QR link. Confirm to replace it.',409);
                     }
@@ -253,9 +258,14 @@ function xinng_ensure_resource_link(string $type, string $resourceId, string $ow
             }
         } elseif (!empty($record['xinng_short_link_id']) && !empty($record['xinng_short_url'])) {
             if (($record['xinng_destination_url'] ?? '') === $destination) {
-                if (xinng_short_url_has_back_half((string)$record['xinng_short_url'],isset($record['xinng_back_half'])?(string)$record['xinng_back_half']:null)) {
+                $savedUrl = xinng_strip_xinngqr_path((string)$record['xinng_short_url']);
+                if (xinng_short_url_has_back_half($savedUrl,isset($record['xinng_back_half'])?(string)$record['xinng_back_half']:null)) {
+                    if ($savedUrl !== (string)$record['xinng_short_url']) {
+                        $pdo->prepare("UPDATE {$table} SET xinng_short_url=? WHERE id=? AND {$ownerColumn}=?")
+                            ->execute([$savedUrl,$resourceId,$ownerId]);
+                    }
                     $pdo->commit();
-                    return ['id'=>(int)$record['xinng_short_link_id'],'url'=>$record['xinng_short_url'],'back_half'=>$record['xinng_back_half'],'destination'=>$destination];
+                    return ['id'=>(int)$record['xinng_short_link_id'],'url'=>$savedUrl,'back_half'=>$record['xinng_back_half'],'destination'=>$destination];
                 }
                 if (!$confirmDestinationChange) {
                     throw new DomainException('The saved short link does not use a four-letter code. Confirm to create a replacement link.',409);
@@ -441,6 +451,7 @@ function xinng_qr_image_url(string $destination, string $userId, string $title, 
     if (strtolower((string)parse_url($destination,PHP_URL_SCHEME))!=='https' || !parse_url($destination,PHP_URL_HOST)) {
         throw new InvalidArgumentException('QR destinations must use HTTPS.');
     }
+    if ($expectedShortUrl !== null) $expectedShortUrl = xinng_strip_xinngqr_path($expectedShortUrl);
     $userId = xinng_user_id($userId);
     $response = xinng_qr_api_call('GET',$userId);
     foreach (($response['qr_codes'] ?? []) as $qrCode) {
@@ -478,7 +489,8 @@ function xinng_qr_image_url(string $destination, string $userId, string $title, 
         || !is_string($qrCode['back_half'] ?? null)) {
         throw new DomainException('Xinng created a QR record without returning its short URL and image URL.',502);
     }
-    return xinng_public_qr_image_url($qrCode['qr_image_url'],(string)$qrCode['full_short_url']);
+    $link = xinng_link_from_response(['short_link'=>$qrCode]);
+    return xinng_public_qr_image_url($qrCode['qr_image_url'],$link['url']);
 }
 
 function xinng_public_qr_image_url(string $imageUrl, string $shortUrl): string
