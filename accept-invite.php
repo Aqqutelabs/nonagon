@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $updated = $pdo->prepare('UPDATE invitations SET accepted_at=NOW() WHERE id=? AND accepted_at IS NULL'); $updated->execute([$invite['id']]);
             if ($updated->rowCount() !== 1) throw new RuntimeException('Invitation already used');
             $pdo->commit(); session_regenerate_id(true); $_SESSION['user_id'] = $userId;
-            issue_verification(['id'=>$userId,'full_name'=>$full,'email'=>$invite['email']]);
-            flash('success','Account created. Verify your email to unlock your assigned operational access.'); redirect('dashboard');
+            $sent = issue_verification(['id'=>$userId,'full_name'=>$full,'email'=>$invite['email']]);
+            flash($sent ? 'success' : 'error', $sent ? 'Account created. Check your inbox to verify your email.' : 'Account created, but the verification email could not be sent. Check the mail configuration, then use Resend verification email.'); redirect('dashboard');
         } catch (Throwable $e) {
             if ($pdo->inTransaction()) $pdo->rollBack(); $errors[] = 'We could not complete the invitation. Please try again.';
         }

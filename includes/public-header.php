@@ -29,8 +29,9 @@ $titleSafe=htmlspecialchars((string)$pageTitle,ENT_QUOTES,'UTF-8');
     <a href="about" <?= $publicActive==='about'?'aria-current="page"':'' ?>>About</a>
     <a href="about#platform">Product</a>
     <a href="about#solutions">Solutions</a>
+    <a href="invest" <?= $publicActive==='investment'?'aria-current="page"':'' ?>>Invest</a>
     <details class="public-nav-dropdown" <?= $publicActive==='tools'?'open':'' ?>><summary <?= $publicActive==='tools'?'aria-current="page"':'' ?>>Tools <span aria-hidden="true">⌄</span></summary><div class="public-nav-menu"><a href="quote-invoice-generator?type=quotation">Quotation Generator</a><a href="quote-invoice-generator?type=invoice">Invoice Generator</a></div></details>
-    <?php if($publicUser):?><a class="public-profile" href="profile" aria-label="Open profile for <?= htmlspecialchars((string)$publicUser['full_name'],ENT_QUOTES,'UTF-8') ?>"><span aria-hidden="true"><?= htmlspecialchars(strtoupper(substr((string)$publicUser['full_name'],0,1)),ENT_QUOTES,'UTF-8') ?></span></a><?php else:?><a class="nav-cta" href="login">Login / Sign up <span aria-hidden="true">↗</span></a><?php endif;?>
+    <?php if($publicUser):?><details class="public-account-menu"><summary class="public-profile" aria-label="Open account menu for <?= htmlspecialchars((string)$publicUser['full_name'],ENT_QUOTES,'UTF-8') ?>"><span aria-hidden="true"><?= htmlspecialchars(strtoupper(substr((string)$publicUser['full_name'],0,1)),ENT_QUOTES,'UTF-8') ?></span></summary><div class="public-account-dropdown"><div><strong><?= htmlspecialchars((string)$publicUser['full_name'],ENT_QUOTES,'UTF-8') ?></strong><small><?= htmlspecialchars((string)$publicUser['email'],ENT_QUOTES,'UTF-8') ?></small></div><a href="profile"><span>Account</span><small>Manage your account</small></a><a href="dashboard"><span>Dashboard</span><small>Open operations overview</small></a></div></details><?php else:?><a class="nav-cta" href="login">Login / Sign up <span aria-hidden="true">↗</span></a><?php endif;?>
   </nav>
 </header>
 <main id="main"<?= $publicMainClass!==''?' class="'.htmlspecialchars($publicMainClass,ENT_QUOTES,'UTF-8').'"':'' ?>>

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
    $pdo->prepare('INSERT INTO sites(id,space_id,name,is_default) VALUES(?,?,?,?)')->execute([$siteId,$spaceId,$mode==='custom'?$site:'Default',$mode==='custom'?0:1]);
    $pdo->prepare('INSERT INTO plants(id,site_id,name,is_default) VALUES(?,?,?,?)')->execute([$plantId,$siteId,$mode==='custom'?$plant:'Default',$mode==='custom'?0:1]);
    $pdo->prepare('INSERT INTO units(id,plant_id,name,is_default) VALUES(?,?,?,?)')->execute([$unitId,$plantId,$mode==='custom'?$unit:'Default',$mode==='custom'?0:1]);
-   $pdo->commit(); session_regenerate_id(true); $_SESSION['user_id']=$userId; issue_verification(['id'=>$userId,'full_name'=>$full,'email'=>$email]); flash('success','Account created. Verify your email to unlock operational features.'); redirect('dashboard');
+   $pdo->commit(); session_regenerate_id(true); $_SESSION['user_id']=$userId; $sent=issue_verification(['id'=>$userId,'full_name'=>$full,'email'=>$email]); flash($sent?'success':'error',$sent?'Account created. Check your inbox to verify your email.':'Account created, but the verification email could not be sent. Check the mail configuration, then use Resend verification email.'); redirect('dashboard');
   } catch(Throwable $e){ if($pdo->inTransaction())$pdo->rollBack(); $errors[]='We could not create the account. Please try again.'; }
  }
 }
