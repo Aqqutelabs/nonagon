@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^php -l app\\\\xinng\\.php; php -l database\\\\test-xinng-qr\\.php; php database\\\\test-xinng-qr\\.php$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

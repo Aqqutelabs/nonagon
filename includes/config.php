@@ -50,4 +50,8 @@ return [
     'marketplace' => [
         'payment_webhook_secret' => env_value('MARKETPLACE_PAYMENT_WEBHOOK_SECRET'),
     ],
+    'xinng' => [
+        'api_base_url' => rtrim(env_value('XINNG_API_BASE_URL'), '/'),
+        'public_base_url' => rtrim(env_value('XINNG_PUBLIC_BASE_URL') ?: env_value('XINNG_API_BASE_URL'), '/'),
+    ],
 ];

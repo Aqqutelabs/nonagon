@@ -11,6 +11,7 @@
 **/database/*.sqlite-*
 **/storage/framework/sessions/*
 **/storage/*.key
+/vendor/
 /dns.pdf
 
 # Local browser verification artifacts and session metadata.

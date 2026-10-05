@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/app/marketplace.php';
+require_once __DIR__ . '/app/xinng.php';
 header('Cache-Control: no-store, private');
 $json = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
 if ($json) header('Content-Type: application/json; charset=utf-8');
@@ -14,6 +15,13 @@ try {
     $action = (string)($_POST['action'] ?? '');
     if (($action==='equipment.status'&&!equipment_can_action($user,'change_status'))||($action==='equipment.operator'&&!equipment_can_action($user,'operators'))) throw new DomainException('This equipment feature is disabled.',403);
     $id = (string)($_POST['id'] ?? '');
+    if ($action==='equipment.qr.create') {
+        $destination='equipment?id='.rawurlencode($id);
+        $link=xinng_equipment_link($user,$id,($_POST['confirm_destination_change']??'')==='1');
+        if($json){$equipment=operation_equipment($user,$id);echo json_encode(['ok'=>true,'short_link'=>['id'=>$link['id'],'full_short_url'=>$link['url']],'qr_data_uri'=>xinng_qr_data_uri_from_image_url($link['qr_image_url'])],JSON_THROW_ON_ERROR);exit;}
+        flash('success','Equipment QR link is ready.');
+        redirect($destination);
+    }
     if (in_array($action,['acknowledge','assign','escalate'],true)) {
         $destination = 'alert?id=' . rawurlencode($id);
         operation_alert_action($user,$id,$action,$_POST);
@@ -113,9 +121,14 @@ try {
     $code=$error instanceof DomainException?$error->getCode():500;
     $message=$error instanceof DomainException?$error->getMessage():'The action could not be saved. Check the details and retry.';
     if($error instanceof PDOException && ($error->errorInfo[1]??null)===1062){$code=409;$message='That asset ID already exists in your organization.';}
+    $reference=null;
+    if(!$error instanceof DomainException&&$code>=500){
+        $reference=bin2hex(random_bytes(6));
+        error_log(sprintf('Operational action [%s] %s failed: %s in %s:%d',$reference,$action??'unknown',$error->getMessage(),$error->getFile(),$error->getLine()));
+    }
+    if(!$json&&($action??'')==='equipment.qr.create'&&$code===409){flash('error',$message);redirect(($destination??'equipment').'&confirm_qr=1');}
     http_response_code($code);
-    if($json){echo json_encode(['error'=>$message]);exit;}
-    if(!$error instanceof DomainException)error_log('Operational action: '.$error->getMessage());
+    if($json){echo json_encode(['error'=>$message,'reference'=>$reference]);exit;}
     if(!isset($user)||!$user){echo e($message);exit;}
     if(($action??'')==='equipment.create'){flash('error',$message.' No equipment was registered. Your device draft is still available.');redirect($destination);}
     $pageTitle='Action not saved';require __DIR__.'/includes/operations-header.php';

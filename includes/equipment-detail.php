@@ -1,4 +1,5 @@
 <?php
+require_once APP_ROOT.'/app/xinng.php';
 $catalog=equipment_catalog($user);$canEdit=operation_can_manage($user);require_once APP_ROOT.'/app/marketplace.php';$marketListing=$canEdit?marketplace_listing_for_equipment($user,$id):null;$marketReadiness=$canEdit?marketplace_equipment_readiness($user,$id):null;
 $tax=[];foreach(['category','subcategory','type','brand','model','status'] as $kind)$tax[$kind]=array_column($catalog[$kind],null,'id');
 $valuation=equipment_refresh_values($id);$profile=$valuation['profile'];$calculation=$valuation['calculation'];$currency=$valuation['currency'];
@@ -6,10 +7,44 @@ $photos=rows('SELECT id,url,caption,is_primary FROM equipment_photos WHERE equip
 $assemblies=rows('SELECT * FROM equipment_assemblies WHERE equipment_id=? ORDER BY sequence,name,id',[$id]);
 $history=rows('SELECT * FROM (SELECT * FROM equipment_value_snapshot WHERE equipment_id=? AND currency=? ORDER BY as_of_date DESC,created_at DESC,id DESC LIMIT 200) recent ORDER BY as_of_date,created_at,id',[$id,$currency]);
 $money=fn($value)=>$value===null?'Not recorded':$currency.' '.number_format((float)$value,2);
+$record['xinng_short_url']=$record['xinng_short_url']??null;$hasValidEquipmentShortLink=!empty($record['xinng_short_url'])&&xinng_short_url_has_back_half((string)$record['xinng_short_url'],isset($record['xinng_back_half'])?(string)$record['xinng_back_half']:null);$qrDestination=!empty($record['public_qr_token'])?base_url('equipment-public?token='.rawurlencode($record['public_qr_token'])):'';$qrImage=$hasValidEquipmentShortLink&&$qrDestination!==''?xinng_qr_image_url($qrDestination,$user['owner_id'],(string)$record['name'],'equipment',(string)$record['id'],(string)$record['xinng_short_url']):null;
 ?>
 <link rel="stylesheet" href="assets/css/equipment-detail.css">
+<link rel="stylesheet" href="assets/css/xinng-qr.css">
 <?php $location=rows('SELECT sp.id block_id,sp.name block_name,p.id plant_id,p.name plant_name FROM units u JOIN plants p ON p.id=u.plant_id JOIN sites s ON s.id=p.site_id JOIN spaces sp ON sp.id=s.space_id WHERE u.id=?',[$record['unit_id']])[0]; ?>
 <header class="asset-heading"><nav aria-label="Equipment location" class="asset-breadcrumbs"><?php foreach(['block'=>$location['block_name'],'site'=>$record['site_name'],'plant'=>$location['plant_name'],'unit'=>$record['unit_name']] as $level=>$name):?><a href="equipment?<?= $level ?>=<?= e($location[$level.'_id']??$record[$level.'_id']) ?>"><?= e($name) ?></a><?php endforeach;?></nav><div class="asset-title-row"><h1><?= e($record['name']) ?><?php if($canEdit):?><a href="#asset-edit" aria-label="Edit equipment">&#9998;</a><?php endif;?></h1><div class="asset-toolbar"><?php if($canEdit):?><a href="#schedule-maintenance">Schedule Maintenance</a><a href="#equipment-assemblies">+ Add Part</a><a href="#asset-edit">Edit Equipment</a><a href="#equipment-archive">Archive</a><?php endif;?><button type="button" id="asset-share">Share</button><button type="button" onclick="window.print()">Print</button></div></div><span id="asset-share-status" role="status"></span></header>
+<?php if($canEdit||$hasValidEquipmentShortLink):?>
+<section class="asset-qr-panel" aria-labelledby="equipment-qr-title" data-equipment-qr-panel>
+	<div class="equipment-qr-copy">
+		<h2 id="equipment-qr-title">Equipment QR</h2>
+		<p>Scan to open this asset's public Nonagon equipment page.</p>
+		<?php if(!empty($record['xinng_short_url'])&&!$hasValidEquipmentShortLink&&$canEdit):?>
+			<p class="equipment-qr-note">The saved short link is not using the required four-letter code. Replacing it may use an Xinng credit; the existing link will remain until replacement succeeds.</p>
+		<?php endif;?>
+		<div class="equipment-qr-ready" data-equipment-qr-ready <?= !$hasValidEquipmentShortLink?'hidden':'' ?>>
+			<label class="sr-only" for="equipment-short-url">Equipment short link</label>
+			<div class="equipment-qr-link-row">
+				<input id="equipment-short-url" type="url" value="<?= e($hasValidEquipmentShortLink?$record['xinng_short_url']:'') ?>" readonly data-equipment-short-url>
+				<button type="button" class="secondary" data-copy-equipment-qr>Copy link</button>
+			</div>
+			<a class="equipment-qr-open" href="<?= e($hasValidEquipmentShortLink?$record['xinng_short_url']:'') ?>" rel="noopener" target="_blank" data-equipment-qr-open>Open short link</a>
+			<p class="equipment-qr-success" role="status" data-equipment-qr-success><?= $hasValidEquipmentShortLink?'Saved short link and QR code ready. This link will be reused.':'' ?></p>
+			<img class="asset-qr-image" src="<?= e($qrImage??'') ?>" alt="QR code for <?= e($record['name']) ?>" width="176" height="176" data-equipment-qr-image <?= !$hasValidEquipmentShortLink?'hidden':'' ?>>
+		</div>
+		<?php if((!$hasValidEquipmentShortLink||empty($record['xinng_short_url']))&&$canEdit):?>
+			<?php if(empty($record['xinng_short_url'])):?><p class="equipment-qr-note">The saved short link and QR will be reused when you return to this equipment.</p><?php endif;?>
+			<form action="operations-action" method="post" data-equipment-qr-form>
+				<?= csrf_field() ?>
+				<input type="hidden" name="action" value="equipment.qr.create">
+				<input type="hidden" name="id" value="<?= e($id) ?>">
+				<input type="hidden" name="confirm_destination_change" value="0" data-equipment-qr-confirm>
+				<button class="primary" type="submit" data-equipment-qr-submit><?= !empty($record['xinng_short_url'])?'Replace with four-letter link':'Generate QR link' ?></button>
+				<p class="equipment-qr-message" role="status" aria-live="polite" data-equipment-qr-message></p>
+			</form>
+		<?php endif;?>
+	</div>
+</section>
+<?php endif;?>
 <?php if($canEdit):?><section class="asset-facts equipment-marketplace-state"><div><span>Marketplace</span><strong><?= e($marketListing?ucfirst(strtolower($marketListing['listing_status'])):'Not listed') ?></strong><?php if($marketReadiness&&!$marketReadiness['ready']):?><small><?= e(implode(' · ',array_merge($marketReadiness['missing_fields'],$marketReadiness['blocking_issues']))) ?></small><?php endif;?></div><div class="marketplace-state-actions"><?php if(!$marketListing):?><form action="marketplace-action" method="post"><?= csrf_field() ?><input type="hidden" name="action" value="listing.start"><input type="hidden" name="asset_id" value="<?= e($id) ?>"><button class="primary">List on Marketplace</button></form><?php elseif($marketListing['listing_status']==='DRAFT'):?><a class="primary" href="marketplace-manage?view=edit&id=<?= e($marketListing['id']) ?>">Continue listing</a><?php elseif(in_array($marketListing['listing_status'],['ACTIVE','RESERVED'],true)):?><a href="marketplace-listing?id=<?= e($marketListing['id']) ?>">View listing</a><form action="marketplace-action" method="post"><?= csrf_field() ?><input type="hidden" name="action" value="listing.pause"><input type="hidden" name="id" value="<?= e($marketListing['id']) ?>"><button class="secondary">Pause listing</button></form><?php elseif($marketListing['listing_status']==='PAUSED'):?><form action="marketplace-action" method="post"><?= csrf_field() ?><input type="hidden" name="action" value="listing.publish"><input type="hidden" name="id" value="<?= e($marketListing['id']) ?>"><button class="primary">Resume listing</button></form><a href="marketplace-manage?view=edit&id=<?= e($marketListing['id']) ?>">Review configuration</a><?php endif;?></div></section><?php endif;?>
 <nav class="asset-tabs" aria-label="Equipment sections"><a href="#equipment-profile">Overview</a><a href="#asset-status-pane">Status &amp; Activity</a><a href="#equipment-assemblies">Assemblies &amp; Parts</a><a href="#equipment-values">Value &amp; Depreciation</a><a href="#asset-maintenance-pane">Maintenance &amp; Utilization</a><a href="#equipment-documentation">Documentation &amp; Certification</a><a href="#equipment-lease">Lease</a><a href="#equipment-activity">Activity Log</a></nav>
 <section class="asset-pane" id="equipment-profile"><div class="asset-overview-columns"><div class="asset-left">
@@ -46,6 +81,6 @@ $series=['PURCHASE'=>'#60758a','BOOK'=>'#0a6fb8','MARKET'=>'#168260','BOOK_ESTIM
 <section class="panel settings-section" id="equipment-documentation"><h2>Documentation &amp; certification</h2><p>No document management integration is available for this equipment yet.</p></section>
 <section class="panel settings-section" id="equipment-lease"><h2>Lease</h2><p>No lease records are available for this equipment.</p></section>
 <?php if($canEdit):?><section class="panel settings-section" id="equipment-archive"><h2>Archive equipment</h2><p>Remove this asset from the active register and KPI totals. Its photos, maintenance records, values, and audit history will be retained. Open maintenance and active alerts must be resolved first.</p><form action="equipment-action" method="post" class="form-grid"><?= csrf_field() ?><input type="hidden" name="action" value="archive"><input type="hidden" name="id" value="<?= e($id) ?>"><label>Type the asset ID to confirm: <?= e($record['asset_code']) ?><input name="confirmation" maxlength="100" autocomplete="off" required></label><div class="full"><button class="secondary">Archive equipment</button></div></form></section><?php endif;?>
-<script src="assets/js/equipment-detail.js" defer></script>
+<script src="assets/js/equipment-detail.js?v=<?= filemtime(APP_ROOT.'/assets/js/equipment-detail.js') ?>" defer></script>
 <script src="assets/js/equipment-photos.js?v=<?= filemtime(APP_ROOT.'/assets/js/equipment-photos.js') ?>" defer></script>
 <script src="assets/js/equipment-catalog.js?v=<?= filemtime(APP_ROOT.'/assets/js/equipment-catalog.js') ?>" defer></script>

@@ -1,0 +1,13 @@
+(()=>{'use strict';
+const modal=document.querySelector('[data-request-card-modal]'),canvas=document.querySelector('[data-request-card-canvas]'),source=document.querySelector('[data-request-card-data]');
+if(!modal||!canvas||!source)return;
+const data=JSON.parse(source.textContent),ctx=canvas.getContext('2d'),link=data.short_url||new URL(data.path,location.href).href;
+const qrImage=data.qr?new Image():null;
+const wrap=(value,x,y,width,lineHeight)=>{const words=String(value).split(/\s+/);let line='';for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>width&&line){ctx.fillText(line,x,y);y+=lineHeight;line=word;}else line=next;}if(line)ctx.fillText(line,x,y);return y;};
+const draw=()=>{ctx.fillStyle='#fff';ctx.fillRect(0,0,620,1050);ctx.fillStyle='#b42335';ctx.fillRect(0,0,620,18);ctx.fillStyle='#102a43';ctx.font='700 18px Segoe UI';ctx.fillText('EQUIPMENT REQUIRED',42,70);ctx.fillStyle='#071b2d';ctx.font='700 38px Segoe UI';let y=wrap(data.title,42,130,536,48)+55;ctx.fillStyle='#f4f7fa';ctx.fillRect(42,y,536,310);ctx.fillStyle='#102a43';ctx.font='600 18px Segoe UI';for(const [label,value] of [['Quantity',data.quantity],['Equipment',data.equipment],['Intent',data.intent],['Location',data.location],['Required',data.required_from+(data.required_until?' - '+data.required_until:'')],['Respond by',data.deadline]]){ctx.fillStyle='#64748b';ctx.fillText(label,68,y+45);ctx.fillStyle='#102a43';ctx.fillText(String(value),245,y+45);y+=43;}y+=55;ctx.textAlign='center';ctx.fillStyle='#102a43';ctx.font='700 18px Segoe UI';ctx.fillText('SCAN TO SUPPLY',310,y);y+=28;if(qrImage&&qrImage.complete&&qrImage.naturalWidth){ctx.drawImage(qrImage,210,y,200,200);}else{ctx.fillStyle='#526477';ctx.font='600 16px Segoe UI';ctx.fillText('Generate the QR link in Nonagon',310,y+85);}y+=222;ctx.fillStyle='#b42335';ctx.font='600 13px Segoe UI';wrap(link,310,y,500,18);ctx.fillStyle='#102a43';ctx.font='700 18px Segoe UI';ctx.fillText('NONAGON',310,1010);ctx.textAlign='start';};
+if(qrImage){qrImage.onload=draw;qrImage.onerror=draw;qrImage.src=data.qr;}else draw();
+document.querySelector('[data-open-request-card]')?.addEventListener('click',()=>modal.showModal());
+document.querySelector('[data-close-request-card]')?.addEventListener('click',()=>modal.close());
+document.querySelectorAll('[data-copy-request-link]').forEach(button=>button.addEventListener('click',async()=>{await navigator.clipboard.writeText(link);button.textContent='Copied';}));
+document.querySelector('[data-request-card-download]')?.addEventListener('click',()=>{const a=document.createElement('a');a.download=`request-${data.request_id}.jpg`;a.href=canvas.toDataURL('image/jpeg',.92);a.click();});
+})();
