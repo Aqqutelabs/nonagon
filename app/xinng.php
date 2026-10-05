@@ -10,7 +10,6 @@ final class XinngTransportException extends RuntimeException
     }
 }
 
-
 final class XinngApiException extends DomainException
 {
     public function __construct(public readonly int $status, public readonly array $response, string $endpoint, string $method)
