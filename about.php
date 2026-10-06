@@ -5,7 +5,7 @@ $features = [
     ['02', 'Stay ahead of maintenance.', 'Bring schedules, work orders and equipment history into your daily workflow.'],
     ['03', 'Keep your team connected.', 'Organize access around your bases, sites, plants and units.'],
 ];
-$pageTitle='About Nonagon';$publicActive='about';$publicStyles=['assets/css/home.css','assets/css/hierarchy.css'];require __DIR__.'/includes/public-header.php';
+$pageTitle='About Nonagon';$publicActive='about';$publicStyles=['assets/css/home.css','assets/css/hierarchy.css','assets/css/about-video.css'];require __DIR__.'/includes/public-header.php';
 ?>
     <section class="hero wrap">
         <div class="hero-copy">
@@ -17,7 +17,7 @@ $pageTitle='About Nonagon';$publicActive='about';$publicStyles=['assets/css/home
         </div>
         <div class="hero-visual" id="preview">
             <div class="preview-top"><span><span class="dot"></span> YOUR OPERATIONS AT A GLANCE</span><span>Platform preview</span></div>
-            <div class="equipment-image"><img src="assets/images/truck.png" alt="Heavy equipment for industrial operations" width="600" height="460"><span class="image-label">EVERY ASSET. ACCOUNTED FOR.</span></div>
+            <div class="equipment-image"><video autoplay muted loop playsinline preload="metadata" poster="assets/images/truck.png" aria-label="Heavy equipment for industrial operations"><source src="assets/images/truck%20video.mp4" type="video/mp4">Your browser does not support embedded video.</video><span class="image-label">EVERY ASSET. ACCOUNTED FOR.</span></div>
             <div class="asset-card"><div><span class="mini-label">ASSET REGISTER</span><h2>A place for every<br>piece of equipment.</h2></div><span class="round-arrow" aria-hidden="true">↗</span></div>
             <div class="preview-bottom"><span>Equipment</span><span>Maintenance</span><span>People</span></div>
         </div>

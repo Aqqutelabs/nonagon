@@ -155,7 +155,7 @@ function xinng_strip_xinngqr_path(string $url): string
 
 function xinng_short_url_has_back_half(string $url, ?string $backHalf): bool
 {
-    if ($backHalf === null || !preg_match('/^[a-z]{4}$/',$backHalf)) return false;
+    if ($backHalf === null || !preg_match('/^[a-z0-9]{4}$/',$backHalf)) return false;
     $parts = parse_url($url);
     if (strtolower((string)($parts['scheme'] ?? '')) !== 'https' || empty($parts['host'])) return false;
     $path = rawurldecode((string)($parts['path'] ?? ''));
@@ -168,6 +168,7 @@ function xinng_resource_settings(string $type): array
         'equipment' => ['equipment','owner_id','Equipment QR','eq'],
         'request' => ['marketplace_requests','organization_id','Request QR','rq'],
         'certificate' => ['qhse_certificates','owner_id','Certificate verification QR','cert'],
+        'opportunity' => ['marketplace_listings','organization_id','Marketplace opportunity QR','opp'],
         default => throw new InvalidArgumentException('Unsupported Xinng resource type.'),
     };
 }
@@ -175,9 +176,10 @@ function xinng_resource_settings(string $type): array
 function xinng_back_half(string $type, string $resourceId): string
 {
     xinng_resource_settings($type);
+    $alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
     $backHalf = '';
     for ($index = 0; $index < 4; $index++) {
-        $backHalf .= chr(random_int(ord('a'),ord('z')));
+        $backHalf .= $alphabet[random_int(0,strlen($alphabet)-1)];
     }
     return $backHalf;
 }
@@ -222,75 +224,26 @@ function xinng_ensure_resource_link(string $type, string $resourceId, string $ow
         $record = rows("SELECT xinng_short_link_id,xinng_short_url,xinng_destination_url,xinng_back_half FROM {$table} WHERE id=? AND {$ownerColumn}=? FOR UPDATE",[$resourceId,$ownerId])[0] ?? null;
         if (!$record) throw new DomainException('The QR resource is no longer available in this organization.',404);
 
-        if ($type === 'equipment') {
-            $existing = !empty($record['xinng_short_link_id']) && !empty($record['xinng_short_url']);
-            $qrResponse = xinng_qr_api_call('GET',$ownerId);
-            $link = xinng_qr_link_for_destination($qrResponse,$destination);
-
-            if ($link && (!$existing || ($record['xinng_destination_url'] ?? '') === $destination)) {
-                if ($existing && xinng_strip_xinngqr_path((string)$record['xinng_short_url']) !== $link['url']) {
-                    if (!$confirmDestinationChange) {
-                        throw new DomainException('The saved short link is not a four-letter QR link. Confirm to replace it.',409);
-                    }
-                } else {
-                    $pdo->prepare("UPDATE {$table} SET xinng_short_link_id=?,xinng_short_url=?,xinng_destination_url=?,xinng_back_half=? WHERE id=? AND {$ownerColumn}=?")
-                        ->execute([$link['id'],$link['url'],$destination,$link['back_half'],$resourceId,$ownerId]);
-                    $pdo->commit();
-                    $link['destination'] = $destination;
-                    return $link;
-                }
-            } elseif ($existing && !$confirmDestinationChange) {
-                throw new DomainException('The saved short link is not a four-letter QR link. Confirm to replace it.',409);
-            }
-
-            if ($existing && ($record['xinng_destination_url'] ?? '') !== $destination && !$confirmDestinationChange) {
-                throw new DomainException('The QR destination changed. Confirm to create a replacement short link.',409);
-            }
-
-            if (!$link || $existing) {
-                $qrCode = xinng_qr_create_link($ownerId,$type,$resourceId,$title,$destination);
-                $link = [
-                    'id'=>$qrCode['id'],
-                    'url'=>$qrCode['url'],
-                    'back_half'=>$qrCode['back_half'],
-                    'destination'=>$destination,
-                ];
-            }
-        } elseif (!empty($record['xinng_short_link_id']) && !empty($record['xinng_short_url'])) {
-            if (($record['xinng_destination_url'] ?? '') === $destination) {
-                $savedUrl = xinng_strip_xinngqr_path((string)$record['xinng_short_url']);
-                if (xinng_short_url_has_back_half($savedUrl,isset($record['xinng_back_half'])?(string)$record['xinng_back_half']:null)) {
-                    if ($savedUrl !== (string)$record['xinng_short_url']) {
-                        $pdo->prepare("UPDATE {$table} SET xinng_short_url=? WHERE id=? AND {$ownerColumn}=?")
-                            ->execute([$savedUrl,$resourceId,$ownerId]);
-                    }
-                    $pdo->commit();
-                    return ['id'=>(int)$record['xinng_short_link_id'],'url'=>$savedUrl,'back_half'=>$record['xinng_back_half'],'destination'=>$destination];
-                }
-                if (!$confirmDestinationChange) {
-                    throw new DomainException('The saved short link does not use a four-letter code. Confirm to create a replacement link.',409);
-                }
-            }
-            $payload = ['id'=>(int)$record['xinng_short_link_id'],'destination_url'=>$destination];
-            if ($confirmDestinationChange) $payload['confirm_create_new'] = true;
-            try {
-                $response = xinng_call_with_unique_back_half('PATCH',$ownerId,$payload,$type,$resourceId);
-            } catch (XinngApiException $error) {
-                if ($error->status === 409 && !empty($error->response['requires_confirmation'])) {
-                    throw new DomainException($error->getMessage(),409);
-                }
-                throw $error;
-            }
-            if (empty($response['created_new'])) throw new DomainException('Xinng did not confirm creation of the replacement short link.',502);
-            $link = xinng_link_from_response($response);
-        } else {
-            $payload = ['title'=>$title,'destination_url'=>$destination];
-            try {
-                $response = xinng_call_with_unique_back_half('POST',$ownerId,$payload,$type,$resourceId);
-                $link = xinng_link_from_response($response);
-            } catch (XinngTransportException $error) {
-                throw new DomainException($error->getMessage().' The outcome is unknown, so no retry was sent; verify the link in Xinng before retrying.',502,$error);
-            }
+        $existing = !empty($record['xinng_short_link_id']) && !empty($record['xinng_short_url']);
+        $qrResponse = xinng_qr_api_call('GET',$ownerId);
+        $link = xinng_qr_link_for_destination($qrResponse,$destination);
+        if ($link && (!$existing || xinng_strip_xinngqr_path((string)$record['xinng_short_url']) === $link['url'])) {
+            $pdo->prepare("UPDATE {$table} SET xinng_short_link_id=?,xinng_short_url=?,xinng_destination_url=?,xinng_back_half=? WHERE id=? AND {$ownerColumn}=?")
+                ->execute([$link['id'],$link['url'],$destination,$link['back_half'],$resourceId,$ownerId]);
+            $pdo->commit();
+            $link['destination'] = $destination;
+            return $link;
+        }
+        if ($existing && !$confirmDestinationChange) {
+            $reason = ($record['xinng_destination_url'] ?? '') !== $destination
+                ? 'The QR destination changed.'
+                : 'The saved link is not the active four-character xin.ng QR link.';
+            throw new DomainException($reason.' Confirm to create a replacement QR link.',409);
+        }
+        try {
+            $link = xinng_qr_create_link($ownerId,$type,$resourceId,$title,$destination);
+        } catch (XinngTransportException $error) {
+            throw new DomainException($error->getMessage().' The outcome is unknown, so no retry was sent; verify the link in Xinng before retrying.',502,$error);
         }
 
         $pdo->prepare("UPDATE {$table} SET xinng_short_link_id=?,xinng_short_url=?,xinng_destination_url=?,xinng_back_half=? WHERE id=? AND {$ownerColumn}=?")
@@ -551,4 +504,25 @@ function xinng_qr_data_uri_from_image_url(string $imageUrl): string
         throw new DomainException('Xinng returned an invalid QR image.',502);
     }
     return 'data:'.$contentType.';base64,'.base64_encode($image);
+}
+
+function xinng_certificate_link(array $user, string $certificateId, bool $confirmDestinationChange = false): array
+{
+    require_once __DIR__.'/qhse.php';
+    $certificate = qhse_certificate($user,$certificateId);
+    if (!in_array($certificate['status'],['ISSUED','REVOKED','SUPERSEDED'],true)) {
+        throw new DomainException('Issue the certificate before creating its verification QR.',409);
+    }
+    $destination = base_url('qhse-certificate-verify?token='.rawurlencode((string)$certificate['verification_token']));
+    return xinng_ensure_resource_link('certificate',$certificateId,$user['owner_id'],$destination,$confirmDestinationChange,'Verify '.$certificate['certificate_number']);
+}
+
+function xinng_opportunity_link(array $user, string $listingId, bool $confirmDestinationChange = false): array
+{
+    $listing = rows("SELECT id,title,listing_status FROM marketplace_listings WHERE id=? AND organization_id=?",[$listingId,$user['owner_id']])[0] ?? null;
+    if (!$listing) throw new DomainException('Marketplace opportunity not found.',404);
+    if (!in_array($listing['listing_status'],['ACTIVE','RESERVED'],true)) {
+        throw new DomainException('Publish the marketplace opportunity before creating its QR.',409);
+    }
+    return xinng_ensure_resource_link('opportunity',$listingId,$user['owner_id'],base_url('marketplace-listing?id='.rawurlencode($listingId)),$confirmDestinationChange,(string)$listing['title']);
 }

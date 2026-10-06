@@ -7,7 +7,12 @@ $photos=rows('SELECT id,url,caption,is_primary FROM equipment_photos WHERE equip
 $assemblies=rows('SELECT * FROM equipment_assemblies WHERE equipment_id=? ORDER BY sequence,name,id',[$id]);
 $history=rows('SELECT * FROM (SELECT * FROM equipment_value_snapshot WHERE equipment_id=? AND currency=? ORDER BY as_of_date DESC,created_at DESC,id DESC LIMIT 200) recent ORDER BY as_of_date,created_at,id',[$id,$currency]);
 $money=fn($value)=>$value===null?'Not recorded':$currency.' '.number_format((float)$value,2);
-$record['xinng_short_url']=isset($record['xinng_short_url'])?xinng_strip_xinngqr_path((string)$record['xinng_short_url']):null;$hasValidEquipmentShortLink=!empty($record['xinng_short_url'])&&xinng_short_url_has_back_half((string)$record['xinng_short_url'],isset($record['xinng_back_half'])?(string)$record['xinng_back_half']:null);$qrDestination=!empty($record['public_qr_token'])?base_url('equipment-public?token='.rawurlencode($record['public_qr_token'])):'';$qrImage=$hasValidEquipmentShortLink&&$qrDestination!==''?xinng_qr_image_url($qrDestination,$user['owner_id'],(string)$record['name'],'equipment',(string)$record['id'],(string)$record['xinng_short_url']):null;
+$record['xinng_short_url']=isset($record['xinng_short_url'])?xinng_strip_xinngqr_path((string)$record['xinng_short_url']):null;
+$hasValidEquipmentShortLink=!empty($record['xinng_short_url'])&&xinng_short_url_has_back_half((string)$record['xinng_short_url'],isset($record['xinng_back_half'])?(string)$record['xinng_back_half']:null);
+$qrDestination=!empty($record['public_qr_token'])?base_url('equipment-public?token='.rawurlencode($record['public_qr_token'])):'';
+$shareUrl=$hasValidEquipmentShortLink?$record['xinng_short_url']:$qrDestination;
+$qrImage=null;
+if($hasValidEquipmentShortLink&&$qrDestination!==''){try{$qrImage=xinng_qr_image_url($qrDestination,$user['owner_id'],(string)$record['name'],'equipment',(string)$record['id'],(string)$record['xinng_short_url']);}catch(Throwable $error){error_log('Equipment QR display fallback: '.$error->getMessage());}}
 ?>
 <link rel="stylesheet" href="assets/css/equipment-detail.css">
 <link rel="stylesheet" href="assets/css/xinng-qr.css">
@@ -21,15 +26,15 @@ $record['xinng_short_url']=isset($record['xinng_short_url'])?xinng_strip_xinngqr
 		<?php if(!empty($record['xinng_short_url'])&&!$hasValidEquipmentShortLink&&$canEdit):?>
 			<p class="equipment-qr-note">The saved short link is not using the required four-letter code. Replacing it may use an Xinng credit; the existing link will remain until replacement succeeds.</p>
 		<?php endif;?>
-		<div class="equipment-qr-ready" data-equipment-qr-ready <?= !$hasValidEquipmentShortLink?'hidden':'' ?>>
+		<div class="equipment-qr-ready" data-equipment-qr-ready <?= $shareUrl===''?'hidden':'' ?>>
 			<label class="sr-only" for="equipment-short-url">Equipment short link</label>
 			<div class="equipment-qr-link-row">
-				<input id="equipment-short-url" type="url" value="<?= e($hasValidEquipmentShortLink?$record['xinng_short_url']:'') ?>" readonly data-equipment-short-url>
+				<input id="equipment-short-url" type="url" value="<?= e($shareUrl) ?>" readonly data-equipment-short-url>
 				<button type="button" class="secondary" data-copy-equipment-qr>Copy link</button>
 			</div>
-			<a class="equipment-qr-open" href="<?= e($hasValidEquipmentShortLink?$record['xinng_short_url']:'') ?>" rel="noopener" target="_blank" data-equipment-qr-open>Open short link</a>
-			<p class="equipment-qr-success" role="status" data-equipment-qr-success><?= $hasValidEquipmentShortLink?'Saved short link and QR code ready. This link will be reused.':'' ?></p>
-			<img class="asset-qr-image" src="<?= e($qrImage??'') ?>" alt="QR code for <?= e($record['name']) ?>" width="176" height="176" data-equipment-qr-image <?= !$hasValidEquipmentShortLink?'hidden':'' ?>>
+			<a class="equipment-qr-open" href="<?= e($shareUrl) ?>" rel="noopener" target="_blank" data-equipment-qr-open>Open equipment link</a>
+			<p class="equipment-qr-success" role="status" data-equipment-qr-success><?= $qrImage?'Saved short link and QR code ready. This link will be reused.':($shareUrl!==''?'QR service unavailable; use the direct equipment link. No QR code or short code was created.':'') ?></p>
+			<img class="asset-qr-image" src="<?= e($qrImage??'') ?>" alt="QR code for <?= e($record['name']) ?>" width="176" height="176" data-equipment-qr-image <?= !$qrImage?'hidden':'' ?>>
 		</div>
 		<?php if((!$hasValidEquipmentShortLink||empty($record['xinng_short_url']))&&$canEdit):?>
 			<?php if(empty($record['xinng_short_url'])):?><p class="equipment-qr-note">The saved short link and QR will be reused when you return to this equipment.</p><?php endif;?>

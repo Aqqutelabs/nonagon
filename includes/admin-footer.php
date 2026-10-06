@@ -1,0 +1,1 @@
+</main></div><script src="assets/js/modal-close-confirmation.js?v=<?= filemtime(APP_ROOT.'/assets/js/modal-close-confirmation.js') ?>" defer></script><?php require __DIR__.'/google-analytics.php'; ?></body></html>

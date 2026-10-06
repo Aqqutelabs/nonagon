@@ -1,0 +1,2 @@
+.equipment-image{isolation:isolate;overflow:hidden}
+.equipment-image video{display:block;width:108%;height:108%;object-fit:cover;mix-blend-mode:multiply;-webkit-mask-image:radial-gradient(ellipse 76% 72% at 50% 50%,#000 48%,rgba(0,0,0,.9) 62%,transparent 100%);mask-image:radial-gradient(ellipse 76% 72% at 50% 50%,#000 48%,rgba(0,0,0,.9) 62%,transparent 100%)}

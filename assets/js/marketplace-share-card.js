@@ -7,16 +7,20 @@
 
   const data = JSON.parse(source.textContent);
   const context = canvas.getContext('2d');
-  const companyUrl = new URL(data.company_path, document.baseURI).href;
   const equipmentUrl = new URL(data.equipment_path, document.baseURI).href;
-  const companyInput = document.querySelector('#share-company-link');
   const equipmentInput = document.querySelector('#share-equipment-link');
-  companyInput.value = companyUrl;
   equipmentInput.value = equipmentUrl;
 
   const image = new Image();
   image.decoding = 'async';
   image.src = data.image;
+  const qrImage = data.qr ? new Image() : null;
+  let qrAvailable = false;
+  if (qrImage) {
+    qrImage.crossOrigin = 'anonymous';
+    qrImage.decoding = 'async';
+    qrImage.src = data.qr;
+  }
   let rendered = false;
 
   const roundedRect = (x, y, width, height, radius) => {
@@ -54,46 +58,14 @@
     return y + lines.length * lineHeight;
   };
 
-  const drawQrPlaceholder = (x, y, size) => {
-    context.fillStyle = '#fff';
-    context.fillRect(x, y, size, size);
-    const cells = 25;
-    const cell = size / cells;
-    const finder = (column, row) => {
-      context.fillStyle = '#102d50';
-      context.fillRect(x + column * cell, y + row * cell, 7 * cell, 7 * cell);
-      context.fillStyle = '#fff';
-      context.fillRect(x + (column + 1) * cell, y + (row + 1) * cell, 5 * cell, 5 * cell);
-      context.fillStyle = '#102d50';
-      context.fillRect(x + (column + 2) * cell, y + (row + 2) * cell, 3 * cell, 3 * cell);
-    };
-    for (let row = 0; row < cells; row += 1) {
-      for (let column = 0; column < cells; column += 1) {
-        const inFinder = (column < 8 && row < 8) || (column > 16 && row < 8) || (column < 8 && row > 16);
-        if (!inFinder && ((column * 7 + row * 11 + column * row) % 5 < 2)) {
-          context.fillStyle = '#102d50';
-          context.fillRect(x + column * cell, y + row * cell, Math.ceil(cell), Math.ceil(cell));
-        }
-      }
-    }
-    finder(0, 0); finder(18, 0); finder(0, 18);
-    context.fillStyle = '#fff';
-    context.beginPath();
-    context.arc(x + size / 2, y + size / 2, 32, 0, Math.PI * 2);
-    context.fill();
-    context.strokeStyle = '#a71930';
-    context.lineWidth = 7;
-    context.beginPath();
-    context.arc(x + size / 2, y + size / 2, 20, .3, Math.PI * 1.75);
-    context.stroke();
-    context.fillStyle = '#a71930';
-    context.font = '700 13px Arial';
-    context.textAlign = 'center';
-    context.fillText('QR PLACEHOLDER', x + size / 2, y + size + 20);
-  };
-
   const draw = async () => {
     if (!image.complete) await image.decode();
+    if (qrImage) {
+      try {
+        if (!qrImage.complete) await qrImage.decode();
+        qrAvailable = qrImage.naturalWidth > 0;
+      } catch { qrAvailable = false; }
+    }
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = '#fff';
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -125,11 +97,16 @@
     context.fillStyle = '#17233b';
     context.font = '17px Arial';
     context.textAlign = 'center';
-    context.fillText('SCAN TO VIEW EQUIPMENT', 310, qrY - 14);
-    drawQrPlaceholder(215, qrY, qrSize);
+    context.fillText(qrAvailable ? 'SCAN TO VIEW EQUIPMENT' : 'VIEW EQUIPMENT ONLINE', 310, qrY - 14);
+    if (qrAvailable) context.drawImage(qrImage, 215, qrY, qrSize, qrSize);
+    else {
+      context.fillStyle = '#657384';
+      context.font = '15px Arial';
+      context.fillText('QR service unavailable — use the link below', 310, qrY + 36);
+    }
     context.fillStyle = '#a71930';
     context.font = '18px Arial';
-    context.fillText(`${location.host}/company/${data.company_path.split('/').pop()}`, 310, qrY + qrSize + 47);
+    context.fillText(data.equipment_path, 310, qrY + qrSize + 47);
     context.fillStyle = '#102d50';
     context.font = '700 21px Arial';
     context.fillText('NONAGON', 310, qrY + qrSize + 82);
@@ -182,12 +159,11 @@
   modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.open) modal.close(); });
   modal.querySelectorAll('[data-copy]').forEach(button => button.addEventListener('click', async () => {
-    const value = button.dataset.copy === 'company' ? companyUrl : equipmentUrl;
-    await navigator.clipboard.writeText(value);
+    await navigator.clipboard.writeText(equipmentUrl);
     const previous = button.textContent;
     button.textContent = 'Copied';
     setTimeout(() => { button.textContent = previous; }, 1400);
   }));
-  modal.querySelector('[data-download="jpeg"]').addEventListener('click', async () => download(await jpegBlob(), `equipment-${data.company_path.split('/').pop()}.jpg`));
-  modal.querySelector('[data-download="pdf"]').addEventListener('click', async () => download(await pdfFromJpeg(), `equipment-${data.company_path.split('/').pop()}.pdf`));
+  modal.querySelector('[data-download="jpeg"]').addEventListener('click', async () => download(await jpegBlob(), `equipment-${data.id}.jpg`));
+  modal.querySelector('[data-download="pdf"]').addEventListener('click', async () => download(await pdfFromJpeg(), `equipment-${data.id}.pdf`));
 })();

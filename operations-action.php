@@ -17,9 +17,10 @@ try {
     $id = (string)($_POST['id'] ?? '');
     if ($action==='equipment.qr.create') {
         $destination='equipment?id='.rawurlencode($id);
-        $link=xinng_equipment_link($user,$id,($_POST['confirm_destination_change']??'')==='1');
-        if($json){$equipment=operation_equipment($user,$id);echo json_encode(['ok'=>true,'short_link'=>['id'=>$link['id'],'full_short_url'=>$link['url']],'qr_data_uri'=>xinng_qr_data_uri_from_image_url($link['qr_image_url'])],JSON_THROW_ON_ERROR);exit;}
-        flash('success','Equipment QR link is ready.');
+        try{$link=xinng_equipment_link($user,$id,($_POST['confirm_destination_change']??'')==='1');$fallback=false;}
+        catch(Throwable $qrError){if($qrError instanceof DomainException&&$qrError->getCode()===409)throw $qrError;$token=rows('SELECT public_qr_token FROM equipment WHERE id=? AND owner_id=?',[$id,$user['owner_id']])[0]['public_qr_token']??null;if(!$token)throw $qrError;$link=['id'=>null,'url'=>base_url('equipment-public?token='.rawurlencode((string)$token)),'qr_image_url'=>null];$fallback=true;error_log('Equipment xin.ng fallback: '.$qrError->getMessage());}
+        if($json){echo json_encode(['ok'=>true,'fallback'=>$fallback,'short_link'=>['id'=>$link['id'],'full_short_url'=>$link['url']],'qr_data_uri'=>$fallback?null:xinng_qr_data_uri_from_image_url($link['qr_image_url'])],JSON_THROW_ON_ERROR);exit;}
+        flash('success',$fallback?'xin.ng is unavailable. The direct equipment link is ready without a QR code or short code.':'Equipment QR link is ready.');
         redirect($destination);
     }
     if (in_array($action,['acknowledge','assign','escalate'],true)) {

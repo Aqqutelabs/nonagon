@@ -8,13 +8,18 @@ function xinng_qr_check(bool $condition,string $message):void{global $checks;if(
 $id='12345678-1234-4234-8234-123456789abc';
 $destination='https://nonagon.example/equipment-public?token='.str_repeat('a',64);
 $equipmentSlug=xinng_back_half('equipment',$id);
-$xinng_qr_check_pattern='/^[a-z]{4}$/';
-xinng_qr_check((bool)preg_match($xinng_qr_check_pattern,$equipmentSlug),'Equipment back-half must be exactly four lowercase letters.');
+$xinng_qr_check_pattern='/^[a-z0-9]{4}$/';
+xinng_qr_check((bool)preg_match($xinng_qr_check_pattern,$equipmentSlug),'Equipment back-half must be exactly four lowercase alphanumeric characters.');
 $nextEquipmentSlug=xinng_back_half('equipment',$id);
 xinng_qr_check((bool)preg_match($xinng_qr_check_pattern,$nextEquipmentSlug),'Every generated back-half must be exactly four lowercase letters.');
 $qrPayload=xinng_qr_create_payload('equipment',$id,'Test equipment',$destination);
 xinng_qr_check(($qrPayload['title']??null)==='Test equipment'&&($qrPayload['type']??null)==='website'&&($qrPayload['destination_url']??null)===$destination,'QR creation must include the title, website type and complete destination URL.');
 xinng_qr_check(isset($qrPayload['back_half'])&&preg_match($xinng_qr_check_pattern,$qrPayload['back_half'])===1,'QR creation must use a four-letter back-half.');
+xinng_qr_check((bool)preg_match($xinng_qr_check_pattern,xinng_back_half('certificate',$id)),'Certificate codes must be four lowercase alphanumeric characters.');
+xinng_qr_check((bool)preg_match($xinng_qr_check_pattern,xinng_back_half('request',$id)),'Request codes must be four lowercase alphanumeric characters.');
+xinng_qr_check((bool)preg_match($xinng_qr_check_pattern,xinng_back_half('opportunity',$id)),'Opportunity codes must be four lowercase alphanumeric characters.');
+xinng_qr_check(xinng_resource_settings('certificate')[0]==='qhse_certificates','Certificates must persist xin.ng links on their own records.');
+xinng_qr_check(xinng_resource_settings('opportunity')[0]==='marketplace_listings','Opportunities must persist xin.ng links on marketplace listings.');
 $taken=new XinngApiException(409,['error'=>'This back-half is already taken.'],'https://xin.ng/api/short-links.php','POST');
 xinng_qr_check(xinng_back_half_taken($taken),'Explicit back-half conflicts must be recognized for retry.');
 $requiresConfirmation=new XinngApiException(409,['error'=>'requires_confirmation','requires_confirmation'=>true],'https://xin.ng/api/short-links.php','PATCH');
@@ -34,6 +39,7 @@ xinng_qr_check($hostedLink['url']==='https://xin.ng/abcd','Hosted Xinng short UR
 xinng_qr_check(xinng_strip_xinngqr_path('https://xin.ng/xinngqr/abcd')==='https://xin.ng/abcd','Previously saved Xinng URLs must be normalized for display and reuse.');
 xinng_qr_check(xinng_strip_xinngqr_path('https://xin.ng/abcd')==='https://xin.ng/abcd','Root-level Xinng URLs must remain unchanged.');
 xinng_qr_check(xinng_short_url_has_back_half('https://xin.ng/abcd','abcd'),'A valid saved URL must use its four-letter back-half.');
+xinng_qr_check(xinng_short_url_has_back_half('https://xin.ng/a7k2','a7k2'),'A valid saved URL may use a four-character alphanumeric back-half.');
 xinng_qr_check(!xinng_short_url_has_back_half('https://xin.ng/xinngqr/ng-eq-3b2d0d50055640b892b7-209df949','ng-eq-3b2d0d50055640b892b7-209df949'),'Saved URLs with long back-halves must be rejected.');
 xinng_qr_check(!xinng_short_url_has_back_half('https://xin.ng/xinngqr/abcd','wxyz'),'A saved back-half must match the final URL path segment.');
 $imageUrl=xinng_public_qr_image_url('https://api.qrserver.com/v1/create-qr-code/?size=260x260&data='.rawurlencode('http://localhost/xinngqr/abcd'),'https://xin.ng/abcd');

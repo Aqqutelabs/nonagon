@@ -35,10 +35,11 @@
 	const url=result.short_link?.full_short_url;
 	let shortPath='';
 	try{shortPath=new URL(url).pathname.split('/').filter(Boolean).pop()||'';}catch{}
-	if(typeof url!=='string'||!url.startsWith('https://')||!/^[a-z]{4}$/.test(shortPath)||typeof result.qr_data_uri!=='string')throw new Error('The QR service did not return a valid four-letter short link.');
-	shortUrl.value=url;openLink.href=url;qrImage.src=result.qr_data_uri;qrImage.hidden=false;
+	if(typeof url!=='string'||!url.startsWith('https://'))throw new Error('A valid public equipment link was not returned.');
+	if(!result.fallback&&(!/^[a-z0-9]{4}$/.test(shortPath)||typeof result.qr_data_uri!=='string'))throw new Error('The QR service did not return a valid four-character short link.');
+	shortUrl.value=url;openLink.href=url;if(result.fallback){qrImage.removeAttribute('src');qrImage.hidden=true;}else{qrImage.src=result.qr_data_uri;qrImage.hidden=false;}
 	ready.hidden=false;qrForm.hidden=true;
-	ready.querySelector('[data-equipment-qr-success]').textContent='Short link and QR code created and saved. This link will be reused.';
+	ready.querySelector('[data-equipment-qr-success]').textContent=result.fallback?'xin.ng is unavailable. Use this direct equipment link; no QR code or short code was created.':'Short link and QR code created and saved. This link will be reused.';
    }catch(error){
 	message.setAttribute('role','alert');message.textContent=error.message||'The equipment QR link could not be created. Please try again.';
 	if(confirmInput.value!=='1')submitButton.textContent='Try again';
