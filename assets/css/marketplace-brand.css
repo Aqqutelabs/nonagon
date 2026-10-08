@@ -1,0 +1,5 @@
+.public-header .logo{width:auto;max-width:190px;height:40px;object-fit:contain}
+.marketplace-brand-footer{margin-bottom:24px;padding:24px 28px;border:0;border-radius:10px;background:#17233b;color:#fff}
+.marketplace-brand-footer .logo{width:auto;max-width:170px;height:35px;object-fit:contain}
+.marketplace-brand-footer p,.marketplace-brand-footer small{color:#d8e1ec}
+@media(max-width:760px){.public-header .logo{max-width:155px;height:34px}.marketplace-brand-footer{padding:20px}}

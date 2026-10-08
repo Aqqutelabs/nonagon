@@ -6,6 +6,8 @@ $publicActive=$publicActive??'';
 $publicStyles=$publicStyles??[];
 $publicMainClass=$publicMainClass??'';
 $publicBodyClass=$publicBodyClass??'';
+$publicHeaderLogo=$publicHeaderLogo??'assets/images/logo-dark.svg';
+$publicLogoAlt=$publicLogoAlt??'Nonagon';
 $publicUser=current_user();
 $titleSafe=htmlspecialchars((string)$pageTitle,ENT_QUOTES,'UTF-8');
 ?>
@@ -23,7 +25,7 @@ $titleSafe=htmlspecialchars((string)$pageTitle,ENT_QUOTES,'UTF-8');
 <body<?= $publicBodyClass!==''?' class="'.htmlspecialchars($publicBodyClass,ENT_QUOTES,'UTF-8').'"':'' ?>>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="public-header header wrap">
-  <a href="./" aria-label="Nonagon home"><img class="logo" src="assets/images/logo-dark.svg" alt="Nonagon" width="151" height="40"></a>
+  <a href="./" aria-label="<?= htmlspecialchars($publicLogoAlt,ENT_QUOTES,'UTF-8') ?> home"><img class="logo" src="<?= htmlspecialchars($publicHeaderLogo,ENT_QUOTES,'UTF-8') ?>" alt="<?= htmlspecialchars($publicLogoAlt,ENT_QUOTES,'UTF-8') ?>" width="151" height="40"></a>
   <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">+</span></button>
   <nav id="navigation" aria-label="Main navigation">
     <a href="about" <?= $publicActive==='about'?'aria-current="page"':'' ?>>About</a>
